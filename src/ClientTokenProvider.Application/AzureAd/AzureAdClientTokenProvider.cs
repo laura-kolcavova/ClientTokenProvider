@@ -3,7 +3,7 @@ using ClientTokenProvider.Application.AzureAd.Interfaces;
 
 namespace ClientTokenProvider.Application.AzureAd;
 
-internal sealed class AzureAdClientTokenProvider : IClientTokenProvider
+public sealed class AzureAdClientTokenProvider : IClientTokenProvider
 {
     private readonly IAzureAdClientHandler _handler;
 

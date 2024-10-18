@@ -2,12 +2,13 @@
 using ClientTokenProvider.Application.AzureAd.Exceptions;
 using ClientTokenProvider.Application.AzureAd.Interfaces;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace ClientTokenProvider.Application.AzureAd;
 
-public sealed class AzureAdClientHandler : IAzureAdClientHandler
+internal sealed class AzureAdClientHandler : IAzureAdClientHandler
 {
     private readonly IHttpClientFactory _httpClientFactory;
 
@@ -30,7 +31,6 @@ public sealed class AzureAdClientHandler : IAzureAdClientHandler
             using (var request = new HttpRequestMessage())
             {
                 request.Method = new HttpMethod("POST");
-                request.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                 request.RequestUri = new Uri(Configuration.AuthorityUri, UriKind.Absolute);
 
                 var bodyRequest = GetClientTokenRequest.Create(
@@ -42,6 +42,8 @@ public sealed class AzureAdClientHandler : IAzureAdClientHandler
                 var bodyRequestJson = JsonSerializer.Serialize(bodyRequest);
 
                 request.Content = new StringContent(bodyRequestJson);
+
+                request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
                 var response = await httpClient.SendAsync(
                     request,
