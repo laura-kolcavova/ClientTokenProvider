@@ -1,4 +1,4 @@
-﻿namespace ClientTokenProvider.Application;
+﻿namespace ClientTokenProvider.Core.Shared;
 
 public interface IClientTokenProvider
 {

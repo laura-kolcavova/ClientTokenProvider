@@ -1,10 +1,8 @@
-﻿namespace ClientTokenProvider.Application.AzureAd.Interfaces;
+﻿namespace ClientTokenProvider.Core.AzureAd.Models;
 
 public interface IClientConfiguration
 {
     public string AuthorityUri { get; }
-
-    public string Scope { get; }
 
     public string Audience { get; }
 

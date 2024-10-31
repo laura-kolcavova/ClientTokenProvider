@@ -1,4 +1,4 @@
-﻿namespace ClientTokenProvider.Application.AzureAd.Dto;
+﻿namespace ClientTokenProvider.Core.AzureAd.Dto;
 
 public sealed record GetClientTokenResponse
 {
