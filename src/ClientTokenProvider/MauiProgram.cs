@@ -1,11 +1,20 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using ClientTokenProvider.Extensions;
+using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 
 namespace ClientTokenProvider;
+
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+
+        var services = builder.Services;
+
+        builder
+          .UseMauiCommunityToolkit();
+
         builder
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
@@ -15,8 +24,10 @@ public static class MauiProgram
             });
 
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
+
+        services.AddClientTokenProvider();
 
         return builder.Build();
     }

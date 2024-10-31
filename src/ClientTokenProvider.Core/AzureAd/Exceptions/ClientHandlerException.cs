@@ -1,4 +1,4 @@
-﻿namespace ClientTokenProvider.Application.AzureAd.Exceptions;
+﻿namespace ClientTokenProvider.Core.AzureAd.Exceptions;
 
 public class ClientHandlerException : Exception
 {

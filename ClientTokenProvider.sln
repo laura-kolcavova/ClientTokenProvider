@@ -12,11 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3CACC939-6
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientTokenProvider.Application", "src\ClientTokenProvider.Application\ClientTokenProvider.Application.csproj", "{7ECAC4C3-CFE4-4F47-AF44-671D45DFD291}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientTokenProvider.Core", "src\ClientTokenProvider.Core\ClientTokenProvider.Core.csproj", "{7ECAC4C3-CFE4-4F47-AF44-671D45DFD291}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A5F095AB-D207-4738-B911-FF2CED82AB4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XunitTests", "tests\XunitTests\XunitTests.csproj", "{E31152BD-594B-48CB-9073-439A08D868E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XunitTests", "tests\XunitTests\XunitTests.csproj", "{E31152BD-594B-48CB-9073-439A08D868E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

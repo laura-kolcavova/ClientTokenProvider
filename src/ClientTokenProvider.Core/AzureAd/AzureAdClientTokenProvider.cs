@@ -1,9 +1,9 @@
-﻿
-using ClientTokenProvider.Application.AzureAd.Interfaces;
+﻿using ClientTokenProvider.Core.AzureAd.Handlers;
+using ClientTokenProvider.Core.AzureAd.Models;
 
-namespace ClientTokenProvider.Application.AzureAd;
+namespace ClientTokenProvider.Core.AzureAd;
 
-public sealed class AzureAdClientTokenProvider : IClientTokenProvider
+public sealed class AzureAdClientTokenProvider : IAzureAdClientTokenProvider
 {
     private readonly IAzureAdClientHandler _handler;
 

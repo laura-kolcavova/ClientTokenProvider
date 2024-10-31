@@ -1,6 +1,7 @@
-﻿using ClientTokenProvider.Application.AzureAd;
-using ClientTokenProvider.Application.AzureAd.Dto;
-using ClientTokenProvider.Application.AzureAd.Exceptions;
+﻿using ClientTokenProvider.Core.AzureAd.Dto;
+using ClientTokenProvider.Core.AzureAd.Exceptions;
+using ClientTokenProvider.Core.AzureAd.Handlers;
+using ClientTokenProvider.Core.AzureAd.Models;
 using FluentAssertions;
 using NSubstitute;
 using System.Net;
@@ -128,7 +129,6 @@ public sealed class AzureArClientHandlerTests
         return new ClientConfiguration
         {
             AuthorityUri = "https://example.com",
-            Scope = "test_scope",
             Audience = "test_audience",
             ClientId = "test_client_id",
             ClientSecret = "test_client_secret"

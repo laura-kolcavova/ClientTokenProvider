@@ -3,13 +3,13 @@
     x:Class="ClientTokenProvider.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:ClientTokenProvider"
-    Shell.FlyoutBehavior="Disabled"
-    Title="ClientTokenProvider">
+    xmlns:azureAdViews="clr-namespace:ClientTokenProvider.AzureAd.Views"
+    Title="ClientTokenProvider"
+    Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
+        ContentTemplate="{DataTemplate azureAdViews:ConfigurationDetailView}"
         Route="MainPage" />
 
 </Shell>

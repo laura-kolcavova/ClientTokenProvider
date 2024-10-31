@@ -1,6 +1,6 @@
-﻿using ClientTokenProvider.Application.AzureAd.Dto;
+﻿using ClientTokenProvider.Core.AzureAd.Dto;
 
-namespace ClientTokenProvider.Application.AzureAd.Interfaces;
+namespace ClientTokenProvider.Core.AzureAd.Handlers;
 
 public interface IAzureAdClientHandler
 {

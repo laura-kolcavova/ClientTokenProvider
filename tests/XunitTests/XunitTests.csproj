@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ClientTokenProvider.Application\ClientTokenProvider.Application.csproj" />
+    <ProjectReference Include="..\..\src\ClientTokenProvider.Core\ClientTokenProvider.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,12 +1,12 @@
-﻿using ClientTokenProvider.Application.AzureAd.Dto;
-using ClientTokenProvider.Application.AzureAd.Exceptions;
-using ClientTokenProvider.Application.AzureAd.Interfaces;
+﻿using ClientTokenProvider.Core.AzureAd.Dto;
+using ClientTokenProvider.Core.AzureAd.Exceptions;
+using ClientTokenProvider.Core.AzureAd.Models;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace ClientTokenProvider.Application.AzureAd;
+namespace ClientTokenProvider.Core.AzureAd.Handlers;
 
 internal sealed class AzureAdClientHandler : IAzureAdClientHandler
 {
@@ -34,7 +34,7 @@ internal sealed class AzureAdClientHandler : IAzureAdClientHandler
                 request.RequestUri = new Uri(Configuration.AuthorityUri, UriKind.Absolute);
 
                 var bodyRequest = GetClientTokenRequest.Create(
-                    Configuration.Scope,
+                    scope,
                     Configuration.Audience,
                     Configuration.ClientId,
                     Configuration.ClientSecret);
@@ -76,7 +76,7 @@ internal sealed class AzureAdClientHandler : IAzureAdClientHandler
                     else
                     {
                         var text = response.Content is not null
-                            ? (await response.Content.ReadAsStringAsync(cancellationToken))
+                            ? await response.Content.ReadAsStringAsync(cancellationToken)
                             : null;
 
                         throw new ClientHandlerException(
@@ -108,8 +108,8 @@ internal sealed class AzureAdClientHandler : IAzureAdClientHandler
         try
         {
             var responseObject = await response
-            .Content
-            .ReadFromJsonAsync<TResponseObject>(cancellationToken);
+                .Content
+                .ReadFromJsonAsync<TResponseObject>(cancellationToken);
 
             return responseObject;
         }
@@ -118,11 +118,11 @@ internal sealed class AzureAdClientHandler : IAzureAdClientHandler
             var text = await response.Content.ReadAsStringAsync(cancellationToken);
 
             throw new ClientHandlerException(
-            $"Could not deserialize the response body string as {typeof(TResponseObject).FullName}.",
-            (int)response.StatusCode,
-            text,
-            headers,
-            ex);
+                $"Could not deserialize the response body string as {typeof(TResponseObject).FullName}.",
+                (int)response.StatusCode,
+                text,
+                headers,
+                ex);
         }
     }
 }
