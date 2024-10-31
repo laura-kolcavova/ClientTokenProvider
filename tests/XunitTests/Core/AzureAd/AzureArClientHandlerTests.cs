@@ -129,7 +129,6 @@ public sealed class AzureArClientHandlerTests
         return new ClientConfiguration
         {
             AuthorityUri = "https://example.com",
-            Scope = "test_scope",
             Audience = "test_audience",
             ClientId = "test_client_id",
             ClientSecret = "test_client_secret"
