@@ -13,13 +13,20 @@ public partial class ConfigurationDetailViewModel : ObservableObject
     private readonly IAzureAdClientTokenProviderFactory _azureAdClientTokenProviderFactory;
 
     [ObservableProperty]
-    private ClientConfigurationModel _configuration;
+    private ClientConfigurationModel configuration;
 
     [ObservableProperty]
-    private bool _isErrorMessageVisible;
+    private bool isErrorMessageVisible;
 
     [ObservableProperty]
-    private string _errorMessage;
+    private string errorMessage;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(GetClientAccessTokenCommand))]
+    private bool getClientAccessTokenButtonEnabled;
+
+    [ObservableProperty]
+    private string clientAccessToken;
 
     public ConfigurationDetailViewModel(
         ILogger<ConfigurationDetailViewModel> logger,
@@ -28,11 +35,20 @@ public partial class ConfigurationDetailViewModel : ObservableObject
         _logger = logger;
         _azureAdClientTokenProviderFactory = azureAdClientTokenProviderFactory;
 
-        _configuration = ClientConfigurationModel.Empty;
-        _errorMessage = string.Empty;
+        configuration = ClientConfigurationModel.Empty;
+        errorMessage = string.Empty;
+        clientAccessToken = string.Empty;
     }
 
-    [RelayCommand]
+    partial void OnConfigurationChanged(ClientConfigurationModel value)
+    {
+        GetClientAccessTokenButtonEnabled = ValidateConfiguration();
+    }
+
+    [RelayCommand(
+        CanExecute = nameof(GetClientAccessTokenButtonEnabled),
+        IncludeCancelCommand = true,
+        AllowConcurrentExecutions = false)]
     private async Task GetClientAccessToken(CancellationToken cancellationToken)
     {
         var azureAdClientConfiguration = new ClientConfiguration
@@ -52,6 +68,8 @@ public partial class ConfigurationDetailViewModel : ObservableObject
                 .GetAccessToken(Configuration.Scope, cancellationToken);
 
             HideErrorMessage();
+
+            ClientAccessToken = clientAccessToken;
         }
         catch (Exception ex)
         {
@@ -61,6 +79,20 @@ public partial class ConfigurationDetailViewModel : ObservableObject
 
             ShowErrorMessage(ex.Message);
         }
+    }
+
+    private bool ValidateConfiguration()
+    {
+        if (string.IsNullOrEmpty(Configuration.Audience) ||
+            string.IsNullOrEmpty(Configuration.AuthorityUrl) ||
+            string.IsNullOrEmpty(Configuration.ClientId) ||
+            string.IsNullOrEmpty(Configuration.ClientSecret) ||
+            string.IsNullOrEmpty(Configuration.Scope))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private void ShowErrorMessage(string message)

@@ -5,45 +5,85 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewModels="clr-namespace:ClientTokenProvider.AzureAd.ViewModels"
-    Title="MainPage">
+    Title="">
 
-    <ContentPage.BindingContext>
-        <viewModels:ConfigurationDetailViewModel />
-    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <Style Class="configurationWrapper" TargetType="Grid">
+            <Setter Property="Padding" Value="20, 10, 20, 10" />
+        </Style>
 
-    <VerticalStackLayout Padding="20">
-        <Grid RowDefinitions="1*, 1*, 1*, 1*, 1*, 1.*">
-            <VerticalStackLayout Grid.Row="0" StyleClass="formGroup">
-                <Label StyleClass="formLabel" Text="Authority" />
-                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.AuthorityUrl}" />
+        <Style Class="responseWrapper" TargetType="Grid">
+            <Setter Property="Padding" Value="20, 10, 20, 10" />
+
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid ColumnDefinitions="*, *">
+        <Grid RowDefinitions="auto, *, auto" StyleClass="configurationWrapper">
+            <VerticalStackLayout Grid.Row="0">
+                <VerticalStackLayout StyleClass="formGroup">
+                    <Label StyleClass="formLabel" Text="Authority" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.AuthorityUrl}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout StyleClass="formGroup">
+                    <Label StyleClass="formLabel" Text="Scope" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Scope}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout StyleClass="formGroup">
+                    <Label StyleClass="formLabel" Text="Audience" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Audience}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout StyleClass="formGroup">
+                    <Label StyleClass="formLabel" Text="ClientId" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientId}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout StyleClass="formGroup">
+                    <Label StyleClass="formLabel" Text="ClientSecret" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientSecret}" />
+                </VerticalStackLayout>
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Row="1" StyleClass="formGroup">
-                <Label StyleClass="formLabel" Text="Scope" />
-                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Scope}" />
+            <VerticalStackLayout Grid.Row="2">
+                <Button
+                    Command="{Binding GetClientAccessTokenCommand}"
+                    StyleClass="btnPrimary"
+                    Text="Get Access Token" />
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Row="2" StyleClass="formGroup">
-                <Label StyleClass="formLabel" Text="Audience" />
-                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Audience}" />
-            </VerticalStackLayout>
-
-            <VerticalStackLayout Grid.Row="3" StyleClass="formGroup">
-                <Label StyleClass="formLabel" Text="ClientId" />
-                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientId}" />
-            </VerticalStackLayout>
-
-            <VerticalStackLayout Grid.Row="4" StyleClass="formGroup">
-                <Label StyleClass="formLabel" Text="ClientSecret" />
-                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientSecret}" />
-            </VerticalStackLayout>
-
-            <Button
-                Grid.Row="5"
-                Command="{Binding GetClientAccessTokenCommand}"
-                StyleClass="btnPrimary"
-                Text="Get Client Access Token" />
         </Grid>
 
-    </VerticalStackLayout>
+        <HorizontalStackLayout Grid.Column="1" Background="Blue">
+            <BoxView
+                Margin="0,0,0,0"
+                VerticalOptions="Fill"
+                WidthRequest="1"
+                Color="{StaticResource Gray400}" />
+
+            <Grid
+                BackgroundColor="Red"
+                RowDefinitions="*"
+                StyleClass="responseWrapper">
+                <VerticalStackLayout Grid.Row="0" Background="Gray">
+                    <Label>Access token</Label>
+
+                    <Label Text="{Binding ClientAccessToken}" />
+
+                    <Label
+                        Background="CadetBlue"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        VerticalOptions="Center"
+                        VerticalTextAlignment="Center">
+                        Enter Azure AD configuration and click Get Access Token to get a response
+                    </Label>
+                </VerticalStackLayout>
+            </Grid>
+        </HorizontalStackLayout>
+    </Grid>
+
+
 </ContentPage>

@@ -27,7 +27,7 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        services.AddClientTokenProvider();
+        services.AddClientTokenProviderApplication();
 
         return builder.Build();
     }
