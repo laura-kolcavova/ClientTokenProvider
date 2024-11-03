@@ -16,17 +16,21 @@ public partial class ConfigurationDetailViewModel : ObservableObject
     private ClientConfigurationModel configuration;
 
     [ObservableProperty]
-    private bool isErrorMessageVisible;
+    private ActionState state;
 
     [ObservableProperty]
     private string errorMessage;
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(GetClientAccessTokenCommand))]
-    private bool getClientAccessTokenButtonEnabled;
+    private string accessToken;
 
     [ObservableProperty]
-    private string clientAccessToken;
+    [NotifyCanExecuteChangedFor(nameof(GetAccessTokenCommand))]
+    private bool getAccessTokenButtonEnabled;
+
+    private ActionState _previousState;
+
+    private CancellationTokenSource _cancellationTokenSource;
 
     public ConfigurationDetailViewModel(
         ILogger<ConfigurationDetailViewModel> logger,
@@ -36,20 +40,22 @@ public partial class ConfigurationDetailViewModel : ObservableObject
         _azureAdClientTokenProviderFactory = azureAdClientTokenProviderFactory;
 
         configuration = ClientConfigurationModel.Empty;
+        state = ActionState.Loading;
         errorMessage = string.Empty;
-        clientAccessToken = string.Empty;
+        accessToken = string.Empty;
+        _cancellationTokenSource = new CancellationTokenSource();
     }
 
     partial void OnConfigurationChanged(ClientConfigurationModel value)
     {
-        GetClientAccessTokenButtonEnabled = ValidateConfiguration();
+        GetAccessTokenButtonEnabled = ValidateConfiguration();
     }
 
     [RelayCommand(
-        CanExecute = nameof(GetClientAccessTokenButtonEnabled),
+        CanExecute = nameof(GetAccessTokenButtonEnabled),
         IncludeCancelCommand = true,
         AllowConcurrentExecutions = false)]
-    private async Task GetClientAccessToken(CancellationToken cancellationToken)
+    private async Task GetAccessToken(CancellationToken cancellationToken)
     {
         var azureAdClientConfiguration = new ClientConfiguration
         {
@@ -64,12 +70,16 @@ public partial class ConfigurationDetailViewModel : ObservableObject
 
         try
         {
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            var customCancellationToken = _cancellationTokenSource.Token;
+
+            SwitchToState(ActionState.Loading);
+
             var clientAccessToken = await azureAdClientTokenProvider
-                .GetAccessToken(Configuration.Scope, cancellationToken);
+                .GetAccessToken(Configuration.Scope, customCancellationToken);
 
-            HideErrorMessage();
-
-            ClientAccessToken = clientAccessToken;
+            HandleSuccess(clientAccessToken);
         }
         catch (Exception ex)
         {
@@ -77,8 +87,21 @@ public partial class ConfigurationDetailViewModel : ObservableObject
                 ex,
                 "An unexpected error occurred while getting client access token");
 
-            ShowErrorMessage(ex.Message);
+            HandleError(ex.Message);
         }
+        finally
+        {
+            _cancellationTokenSource.Dispose();
+        }
+    }
+
+    [RelayCommand]
+    private void CancelRequest()
+    {
+        SwitchToState(_previousState);
+
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource.Dispose();
     }
 
     private bool ValidateConfiguration()
@@ -95,15 +118,27 @@ public partial class ConfigurationDetailViewModel : ObservableObject
         return true;
     }
 
-    private void ShowErrorMessage(string message)
+    private void SwitchToState(ActionState state)
     {
-        IsErrorMessageVisible = true;
-        ErrorMessage = message;
+        _previousState = State;
+        State = state;
     }
 
-    private void HideErrorMessage()
+    private void SwitchToPreviousState()
     {
-        IsErrorMessageVisible = false;
-        ErrorMessage = string.Empty;
+        SwitchToState(_previousState);
+    }
+
+    private void HandleError(string message)
+    {
+
+        ErrorMessage = message;
+        SwitchToState(ActionState.Error);
+    }
+
+    private void HandleSuccess(string accessToken)
+    {
+        AccessToken = accessToken;
+        SwitchToState(ActionState.Success);
     }
 }
