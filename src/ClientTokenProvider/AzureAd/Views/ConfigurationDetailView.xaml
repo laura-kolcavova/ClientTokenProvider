@@ -5,12 +5,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:ClientTokenProvider.AzureAd.Models"
     xmlns:sharedComponents="clr-namespace:ClientTokenProvider.Shared.Components"
+    xmlns:sharedConverters="clr-namespace:ClientTokenProvider.Shared.Converters"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewModels="clr-namespace:ClientTokenProvider.AzureAd.ViewModels"
     Title="">
 
     <ContentPage.Resources>
         <ResourceDictionary>
+
             <toolkit:EnumToBoolConverter x:Key="EnumToBoolConverter" />
 
             <toolkit:EnumToBoolConverter x:Key="CanSendRequestConverter">
@@ -20,6 +22,8 @@
                     <models:ActionState>Success</models:ActionState>
                 </toolkit:EnumToBoolConverter.TrueValues>
             </toolkit:EnumToBoolConverter>
+
+            <sharedConverters:TextChangedEventArgsToNewValueConverter x:Key="TextChangedEventArgsToNewValueConverter" />
         </ResourceDictionary>
 
         <Style Class="configurationWrapper" TargetType="Grid">
@@ -57,27 +61,62 @@
             <VerticalStackLayout Grid.Row="0">
                 <VerticalStackLayout StyleClass="formGroup">
                     <Label StyleClass="formLabel" Text="Authority" />
-                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.AuthorityUrl}" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.AuthorityUrl, Mode=OneWay}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateAuthorityCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>
+                    </Entry>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout StyleClass="formGroup">
                     <Label StyleClass="formLabel" Text="Scope" />
-                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Scope}" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Scope, Mode=OneWay}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateScopeCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>
+                    </Entry>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout StyleClass="formGroup">
                     <Label StyleClass="formLabel" Text="Audience" />
-                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Audience}" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Audience, Mode=OneWay}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateAudienceCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>
+                    </Entry>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout StyleClass="formGroup">
                     <Label StyleClass="formLabel" Text="ClientId" />
-                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientId}" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientId, Mode=OneWay}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateClientIdCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>
+                    </Entry>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout StyleClass="formGroup">
                     <Label StyleClass="formLabel" Text="ClientSecret" />
-                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientSecret}" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientSecret, Mode=OneWay}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateClientSecretCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>
+                    </Entry>
                 </VerticalStackLayout>
             </VerticalStackLayout>
 

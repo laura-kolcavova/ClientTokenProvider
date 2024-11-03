@@ -40,7 +40,7 @@ public partial class ConfigurationDetailViewModel : ObservableObject
         _azureAdClientTokenProviderFactory = azureAdClientTokenProviderFactory;
 
         configuration = ClientConfigurationModel.Empty;
-        state = ActionState.Loading;
+        state = ActionState.Idle;
         errorMessage = string.Empty;
         accessToken = string.Empty;
         _cancellationTokenSource = new CancellationTokenSource();
@@ -49,6 +49,51 @@ public partial class ConfigurationDetailViewModel : ObservableObject
     partial void OnConfigurationChanged(ClientConfigurationModel value)
     {
         GetAccessTokenButtonEnabled = ValidateConfiguration();
+    }
+
+    [RelayCommand]
+    private void UpdateAuthority(string authority)
+    {
+        Configuration = Configuration with
+        {
+            AuthorityUrl = authority
+        };
+    }
+
+    [RelayCommand]
+    private void UpdateScope(string scope)
+    {
+        Configuration = Configuration with
+        {
+            Scope = scope
+        };
+    }
+
+    [RelayCommand]
+    private void UpdateAudience(string audience)
+    {
+        Configuration = Configuration with
+        {
+            Audience = audience
+        };
+    }
+
+    [RelayCommand]
+    private void UpdateClientId(string clientId)
+    {
+        Configuration = Configuration with
+        {
+            ClientId = clientId
+        };
+    }
+
+    [RelayCommand]
+    private void UpdateClientSecret(string clientSecret)
+    {
+        Configuration = Configuration with
+        {
+            ClientSecret = clientSecret
+        };
     }
 
     [RelayCommand(
