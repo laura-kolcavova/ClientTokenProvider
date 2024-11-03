@@ -77,6 +77,7 @@ public partial class CircularSpinner :
         set => SetValue(EnabledProperty, value);
     }
 
+
     public CircularSpinner()
     {
         InitializeComponent();
@@ -102,6 +103,8 @@ public partial class CircularSpinner :
     {
         if (!_timer.IsRunning)
         {
+            CircularSpinnerDrawableLocal.EndAngle = CircularSpinnerDrawableLocal.StartAngle;
+
             _timer.Start();
         }
     }

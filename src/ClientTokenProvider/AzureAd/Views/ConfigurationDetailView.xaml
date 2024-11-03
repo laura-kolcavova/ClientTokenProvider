@@ -57,7 +57,7 @@
 
         <Style Class="errorMessage" TargetType="Label">
             <Setter Property="MaxLines" Value="2" />
-            <Setter Property="MaximumWidthRequest" Value="250" />
+            <Setter Property="MaximumWidthRequest" Value="230" />
             <Setter Property="LineBreakMode" Value="TailTruncation" />
         </Style>
 
@@ -205,7 +205,6 @@
                         <Border StyleClass="errorWrapper">
                             <FlexLayout>
                                 <Label
-                                    Grid.Column="0"
                                     Padding="0,0,10,0"
                                     HorizontalTextAlignment="Center"
                                     StyleClass="errorMessage"
@@ -219,7 +218,6 @@
                                 </Label>
 
                                 <Label
-                                    Grid.Column="2"
                                     Padding="10,0,0,0"
                                     HorizontalTextAlignment="Center"
                                     StyleClass="viewErrorDetailLabel"
