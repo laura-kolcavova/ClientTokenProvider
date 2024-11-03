@@ -47,12 +47,23 @@
         </Style>
 
         <Style Class="errorWrapper" TargetType="Border">
-            <Setter Property="MinimumWidthRequest" Value="150" />
+
             <Setter Property="BackgroundColor" Value="{StaticResource Danger}" />
             <Setter Property="Stroke" Value="{StaticResource Danger}" />
             <Setter Property="StrokeThickness" Value="1" />
             <Setter Property="StrokeShape" Value=" RoundRectangle 50" />
             <Setter Property="Padding" Value="14,6" />
+        </Style>
+
+        <Style Class="errorMessage" TargetType="Label">
+            <Setter Property="MaxLines" Value="2" />
+            <Setter Property="MaximumWidthRequest" Value="250" />
+            <Setter Property="LineBreakMode" Value="TailTruncation" />
+        </Style>
+
+        <Style Class="viewErrorDetailLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource Orange300}" />
+            <Setter Property="FontAttributes" Value="Bold" />
         </Style>
     </ContentPage.Resources>
 
@@ -192,15 +203,33 @@
                         </Label>
 
                         <Border StyleClass="errorWrapper">
-                            <HorizontalStackLayout>
-                                <Label>
-                                    <Label.Text>
-                                        <MultiBinding StringFormat="{}Error: {0}">
-                                            <Binding Path="ErrorMessage" />
-                                        </MultiBinding>
-                                    </Label.Text>
+                            <FlexLayout>
+                                <Label
+                                    Grid.Column="0"
+                                    Padding="0,0,10,0"
+                                    HorizontalTextAlignment="Center"
+                                    StyleClass="errorMessage"
+                                    VerticalTextAlignment="Center">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Error: " />
+                                            <Span Text="{Binding ErrorMessage}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
                                 </Label>
-                            </HorizontalStackLayout>
+
+                                <Label
+                                    Grid.Column="2"
+                                    Padding="10,0,0,0"
+                                    HorizontalTextAlignment="Center"
+                                    StyleClass="viewErrorDetailLabel"
+                                    Text="View Detail"
+                                    VerticalTextAlignment="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ShowErrorDetailModalCommand}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </FlexLayout>
 
                         </Border>
                     </VerticalStackLayout>

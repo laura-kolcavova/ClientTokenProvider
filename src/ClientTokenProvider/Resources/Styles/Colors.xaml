@@ -29,6 +29,14 @@
     <Color x:Key="Gray900">#212121</Color>
     <Color x:Key="Gray950">#141414</Color>
 
+    <Color x:Key="Orange300">#fdba74</Color>
+    <Color x:Key="Orange400">#fb923c</Color>
+    <Color x:Key="Orange500">#f97316</Color>
+    <Color x:Key="Orange600">#ea580c</Color>
+    <Color x:Key="Orange700">#c2410c</Color>
+    <Color x:Key="Orange800">#9a3412</Color>
+    <Color x:Key="Orange900">#7c2d12</Color>
+
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}" />
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}" />

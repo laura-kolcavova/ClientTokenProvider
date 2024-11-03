@@ -1,8 +1,10 @@
-﻿using ClientTokenProvider.AzureAd.Models;
+﻿using ClientTokenProvider.AzureAd.Messages;
+using ClientTokenProvider.AzureAd.Models;
 using ClientTokenProvider.Core.AzureAd.Factories;
 using ClientTokenProvider.Core.AzureAd.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 
 namespace ClientTokenProvider.AzureAd.ViewModels;
@@ -147,6 +149,15 @@ public partial class ConfigurationDetailViewModel : ObservableObject
 
         _cancellationTokenSource.Cancel();
         _cancellationTokenSource.Dispose();
+    }
+
+    [RelayCommand]
+    private void ShowErrorDetailModal()
+    {
+        WeakReferenceMessenger.Default.Send(new ShowErrorDetailMessage
+        {
+            ErrorMessage = ErrorMessage
+        });
     }
 
     private bool ValidateConfiguration()
