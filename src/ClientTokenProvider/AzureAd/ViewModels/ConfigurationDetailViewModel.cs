@@ -1,8 +1,10 @@
-﻿using ClientTokenProvider.AzureAd.Models;
+﻿using ClientTokenProvider.AzureAd.Messages;
+using ClientTokenProvider.AzureAd.Models;
 using ClientTokenProvider.Core.AzureAd.Factories;
 using ClientTokenProvider.Core.AzureAd.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 
 namespace ClientTokenProvider.AzureAd.ViewModels;
@@ -13,13 +15,24 @@ public partial class ConfigurationDetailViewModel : ObservableObject
     private readonly IAzureAdClientTokenProviderFactory _azureAdClientTokenProviderFactory;
 
     [ObservableProperty]
-    private ClientConfigurationModel _configuration;
+    private ClientConfigurationModel configuration;
 
     [ObservableProperty]
-    private bool _isErrorMessageVisible;
+    private ActionState state;
 
     [ObservableProperty]
-    private string _errorMessage;
+    private string errorMessage;
+
+    [ObservableProperty]
+    private string accessToken;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(GetAccessTokenCommand))]
+    private bool getAccessTokenButtonEnabled;
+
+    private ActionState _previousState;
+
+    private CancellationTokenSource _cancellationTokenSource;
 
     public ConfigurationDetailViewModel(
         ILogger<ConfigurationDetailViewModel> logger,
@@ -28,12 +41,68 @@ public partial class ConfigurationDetailViewModel : ObservableObject
         _logger = logger;
         _azureAdClientTokenProviderFactory = azureAdClientTokenProviderFactory;
 
-        _configuration = ClientConfigurationModel.Empty;
-        _errorMessage = string.Empty;
+        configuration = ClientConfigurationModel.Empty;
+        state = ActionState.Idle;
+        errorMessage = string.Empty;
+        accessToken = string.Empty;
+        _cancellationTokenSource = new CancellationTokenSource();
+    }
+
+    partial void OnConfigurationChanged(ClientConfigurationModel value)
+    {
+        GetAccessTokenButtonEnabled = ValidateConfiguration();
     }
 
     [RelayCommand]
-    private async Task GetClientAccessToken(CancellationToken cancellationToken)
+    private void UpdateAuthority(string authority)
+    {
+        Configuration = Configuration with
+        {
+            AuthorityUrl = authority
+        };
+    }
+
+    [RelayCommand]
+    private void UpdateScope(string scope)
+    {
+        Configuration = Configuration with
+        {
+            Scope = scope
+        };
+    }
+
+    [RelayCommand]
+    private void UpdateAudience(string audience)
+    {
+        Configuration = Configuration with
+        {
+            Audience = audience
+        };
+    }
+
+    [RelayCommand]
+    private void UpdateClientId(string clientId)
+    {
+        Configuration = Configuration with
+        {
+            ClientId = clientId
+        };
+    }
+
+    [RelayCommand]
+    private void UpdateClientSecret(string clientSecret)
+    {
+        Configuration = Configuration with
+        {
+            ClientSecret = clientSecret
+        };
+    }
+
+    [RelayCommand(
+        CanExecute = nameof(GetAccessTokenButtonEnabled),
+        IncludeCancelCommand = true,
+        AllowConcurrentExecutions = false)]
+    private async Task GetAccessToken(CancellationToken cancellationToken)
     {
         var azureAdClientConfiguration = new ClientConfiguration
         {
@@ -48,10 +117,16 @@ public partial class ConfigurationDetailViewModel : ObservableObject
 
         try
         {
-            var clientAccessToken = await azureAdClientTokenProvider
-                .GetAccessToken(Configuration.Scope, cancellationToken);
+            _cancellationTokenSource = new CancellationTokenSource();
 
-            HideErrorMessage();
+            var customCancellationToken = _cancellationTokenSource.Token;
+
+            SwitchToState(ActionState.Loading);
+
+            var clientAccessToken = await azureAdClientTokenProvider
+                .GetAccessToken(Configuration.Scope, customCancellationToken);
+
+            HandleSuccess(clientAccessToken);
         }
         catch (Exception ex)
         {
@@ -59,19 +134,67 @@ public partial class ConfigurationDetailViewModel : ObservableObject
                 ex,
                 "An unexpected error occurred while getting client access token");
 
-            ShowErrorMessage(ex.Message);
+            HandleError(ex.Message);
+        }
+        finally
+        {
+            _cancellationTokenSource.Dispose();
         }
     }
 
-    private void ShowErrorMessage(string message)
+    [RelayCommand]
+    private void CancelRequest()
     {
-        IsErrorMessageVisible = true;
-        ErrorMessage = message;
+        SwitchToState(_previousState);
+
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource.Dispose();
     }
 
-    private void HideErrorMessage()
+    [RelayCommand]
+    private void ShowErrorDetailModal()
     {
-        IsErrorMessageVisible = false;
-        ErrorMessage = string.Empty;
+        WeakReferenceMessenger.Default.Send(new ShowErrorDetailMessage
+        {
+            ErrorMessage = ErrorMessage
+        });
+    }
+
+    private bool ValidateConfiguration()
+    {
+        if (string.IsNullOrEmpty(Configuration.Audience) ||
+            string.IsNullOrEmpty(Configuration.AuthorityUrl) ||
+            string.IsNullOrEmpty(Configuration.ClientId) ||
+            string.IsNullOrEmpty(Configuration.ClientSecret) ||
+            string.IsNullOrEmpty(Configuration.Scope))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private void SwitchToState(ActionState state)
+    {
+        _previousState = State;
+        State = state;
+    }
+
+    private void SwitchToPreviousState()
+    {
+        SwitchToState(_previousState);
+    }
+
+    private void HandleError(string message)
+    {
+
+        ErrorMessage = message;
+        SwitchToState(ActionState.Error);
+    }
+
+    private void HandleSuccess(string accessToken)
+    {
+        AccessToken = accessToken;
+        SwitchToState(ActionState.Success);
     }
 }

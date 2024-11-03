@@ -8,8 +8,8 @@
     Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
-        Title="Home"
+        Title=""
         ContentTemplate="{DataTemplate azureAdViews:ConfigurationDetailView}"
-        Route="MainPage" />
+        Route="AzureAdClient" />
 
 </Shell>

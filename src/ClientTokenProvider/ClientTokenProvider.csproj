@@ -47,13 +47,17 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Images\repair.svg" />
+	  <None Remove="Resources\Images\rocket.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -72,10 +76,16 @@
 	  <Compile Update="AzureAd\Views\ConfigurationDetailView.xaml.cs">
 	    <DependentUpon>ConfigurationDetailView.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Shared\Components\CircularSpinner.xaml.cs">
+	    <DependentUpon>CircularSpinner.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="AzureAd\Views\ConfigurationDetailView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Shared\Components\CircularSpinner.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

@@ -3,47 +3,244 @@
     x:Class="ClientTokenProvider.AzureAd.Views.ConfigurationDetailView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:ClientTokenProvider.AzureAd.Models"
+    xmlns:sharedComponents="clr-namespace:ClientTokenProvider.Shared.Components"
+    xmlns:sharedConverters="clr-namespace:ClientTokenProvider.Shared.Converters"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewModels="clr-namespace:ClientTokenProvider.AzureAd.ViewModels"
-    Title="MainPage">
+    Title="">
 
-    <ContentPage.BindingContext>
-        <viewModels:ConfigurationDetailViewModel />
-    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
 
-    <VerticalStackLayout Padding="20">
-        <Grid RowDefinitions="1*, 1*, 1*, 1*, 1*, 1.*">
-            <VerticalStackLayout Grid.Row="0" StyleClass="formGroup">
-                <Label StyleClass="formLabel" Text="Authority" />
-                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.AuthorityUrl}" />
+            <toolkit:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+
+            <toolkit:EnumToBoolConverter x:Key="CanSendRequestConverter">
+                <toolkit:EnumToBoolConverter.TrueValues>
+                    <models:ActionState>Idle</models:ActionState>
+                    <models:ActionState>Error</models:ActionState>
+                    <models:ActionState>Success</models:ActionState>
+                </toolkit:EnumToBoolConverter.TrueValues>
+            </toolkit:EnumToBoolConverter>
+
+            <sharedConverters:TextChangedEventArgsToNewValueConverter x:Key="TextChangedEventArgsToNewValueConverter" />
+        </ResourceDictionary>
+
+        <Style Class="configurationWrapper" TargetType="Grid">
+            <Setter Property="Padding" Value="20, 10, 20, 10" />
+        </Style>
+
+        <Style Class="responseWrapper" TargetType="Grid">
+            <Setter Property="Padding" Value="20, 10, 20, 10" />
+        </Style>
+
+        <Style Class="alertWrapper" TargetType="VerticalStackLayout">
+            <Setter Property="Spacing" Value="20" />
+        </Style>
+
+        <Style Class="alertImage" TargetType="Image">
+            <Setter Property="WidthRequest" Value="100" />
+        </Style>
+
+        <Style Class="alertMessage" TargetType="Label">
+            <Setter Property="HorizontalTextAlignment" Value="Center" />
+        </Style>
+
+        <Style Class="errorWrapper" TargetType="Border">
+
+            <Setter Property="BackgroundColor" Value="{StaticResource Danger}" />
+            <Setter Property="Stroke" Value="{StaticResource Danger}" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape" Value=" RoundRectangle 50" />
+            <Setter Property="Padding" Value="14,6" />
+        </Style>
+
+        <Style Class="errorMessage" TargetType="Label">
+            <Setter Property="MaxLines" Value="2" />
+            <Setter Property="MaximumWidthRequest" Value="230" />
+            <Setter Property="LineBreakMode" Value="TailTruncation" />
+        </Style>
+
+        <Style Class="viewErrorDetailLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource Orange300}" />
+            <Setter Property="FontAttributes" Value="Bold" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid ColumnDefinitions="*, *">
+        <Grid RowDefinitions="auto, *, auto" StyleClass="configurationWrapper">
+            <VerticalStackLayout Grid.Row="0">
+                <VerticalStackLayout StyleClass="formGroup">
+                    <Label StyleClass="formLabel" Text="Authority" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.AuthorityUrl, Mode=OneWay}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateAuthorityCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout StyleClass="formGroup">
+                    <Label StyleClass="formLabel" Text="Scope" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Scope, Mode=OneWay}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateScopeCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout StyleClass="formGroup">
+                    <Label StyleClass="formLabel" Text="Audience" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Audience, Mode=OneWay}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateAudienceCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout StyleClass="formGroup">
+                    <Label StyleClass="formLabel" Text="ClientId" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientId, Mode=OneWay}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateClientIdCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout StyleClass="formGroup">
+                    <Label StyleClass="formLabel" Text="ClientSecret" />
+                    <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientSecret, Mode=OneWay}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateClientSecretCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </VerticalStackLayout>
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Row="1" StyleClass="formGroup">
-                <Label StyleClass="formLabel" Text="Scope" />
-                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Scope}" />
+            <VerticalStackLayout Grid.Row="2">
+                <Button
+                    Command="{Binding GetAccessTokenCommand}"
+                    IsVisible="{Binding State, Converter={StaticResource CanSendRequestConverter}}"
+                    StyleClass="btnPrimary"
+                    Text="Get Access Token" />
+
+                <Button
+                    Command="{Binding CancelRequestCommand}"
+                    IsVisible="{Binding State, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ActionState.Loading}}"
+                    StyleClass="btnSecondary"
+                    Text="Cancel" />
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Row="2" StyleClass="formGroup">
-                <Label StyleClass="formLabel" Text="Audience" />
-                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Audience}" />
-            </VerticalStackLayout>
-
-            <VerticalStackLayout Grid.Row="3" StyleClass="formGroup">
-                <Label StyleClass="formLabel" Text="ClientId" />
-                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientId}" />
-            </VerticalStackLayout>
-
-            <VerticalStackLayout Grid.Row="4" StyleClass="formGroup">
-                <Label StyleClass="formLabel" Text="ClientSecret" />
-                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientSecret}" />
-            </VerticalStackLayout>
-
-            <Button
-                Grid.Row="5"
-                Command="{Binding GetClientAccessTokenCommand}"
-                StyleClass="btnPrimary"
-                Text="Get Client Access Token" />
         </Grid>
 
-    </VerticalStackLayout>
+        <Grid Grid.Column="1" ColumnDefinitions="1, *">
+            <BoxView
+                Grid.Column="0"
+                Margin="0,0,0,0"
+                VerticalOptions="Fill"
+                WidthRequest="1"
+                Color="{StaticResource Gray400}" />
+
+            <Grid
+                Grid.Column="1"
+                RowDefinitions="auto, *"
+                StyleClass="responseWrapper">
+                <Label Grid.Row="0">Access token</Label>
+
+                <FlexLayout
+                    Grid.Row="1"
+                    AlignItems="Center"
+                    Direction="Column"
+                    JustifyContent="Center">
+
+                    <VerticalStackLayout
+                        FlexLayout.AlignSelf="Center"
+                        IsVisible="{Binding State, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ActionState.Idle}}"
+                        StyleClass="alertWrapper">
+                        <Image Source="rocket.png" StyleClass="alertImage" />
+
+                        <Label StyleClass="alertMessage">
+                            Enter Azure AD configuration and click Get Access Token to get a response
+                        </Label>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout
+                        FlexLayout.AlignSelf="Center"
+                        IsVisible="{Binding State, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ActionState.Loading}}"
+                        StyleClass="alertWrapper">
+                        <sharedComponents:CircularSpinner
+                            Enabled="{Binding State, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ActionState.Loading}}"
+                            PrimaryColor="{StaticResource Primary}"
+                            SecondaryColor="{StaticResource White}"
+                            Size="60"
+                            Speed="3"
+                            Thickness="4" />
+
+                        <Label StyleClass="alertMessage">
+                            Sending request ...
+                        </Label>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout IsVisible="{Binding State, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ActionState.Error}}" StyleClass="alertWrapper">
+                        <Image Source="repair.png" StyleClass="alertImage" />
+
+                        <Label StyleClass="alertMessage">
+                            Could not send request
+                        </Label>
+
+                        <Border StyleClass="errorWrapper">
+                            <FlexLayout>
+                                <Label
+                                    Padding="0,0,10,0"
+                                    HorizontalTextAlignment="Center"
+                                    StyleClass="errorMessage"
+                                    VerticalTextAlignment="Center">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Error: " />
+                                            <Span Text="{Binding ErrorMessage}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+
+                                <Label
+                                    Padding="10,0,0,0"
+                                    HorizontalTextAlignment="Center"
+                                    StyleClass="viewErrorDetailLabel"
+                                    Text="View Detail"
+                                    VerticalTextAlignment="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ShowErrorDetailModalCommand}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </FlexLayout>
+
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout IsVisible="{Binding State, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ActionState.Success}}">
+                        <Label Text="{Binding AccessToken}" />
+                    </VerticalStackLayout>
+                </FlexLayout>
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+
+
 </ContentPage>
