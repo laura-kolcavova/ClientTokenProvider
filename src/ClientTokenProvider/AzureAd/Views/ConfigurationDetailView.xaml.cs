@@ -6,16 +6,20 @@ namespace ClientTokenProvider.AzureAd.Views;
 
 public partial class ConfigurationDetailView :
     ContentPage,
-    IRecipient<ShowErrorDetailMessage>
+    IRecipient<ShowErrorDetailMessage>,
+    IRecipient<ShowSavingFileFailedErrorMessage>
 {
     public ConfigurationDetailView(ConfigurationDetailViewModel viewModel)
     {
-        BindingContext = viewModel;
         InitializeComponent();
+
+        BindingContext = viewModel;
 
         Loaded += (s, e) =>
         {
             WeakReferenceMessenger.Default.RegisterAll(this);
+
+            AuthorityEntry.Focus();
         };
 
         Unloaded += (s, e) =>
@@ -24,8 +28,21 @@ public partial class ConfigurationDetailView :
         };
     }
 
-    async void IRecipient<ShowErrorDetailMessage>.Receive(ShowErrorDetailMessage message)
+    async void IRecipient<ShowErrorDetailMessage>.Receive(
+        ShowErrorDetailMessage message)
     {
-        await DisplayAlert("Error", message.ErrorMessage, "Close");
+        await DisplayAlert(
+            "Error",
+            message.ErrorMessage,
+            "Close");
+    }
+
+    async void IRecipient<ShowSavingFileFailedErrorMessage>.Receive(
+        ShowSavingFileFailedErrorMessage message)
+    {
+        await DisplayAlert(
+            "Saving file failed",
+            "File could not be saved",
+            "Close");
     }
 }

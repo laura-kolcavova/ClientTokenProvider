@@ -1,9 +1,10 @@
-﻿using ClientTokenProvider.AzureAd.ViewModels;
+﻿using ClientTokenProvider.AzureAd.Managers;
+using ClientTokenProvider.AzureAd.ViewModels;
 using ClientTokenProvider.AzureAd.Views;
 using ClientTokenProvider.Core.AzureAd.Extensions;
 using CommunityToolkit.Maui;
 
-namespace ClientTokenProvider.Extensions;
+namespace ClientTokenProvider.AzureAd.Extensions;
 
 internal static class ServiceCollectionExtensions
 {
@@ -15,6 +16,9 @@ internal static class ServiceCollectionExtensions
 
         services
             .AddAzureAdClientTokenProvider();
+
+        services
+            .AddSingleton<IConfigurationFileManager, ConfigurationFileManager>();
 
         return services;
     }

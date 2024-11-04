@@ -9,6 +9,7 @@
     <Color x:Key="Secondary">#ab47bc</Color>
     <Color x:Key="SecondaryText">#f3e5f5</Color>
     <Color x:Key="Tertiary">#393939</Color>
+    <Color x:Key="TertiaryText">#6E6E6E</Color>
 
     <Color x:Key="Danger">#d32f2f</Color>
     <Color x:Key="Warning">#f57c00</Color>

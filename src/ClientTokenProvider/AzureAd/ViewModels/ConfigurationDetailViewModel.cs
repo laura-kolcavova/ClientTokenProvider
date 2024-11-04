@@ -1,7 +1,8 @@
-﻿using ClientTokenProvider.AzureAd.Messages;
+﻿using ClientTokenProvider.AzureAd.Managers;
+using ClientTokenProvider.AzureAd.Mappers;
+using ClientTokenProvider.AzureAd.Messages;
 using ClientTokenProvider.AzureAd.Models;
 using ClientTokenProvider.Core.AzureAd.Factories;
-using ClientTokenProvider.Core.AzureAd.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -13,6 +14,7 @@ public partial class ConfigurationDetailViewModel : ObservableObject
 {
     private readonly ILogger _logger;
     private readonly IAzureAdClientTokenProviderFactory _azureAdClientTokenProviderFactory;
+    private readonly IConfigurationFileManager _configurationFileManager;
 
     [ObservableProperty]
     private ClientConfigurationModel configuration;
@@ -30,27 +32,41 @@ public partial class ConfigurationDetailViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(GetAccessTokenCommand))]
     private bool getAccessTokenButtonEnabled;
 
+    [ObservableProperty]
+    private string configurationName;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
+    private bool saveFileButtonEnabled;
+
     private ActionState _previousState;
 
     private CancellationTokenSource _cancellationTokenSource;
 
     public ConfigurationDetailViewModel(
         ILogger<ConfigurationDetailViewModel> logger,
-        IAzureAdClientTokenProviderFactory azureAdClientTokenProviderFactory)
+        IAzureAdClientTokenProviderFactory azureAdClientTokenProviderFactory,
+        IConfigurationFileManager configurationFileManager)
     {
         _logger = logger;
         _azureAdClientTokenProviderFactory = azureAdClientTokenProviderFactory;
+        _configurationFileManager = configurationFileManager;
 
         configuration = ClientConfigurationModel.Empty;
         state = ActionState.Idle;
+
         errorMessage = string.Empty;
         accessToken = string.Empty;
+
+        configurationName = "New Configuration";
+
         _cancellationTokenSource = new CancellationTokenSource();
     }
 
     partial void OnConfigurationChanged(ClientConfigurationModel value)
     {
-        GetAccessTokenButtonEnabled = ValidateConfiguration();
+        GetAccessTokenButtonEnabled = Configuration.IsValid();
+        SaveFileButtonEnabled = !Configuration.IsEmpty();
     }
 
     [RelayCommand]
@@ -104,13 +120,7 @@ public partial class ConfigurationDetailViewModel : ObservableObject
         AllowConcurrentExecutions = false)]
     private async Task GetAccessToken(CancellationToken cancellationToken)
     {
-        var azureAdClientConfiguration = new ClientConfiguration
-        {
-            Audience = Configuration.Audience,
-            AuthorityUri = Configuration.AuthorityUrl,
-            ClientId = Configuration.ClientId,
-            ClientSecret = Configuration.ClientSecret,
-        };
+        var azureAdClientConfiguration = Configuration.ToClientConfiguration();
 
         var azureAdClientTokenProvider = _azureAdClientTokenProviderFactory
             .Create(azureAdClientConfiguration);
@@ -160,18 +170,30 @@ public partial class ConfigurationDetailViewModel : ObservableObject
         });
     }
 
-    private bool ValidateConfiguration()
+    [RelayCommand]
+    private void UpdateConfigurationName(string configurationName)
     {
-        if (string.IsNullOrEmpty(Configuration.Audience) ||
-            string.IsNullOrEmpty(Configuration.AuthorityUrl) ||
-            string.IsNullOrEmpty(Configuration.ClientId) ||
-            string.IsNullOrEmpty(Configuration.ClientSecret) ||
-            string.IsNullOrEmpty(Configuration.Scope))
-        {
-            return false;
-        }
+        ConfigurationName = configurationName;
+    }
 
-        return true;
+    [RelayCommand(
+        CanExecute = nameof(SaveFileButtonEnabled))]
+    private async Task SaveFile(CancellationToken cancellationToken)
+    {
+        var result = await _configurationFileManager.SaveConfiguration(
+            ConfigurationName,
+            Configuration,
+            cancellationToken);
+
+        if (result.IsFailure)
+        {
+            WeakReferenceMessenger.Default.Send(
+                new ShowSavingFileFailedErrorMessage());
+        }
+        else
+        {
+            SaveFileButtonEnabled = false;
+        }
     }
 
     private void SwitchToState(ActionState state)

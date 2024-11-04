@@ -58,6 +58,8 @@
 	<ItemGroup>
 	  <None Remove="Resources\Images\repair.svg" />
 	  <None Remove="Resources\Images\rocket.svg" />
+	  <None Remove="Resources\Images\save_small_grey400.svg" />
+	  <None Remove="Resources\Images\save_small_grey500.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -88,6 +90,10 @@
 	  <MauiXaml Update="Shared\Components\CircularSpinner.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Extensions\" />
 	</ItemGroup>
 
 </Project>
