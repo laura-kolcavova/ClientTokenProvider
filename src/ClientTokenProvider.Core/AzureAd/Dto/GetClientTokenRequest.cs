@@ -1,9 +1,13 @@
-﻿namespace ClientTokenProvider.Core.AzureAd.Dto;
+﻿using System.Text.Json.Serialization;
+
+namespace ClientTokenProvider.Core.AzureAd.Dto;
 
 public sealed record GetClientTokenRequest
 {
+    [JsonPropertyName("mode")]
     public required string Mode { get; init; }
 
+    [JsonPropertyName("urlencoded")]
     public required IReadOnlyCollection<GetClientTokenRequestItem> UrlEncoded { get; init; }
 
     public static GetClientTokenRequest Create(

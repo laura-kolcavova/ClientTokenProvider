@@ -1,4 +1,4 @@
-﻿using ClientTokenProvider.Extensions;
+﻿using ClientTokenProvider.AzureAd.Extensions;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 

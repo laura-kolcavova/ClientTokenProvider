@@ -12,6 +12,34 @@ public sealed record ClientConfigurationModel
 
     public required string ClientSecret { get; init; }
 
+    public bool IsValid()
+    {
+        if (string.IsNullOrEmpty(Audience) ||
+             string.IsNullOrEmpty(AuthorityUrl) ||
+             string.IsNullOrEmpty(ClientId) ||
+             string.IsNullOrEmpty(ClientSecret) ||
+             string.IsNullOrEmpty(Scope))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool IsEmpty()
+    {
+        if (string.IsNullOrEmpty(Audience) &&
+            string.IsNullOrEmpty(AuthorityUrl) &&
+            string.IsNullOrEmpty(ClientId) &&
+            string.IsNullOrEmpty(ClientSecret) &&
+            string.IsNullOrEmpty(Scope))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public static ClientConfigurationModel Empty =>
         new()
         {
