@@ -12,10 +12,10 @@ internal sealed class ConfigurationFileManager(
 {
     public async Task<Result<ClientConfigurationModel, string>> OpenConfiguration(string configurationName, CancellationToken cancellationToken)
     {
-        var path = Path.GetFullPath(configurationName);
-
         try
         {
+            var path = GetPath(configurationName);
+
             var jsonString = await File.ReadAllTextAsync(path, cancellationToken);
 
             var configuration = JsonSerializer.Deserialize<ClientConfigurationModel>(jsonString) ??
@@ -38,12 +38,12 @@ internal sealed class ConfigurationFileManager(
        ClientConfigurationModel configuration,
        CancellationToken cancellationToken)
     {
-        var path = Path.GetFullPath(configurationName);
-
-        var jsonString = JsonSerializer.Serialize(configuration);
-
         try
         {
+            var path = GetPath(configurationName);
+
+            var jsonString = JsonSerializer.Serialize(configuration);
+
             await File.WriteAllTextAsync(path, jsonString, cancellationToken);
 
             return UnitResult.Success<string>();
