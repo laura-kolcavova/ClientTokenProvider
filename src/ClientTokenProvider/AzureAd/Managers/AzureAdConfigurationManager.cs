@@ -1,20 +1,23 @@
-﻿using ClientTokenProvider.AzureAd.Exceptions;
-using ClientTokenProvider.AzureAd.Models;
+﻿using ClientTokenProvider.AzureAd.Models;
+using ClientTokenProvider.Shared.Exceptions;
+using ClientTokenProvider.Shared.Models;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 namespace ClientTokenProvider.AzureAd.Managers;
 
-internal sealed class ConfigurationFileManager(
-    ILogger<ConfigurationFileManager> logger) :
-    IConfigurationFileManager
+internal sealed class AzureAdConfigurationManager(
+    ILogger<AzureAdConfigurationManager> logger) :
+    IAzureAdConfigurationManager
 {
-    public async Task<Result<ClientConfigurationModel, string>> OpenConfiguration(string configurationName, CancellationToken cancellationToken)
+    public async Task<Result<ClientConfigurationModel, string>> OpenConfiguration(
+        ConfigurationIdentityModel configurationIdentity,
+        CancellationToken cancellationToken)
     {
         try
         {
-            var path = GetPath(configurationName);
+            var path = GetPath(configurationIdentity);
 
             var jsonString = await File.ReadAllTextAsync(path, cancellationToken);
 
@@ -34,13 +37,13 @@ internal sealed class ConfigurationFileManager(
     }
 
     public async Task<UnitResult<string>> SaveConfiguration(
-       string configurationName,
+       ConfigurationIdentityModel configurationIdentity,
        ClientConfigurationModel configuration,
        CancellationToken cancellationToken)
     {
         try
         {
-            var path = GetPath(configurationName);
+            var path = GetPath(configurationIdentity);
 
             var jsonString = JsonSerializer.Serialize(configuration);
 
@@ -58,9 +61,9 @@ internal sealed class ConfigurationFileManager(
         }
     }
 
-    private string GetPath(string configurationName)
+    private string GetPath(ConfigurationIdentityModel configurationIdentity)
     {
-        var fileName = $"{configurationName}.json";
+        var fileName = $"{configurationIdentity.Name}_{configurationIdentity.Id}.json";
 
         var path = Path.Combine(
             FileSystem.Current.AppDataDirectory,
