@@ -1,4 +1,4 @@
-﻿namespace ClientTokenProvider.AzureAd.Exceptions;
+﻿namespace ClientTokenProvider.Shared.Exceptions;
 
 internal sealed class JsonDeserializationException : Exception
 {

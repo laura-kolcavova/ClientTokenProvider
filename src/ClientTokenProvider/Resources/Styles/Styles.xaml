@@ -300,17 +300,17 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
-    </Style>
+    </Style>-->
 
     <Style ApplyToDerivedTypes="True" TargetType="Page">
         <Setter Property="Padding" Value="0" />
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryBackground}}" />
     </Style>
 
     <Style ApplyToDerivedTypes="True" TargetType="Shell">
-        <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
-        <Setter Property="Shell.ForegroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource SecondaryDarkText}}" />
-        <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource SecondaryDarkText}}" />
+        <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryBackground}}" />
+        <Setter Property="Shell.ForegroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource SecondaryText}}" />
+        <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource SecondaryText}}" />
         <Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="Shell.UnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" />
         <Setter Property="Shell.NavBarHasShadow" Value="False" />
@@ -321,7 +321,7 @@
     </Style>
 
     <Style TargetType="NavigationPage">
-        <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
+        <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryBackground}}" />
         <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource White}}" />
         <Setter Property="IconColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource White}}" />
     </Style>
@@ -331,7 +331,7 @@
         <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
         <Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
-    </Style>-->
+    </Style>
 
     <Style TargetType="Entry">
         <Setter Property="TextColor" Value="{StaticResource SecondaryText}" />
@@ -372,7 +372,38 @@
         </Setter>
     </Style>
 
-    <Style TargetType="Button">
+    <Style Class="iconButton" TargetType="Button">
+        <Setter Property="Padding" Value="3, 4" />
+        <Setter Property="MinimumWidthRequest" Value="24" />
+        <Setter Property="MinimumHeightRequest" Value="24" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+    </Style>
+
+    <Style Class="textIconButton" TargetType="Button">
+        <Setter Property="Padding" Value="3, 4" />
+        <Setter Property="MinimumWidthRequest" Value="44" />
+        <Setter Property="MinimumHeightRequest" Value="0" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="ContentLayout" Value="Left, 4" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource Gray400}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="Transparent" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style Class="button" TargetType="Button">
         <Setter Property="TextColor" Value="{StaticResource White}" />
         <Setter Property="BackgroundColor" Value="{StaticResource Black}" />
         <Setter Property="BorderColor" Value="{StaticResource Black}" />
@@ -432,6 +463,16 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
+
+    <Style Class="container" TargetType="VerticalStackLayout">
+        <Setter Property="Padding" Value="20, 10, 20, 10" />
+    </Style>
+
+    <Style Class="flexContainer" TargetType="FlexLayout">
+        <!--<Setter Property="Padding" Value="20, 10, 20, 10" /> Not working for flex layout (: -->
+        <Setter Property="Direction" Value="Column" />
+    </Style>
+
 
     <Style Class="formGroup" TargetType="VerticalStackLayout">
         <Setter Property="Margin" Value="0, 0, 0, 10" />

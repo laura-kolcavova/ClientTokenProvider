@@ -3,6 +3,9 @@ using ClientTokenProvider.AzureAd.Mappers;
 using ClientTokenProvider.AzureAd.Messages;
 using ClientTokenProvider.AzureAd.Models;
 using ClientTokenProvider.Core.AzureAd.Factories;
+using ClientTokenProvider.Shared.Managers;
+using ClientTokenProvider.Shared.Messages;
+using ClientTokenProvider.Shared.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -12,9 +15,13 @@ namespace ClientTokenProvider.AzureAd.ViewModels;
 
 public partial class ConfigurationDetailViewModel : ObservableObject
 {
-    private readonly ILogger _logger;
     private readonly IAzureAdClientTokenProviderFactory _azureAdClientTokenProviderFactory;
-    private readonly IConfigurationFileManager _configurationFileManager;
+    private readonly IAzureAdConfigurationManager _azureAdConfigurationFileManager;
+    private readonly IConfigurationIdentityManager _configurationIdentityManager;
+    private readonly ILogger _logger;
+
+    [ObservableProperty]
+    private ConfigurationIdentityModel configurationIdentity;
 
     [ObservableProperty]
     private ClientConfigurationModel configuration;
@@ -33,40 +40,46 @@ public partial class ConfigurationDetailViewModel : ObservableObject
     private bool getAccessTokenButtonEnabled;
 
     [ObservableProperty]
-    private string configurationName;
+    [NotifyCanExecuteChangedFor(nameof(SaveConfigurationCommand))]
+    private bool saveConfigurationButtonEnabled;
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
-    private bool saveFileButtonEnabled;
+    private bool isConfigurationSaved;
 
     private ActionState _previousState;
 
     private CancellationTokenSource _cancellationTokenSource;
 
     public ConfigurationDetailViewModel(
-        ILogger<ConfigurationDetailViewModel> logger,
         IAzureAdClientTokenProviderFactory azureAdClientTokenProviderFactory,
-        IConfigurationFileManager configurationFileManager)
+        IAzureAdConfigurationManager azureAdConfigurationFileManager,
+        IConfigurationIdentityManager configurationIdentityManager,
+        ILogger<ConfigurationDetailViewModel> logger)
     {
-        _logger = logger;
+        _configurationIdentityManager = configurationIdentityManager;
         _azureAdClientTokenProviderFactory = azureAdClientTokenProviderFactory;
-        _configurationFileManager = configurationFileManager;
+        _azureAdConfigurationFileManager = azureAdConfigurationFileManager;
+        _logger = logger;
 
+        configurationIdentity = configurationIdentityManager.NewIdentity();
         configuration = ClientConfigurationModel.Empty;
         state = ActionState.Idle;
 
         errorMessage = string.Empty;
         accessToken = string.Empty;
 
-        configurationName = "New Configuration";
-
         _cancellationTokenSource = new CancellationTokenSource();
+    }
+
+    partial void OnConfigurationIdentityChanged(ConfigurationIdentityModel value)
+    {
+        SaveConfigurationButtonEnabled = !Configuration.IsEmpty();
     }
 
     partial void OnConfigurationChanged(ClientConfigurationModel value)
     {
         GetAccessTokenButtonEnabled = Configuration.IsValid();
-        SaveFileButtonEnabled = !Configuration.IsEmpty();
+        SaveConfigurationButtonEnabled = !Configuration.IsEmpty();
     }
 
     [RelayCommand]
@@ -173,15 +186,24 @@ public partial class ConfigurationDetailViewModel : ObservableObject
     [RelayCommand]
     private void UpdateConfigurationName(string configurationName)
     {
-        ConfigurationName = configurationName;
+        ConfigurationIdentity = ConfigurationIdentity with
+        {
+            Name = configurationName
+        };
+
+        WeakReferenceMessenger.Default.Send(new ConfigurationNameChangedMessage
+        {
+            ConfigurationIdentity = ConfigurationIdentity,
+            IsConfigurationSaved = IsConfigurationSaved,
+        });
     }
 
     [RelayCommand(
-        CanExecute = nameof(SaveFileButtonEnabled))]
-    private async Task SaveFile(CancellationToken cancellationToken)
+        CanExecute = nameof(SaveConfigurationButtonEnabled))]
+    private async Task SaveConfiguration(CancellationToken cancellationToken)
     {
-        var result = await _configurationFileManager.SaveConfiguration(
-            ConfigurationName,
+        var result = await _azureAdConfigurationFileManager.SaveConfiguration(
+            ConfigurationIdentity,
             Configuration,
             cancellationToken);
 
@@ -192,7 +214,13 @@ public partial class ConfigurationDetailViewModel : ObservableObject
         }
         else
         {
-            SaveFileButtonEnabled = false;
+            SaveConfigurationButtonEnabled = false;
+            IsConfigurationSaved = true;
+
+            WeakReferenceMessenger.Default.Send(new ConfigurationSavedMessage
+            {
+                ConfigurationIdentity = ConfigurationIdentity,
+            });
         }
     }
 

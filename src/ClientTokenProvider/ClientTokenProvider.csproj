@@ -56,6 +56,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Extensions\**" />
+	  <Compile Remove="Extensions\**" />
+	  <EmbeddedResource Remove="Extensions\**" />
+	  <MauiCss Remove="Extensions\**" />
+	  <MauiXaml Remove="Extensions\**" />
+	  <None Remove="Extensions\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Images\add_small_grey400.svg" />
 	  <None Remove="Resources\Images\repair.svg" />
 	  <None Remove="Resources\Images\rocket.svg" />
 	  <None Remove="Resources\Images\save_small_grey400.svg" />
@@ -81,6 +91,9 @@
 	  <Compile Update="Shared\Components\CircularSpinner.xaml.cs">
 	    <DependentUpon>CircularSpinner.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Shared\Views\ConfigurationListView.xaml.cs">
+	    <DependentUpon>ConfigurationListView.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -90,10 +103,12 @@
 	  <MauiXaml Update="Shared\Components\CircularSpinner.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Extensions\" />
+	  <MauiXaml Update="Shared\Views\ConfigurationListView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Shared\Views\PageLayout.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>

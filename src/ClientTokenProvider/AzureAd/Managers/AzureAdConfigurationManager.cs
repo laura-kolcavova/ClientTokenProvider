@@ -1,21 +1,24 @@
-﻿using ClientTokenProvider.AzureAd.Exceptions;
-using ClientTokenProvider.AzureAd.Models;
+﻿using ClientTokenProvider.AzureAd.Models;
+using ClientTokenProvider.Shared.Exceptions;
+using ClientTokenProvider.Shared.Models;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 namespace ClientTokenProvider.AzureAd.Managers;
 
-internal sealed class ConfigurationFileManager(
-    ILogger<ConfigurationFileManager> logger) :
-    IConfigurationFileManager
+internal sealed class AzureAdConfigurationManager(
+    ILogger<AzureAdConfigurationManager> logger) :
+    IAzureAdConfigurationManager
 {
-    public async Task<Result<ClientConfigurationModel, string>> OpenConfiguration(string configurationName, CancellationToken cancellationToken)
+    public async Task<Result<ClientConfigurationModel, string>> OpenConfiguration(
+        ConfigurationIdentityModel configurationIdentity,
+        CancellationToken cancellationToken)
     {
-        var path = Path.GetFullPath(configurationName);
-
         try
         {
+            var path = GetPath(configurationIdentity);
+
             var jsonString = await File.ReadAllTextAsync(path, cancellationToken);
 
             var configuration = JsonSerializer.Deserialize<ClientConfigurationModel>(jsonString) ??
@@ -34,16 +37,16 @@ internal sealed class ConfigurationFileManager(
     }
 
     public async Task<UnitResult<string>> SaveConfiguration(
-       string configurationName,
+       ConfigurationIdentityModel configurationIdentity,
        ClientConfigurationModel configuration,
        CancellationToken cancellationToken)
     {
-        var path = Path.GetFullPath(configurationName);
-
-        var jsonString = JsonSerializer.Serialize(configuration);
-
         try
         {
+            var path = GetPath(configurationIdentity);
+
+            var jsonString = JsonSerializer.Serialize(configuration);
+
             await File.WriteAllTextAsync(path, jsonString, cancellationToken);
 
             return UnitResult.Success<string>();
@@ -58,9 +61,9 @@ internal sealed class ConfigurationFileManager(
         }
     }
 
-    private string GetPath(string configurationName)
+    private string GetPath(ConfigurationIdentityModel configurationIdentity)
     {
-        var fileName = $"{configurationName}.json";
+        var fileName = $"{configurationIdentity.Name}_{configurationIdentity.Id}.json";
 
         var path = Path.Combine(
             FileSystem.Current.AppDataDirectory,

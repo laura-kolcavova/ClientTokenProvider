@@ -1,16 +1,17 @@
 ﻿using ClientTokenProvider.AzureAd.Models;
+using ClientTokenProvider.Shared.Models;
 using CSharpFunctionalExtensions;
 
 namespace ClientTokenProvider.AzureAd.Managers;
 
-public interface IConfigurationFileManager
+public interface IAzureAdConfigurationManager
 {
     public Task<UnitResult<string>> SaveConfiguration(
-       string configurationName,
+       ConfigurationIdentityModel configurationIdentity,
        ClientConfigurationModel configuration,
        CancellationToken cancellationToken);
 
     public Task<Result<ClientConfigurationModel, string>> OpenConfiguration(
-      string configurationName,
+      ConfigurationIdentityModel configurationIdentity,
       CancellationToken cancellationToken);
 }

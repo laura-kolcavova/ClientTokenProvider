@@ -8,17 +8,17 @@ namespace ClientTokenProvider.AzureAd.Extensions;
 
 internal static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddClientTokenProviderApplication(
+    public static IServiceCollection AddAzureAdClientTokenProvider(
         this IServiceCollection services)
     {
+        services
+           .AddCoreAzureAdClientTokenProvider();
+
         services
             .AddTransient<ConfigurationDetailView, ConfigurationDetailViewModel>();
 
         services
-            .AddAzureAdClientTokenProvider();
-
-        services
-            .AddSingleton<IConfigurationFileManager, ConfigurationFileManager>();
+            .AddSingleton<IAzureAdConfigurationManager, AzureAdConfigurationManager>();
 
         return services;
     }
