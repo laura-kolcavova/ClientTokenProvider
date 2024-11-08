@@ -372,7 +372,38 @@
         </Setter>
     </Style>
 
-    <Style TargetType="Button">
+    <Style Class="iconButton" TargetType="Button">
+        <Setter Property="Padding" Value="3, 4" />
+        <Setter Property="MinimumWidthRequest" Value="24" />
+        <Setter Property="MinimumHeightRequest" Value="24" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+    </Style>
+
+    <Style Class="textIconButton" TargetType="Button">
+        <Setter Property="Padding" Value="3, 4" />
+        <Setter Property="MinimumWidthRequest" Value="44" />
+        <Setter Property="MinimumHeightRequest" Value="0" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="ContentLayout" Value="Left, 4" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource Gray400}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="Transparent" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style Class="button" TargetType="Button">
         <Setter Property="TextColor" Value="{StaticResource White}" />
         <Setter Property="BackgroundColor" Value="{StaticResource Black}" />
         <Setter Property="BorderColor" Value="{StaticResource Black}" />

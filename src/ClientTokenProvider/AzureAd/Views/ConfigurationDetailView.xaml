@@ -33,17 +33,10 @@
 
         <Style Class="configurationNameEntry" TargetType="Entry">
             <Setter Property="FontAttributes" Value="Bold" />
-            <Setter Property="MaximumWidthRequest" Value="300" />
+            <Setter Property="MaximumWidthRequest" Value="200" />
         </Style>
 
         <Style Class="saveButton" TargetType="Button">
-            <Setter Property="Padding" Value="3, 4" />
-            <Setter Property="MinimumWidthRequest" Value="44" />
-            <Setter Property="MinimumHeightRequest" Value="0" />
-            <Setter Property="CornerRadius" Value="0" />
-            <Setter Property="ContentLayout" Value="Left, 4" />
-            <Setter Property="BackgroundColor" Value="Transparent" />
-            <Setter Property="TextColor" Value="{StaticResource Gray400}" />
             <Setter Property="ImageSource" Value="save_small_grey400.png" />
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
@@ -51,8 +44,6 @@
                         <VisualState x:Name="Normal" />
                         <VisualState x:Name="Disabled">
                             <VisualState.Setters>
-                                <Setter Property="TextColor" Value="{StaticResource Gray500}" />
-                                <Setter Property="BackgroundColor" Value="Transparent" />
                                 <Setter Property="ImageSource" Value="save_small_grey500.png" />
                             </VisualState.Setters>
                         </VisualState>
@@ -118,7 +109,7 @@
                         <HorizontalStackLayout VerticalOptions="Center">
                             <Button
                                 Command="{Binding SaveConfigurationCommand}"
-                                StyleClass="saveButton"
+                                StyleClass="textIconButton, saveButton"
                                 Text="Save" />
                         </HorizontalStackLayout>
                     </FlexLayout>
@@ -193,13 +184,13 @@
                     <Button
                         Command="{Binding GetAccessTokenCommand}"
                         IsVisible="{Binding State, Converter={StaticResource CanSendRequestConverter}}"
-                        StyleClass="btnPrimary, requestButton"
+                        StyleClass="button, btnPrimary, requestButton"
                         Text="Get Access Token" />
 
                     <Button
                         Command="{Binding CancelRequestCommand}"
                         IsVisible="{Binding State, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ActionState.Loading}}"
-                        StyleClass="btnSecondary, requestButton"
+                        StyleClass="button, btnSecondary, requestButton"
                         Text="Cancel" />
                 </VerticalStackLayout>
 

@@ -71,6 +71,11 @@ public partial class ConfigurationDetailViewModel : ObservableObject
         _cancellationTokenSource = new CancellationTokenSource();
     }
 
+    partial void OnConfigurationIdentityChanged(ConfigurationIdentityModel value)
+    {
+        SaveConfigurationButtonEnabled = !Configuration.IsEmpty();
+    }
+
     partial void OnConfigurationChanged(ClientConfigurationModel value)
     {
         GetAccessTokenButtonEnabled = Configuration.IsValid();

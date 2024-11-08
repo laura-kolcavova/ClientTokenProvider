@@ -65,6 +65,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\add_small_grey400.svg" />
 	  <None Remove="Resources\Images\repair.svg" />
 	  <None Remove="Resources\Images\rocket.svg" />
 	  <None Remove="Resources\Images\save_small_grey400.svg" />

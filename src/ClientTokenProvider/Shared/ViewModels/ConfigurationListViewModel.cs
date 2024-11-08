@@ -1,4 +1,5 @@
-﻿using ClientTokenProvider.Shared.Messages;
+﻿using ClientTokenProvider.Shared.Managers;
+using ClientTokenProvider.Shared.Messages;
 using ClientTokenProvider.Shared.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,6 +12,8 @@ public partial class ConfigurationListViewModel : ObservableObject,
     IRecipient<ConfigurationSavedMessage>,
     IRecipient<ConfigurationNameChangedMessage>
 {
+    private readonly IConfigurationIdentityManager _configurationIdentityManager;
+
     [ObservableProperty]
     private ObservableCollection<ConfigurationListItemModel> configurationList;
 
@@ -20,8 +23,11 @@ public partial class ConfigurationListViewModel : ObservableObject,
     [ObservableProperty]
     private bool isItemSelected;
 
-    public ConfigurationListViewModel()
+    public ConfigurationListViewModel(
+        IConfigurationIdentityManager configurationIdentityManager)
     {
+        _configurationIdentityManager = configurationIdentityManager;
+
         ConfigurationList = [];
     }
 
@@ -33,13 +39,7 @@ public partial class ConfigurationListViewModel : ObservableObject,
             return;
         }
 
-        var newConfigurationListItem = new ConfigurationListItemModel
-        {
-            Id = message.ConfigurationIdentity.Id,
-            Name = message.ConfigurationIdentity.Name,
-        };
-
-        ConfigurationList.Add(newConfigurationListItem);
+        AddConfiguration(message.ConfigurationIdentity);
     }
 
     public void Receive(ConfigurationNameChangedMessage message)
@@ -72,6 +72,8 @@ public partial class ConfigurationListViewModel : ObservableObject,
         if (value is null)
         {
             IsItemSelected = false;
+
+            WeakReferenceMessenger.Default.Send(new ConfigurationUnselectedMessage());
         }
         else
         {
@@ -103,7 +105,7 @@ public partial class ConfigurationListViewModel : ObservableObject,
     }
 
     [RelayCommand]
-    private void SelectItem(ConfigurationListItemModel item)
+    private void SelectOrDeselectItem(ConfigurationListItemModel item)
     {
         if (!ConfigurationList.Contains(item))
         {
@@ -118,5 +120,26 @@ public partial class ConfigurationListViewModel : ObservableObject,
         {
             SelectedItem = item;
         }
+    }
+
+    [RelayCommand]
+    private void AddNewConfiguration()
+    {
+        var configurationIdentity = _configurationIdentityManager
+            .NewIdentity();
+
+        AddConfiguration(configurationIdentity);
+    }
+
+    private void AddConfiguration(ConfigurationIdentityModel configurationIdentity)
+    {
+        var newConfigurationListItem = new ConfigurationListItemModel
+        {
+            Id = configurationIdentity.Id,
+            Name = configurationIdentity.Name,
+        };
+
+        ConfigurationList.Add(newConfigurationListItem);
+        SelectedItem = newConfigurationListItem;
     }
 }
