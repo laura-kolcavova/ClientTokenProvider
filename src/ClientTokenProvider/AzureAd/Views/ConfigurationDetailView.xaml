@@ -105,7 +105,7 @@
                 <VerticalStackLayout Grid.Column="0" StyleClass="container">
                     <FlexLayout>
                         <HorizontalStackLayout FlexLayout.Grow="1" VerticalOptions="Center">
-                            <Entry StyleClass="configurationNameEntry" Text="{Binding ConfigurationName, Mode=OneWay}">
+                            <Entry StyleClass="configurationNameEntry" Text="{Binding ConfigurationIdentity.Name, Mode=OneWay}">
                                 <Entry.Behaviors>
                                     <toolkit:EventToCommandBehavior
                                         Command="{Binding UpdateConfigurationNameCommand}"

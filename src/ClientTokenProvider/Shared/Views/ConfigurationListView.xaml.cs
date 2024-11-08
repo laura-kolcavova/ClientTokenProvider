@@ -12,5 +12,15 @@ public partial class ConfigurationListView : ContentView
         var viewModel = ServiceHelper.GetRequiredService<ConfigurationListViewModel>();
 
         BindingContext = viewModel;
+
+        Loaded += (s, e) =>
+        {
+            viewModel.LoadCommand.Execute(null);
+        };
+
+        Unloaded += (s, e) =>
+        {
+            viewModel.UnloadCommand.Execute(null);
+        };
     }
 }

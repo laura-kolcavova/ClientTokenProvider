@@ -211,6 +211,11 @@ public partial class ConfigurationDetailViewModel : ObservableObject
         {
             SaveConfigurationButtonEnabled = false;
             IsConfigurationSaved = true;
+
+            WeakReferenceMessenger.Default.Send(new ConfigurationSavedMessage
+            {
+                ConfigurationIdentity = ConfigurationIdentity,
+            });
         }
     }
 

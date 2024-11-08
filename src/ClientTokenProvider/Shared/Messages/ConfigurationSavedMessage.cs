@@ -2,10 +2,7 @@
 
 namespace ClientTokenProvider.Shared.Messages;
 
-
-public sealed record ConfigurationNameChangedMessage
+public sealed record ConfigurationSavedMessage
 {
     public required ConfigurationIdentityModel ConfigurationIdentity { get; init; }
-
-    public required bool IsConfigurationSaved { get; init; }
 }
