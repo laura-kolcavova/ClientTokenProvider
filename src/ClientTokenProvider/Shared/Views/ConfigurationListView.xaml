@@ -19,7 +19,7 @@
         </Style>
 
         <Style Class="configurationListItem" TargetType="Grid">
-            <Setter Property="Padding" Value="20, 5, 5, 5" />
+            <Setter Property="Padding" Value="20, 5, 20, 5" />
         </Style>
 
         <Style Class="configurationListItemName" TargetType="Label">

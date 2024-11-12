@@ -1,4 +1,6 @@
-﻿using ClientTokenProvider.Shared.Managers;
+﻿using ClientTokenProvider.AzureAd.Models;
+using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Business.Shared.Services;
 using ClientTokenProvider.Shared.Messages;
 using ClientTokenProvider.Shared.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -12,7 +14,7 @@ public partial class ConfigurationListViewModel : ObservableObject,
     IRecipient<ConfigurationSavedMessage>,
     IRecipient<ConfigurationNameChangedMessage>
 {
-    private readonly IConfigurationIdentityManager _configurationIdentityManager;
+    private readonly IConfigurationRepository _configurationRepository;
 
     [ObservableProperty]
     private ObservableCollection<ConfigurationListItemModel> configurationList;
@@ -24,9 +26,9 @@ public partial class ConfigurationListViewModel : ObservableObject,
     private bool isItemSelected;
 
     public ConfigurationListViewModel(
-        IConfigurationIdentityManager configurationIdentityManager)
+        IConfigurationRepository configurationRepository)
     {
-        _configurationIdentityManager = configurationIdentityManager;
+        _configurationRepository = configurationRepository;
 
         ConfigurationList = [];
     }
@@ -44,27 +46,12 @@ public partial class ConfigurationListViewModel : ObservableObject,
 
     public void Receive(ConfigurationNameChangedMessage message)
     {
-        var index = -1;
-
-        for (var i = 0; i < ConfigurationList.Count; i++)
+        if (!message.IsConfigurationSaved)
         {
-            if (ConfigurationList[i].Id == message.ConfigurationIdentity.Id)
-            {
-                index = i;
-                break;
-            }
+            return;
         }
 
-        if (index > -1)
-        {
-            var newConfigurationListItem = new ConfigurationListItemModel
-            {
-                Id = message.ConfigurationIdentity.Id,
-                Name = message.ConfigurationIdentity.Name,
-            };
-
-            ConfigurationList[index] = newConfigurationListItem;
-        }
+        UpdateConfiguration(message.ConfigurationIdentity);
     }
 
     partial void OnSelectedItemChanged(ConfigurationListItemModel? value)
@@ -79,7 +66,7 @@ public partial class ConfigurationListViewModel : ObservableObject,
         {
             IsItemSelected = true;
 
-            var configurationIdentity = new ConfigurationIdentityModel
+            var configurationIdentity = new ConfigurationIdentity
             {
                 Id = value.Id,
                 Name = value.Name,
@@ -93,9 +80,22 @@ public partial class ConfigurationListViewModel : ObservableObject,
     }
 
     [RelayCommand]
-    private void Load()
+    private async Task Load(CancellationToken cancellationToken)
     {
         WeakReferenceMessenger.Default.RegisterAll(this);
+
+        var configurations = await _configurationRepository
+            .GetAll(cancellationToken);
+
+        var configurationListItems = configurations
+            .Select(configuration => new ConfigurationListItemModel
+            {
+                Id = configuration.Identity.Id,
+                Name = configuration.Identity.Name,
+            });
+
+        ConfigurationList = new ObservableCollection<ConfigurationListItemModel>(
+           configurationListItems);
     }
 
     [RelayCommand]
@@ -122,16 +122,20 @@ public partial class ConfigurationListViewModel : ObservableObject,
         }
     }
 
-    [RelayCommand]
-    private void AddNewConfiguration()
+    [RelayCommand(
+        IncludeCancelCommand = true,
+        AllowConcurrentExecutions = false)]
+    private async Task AddNewConfiguration(CancellationToken cancellationToken)
     {
-        var configurationIdentity = _configurationIdentityManager
-            .NewIdentity();
+        var configuration = await _configurationRepository
+            .Create<AzureAdConfigurationModel>(
+                () => AzureAdConfigurationModel.Empty,
+                cancellationToken);
 
-        AddConfiguration(configurationIdentity);
+        AddConfiguration(configuration.Identity);
     }
 
-    private void AddConfiguration(ConfigurationIdentityModel configurationIdentity)
+    private void AddConfiguration(ConfigurationIdentity configurationIdentity)
     {
         var newConfigurationListItem = new ConfigurationListItemModel
         {
@@ -141,5 +145,30 @@ public partial class ConfigurationListViewModel : ObservableObject,
 
         ConfigurationList.Add(newConfigurationListItem);
         SelectedItem = newConfigurationListItem;
+    }
+
+    private void UpdateConfiguration(ConfigurationIdentity configurationIdentity)
+    {
+        var index = -1;
+
+        for (var i = 0; i < ConfigurationList.Count; i++)
+        {
+            if (ConfigurationList[i].Id == configurationIdentity.Id)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        if (index > -1)
+        {
+            var newConfigurationListItem = new ConfigurationListItemModel
+            {
+                Id = configurationIdentity.Id,
+                Name = configurationIdentity.Name,
+            };
+
+            ConfigurationList[index] = newConfigurationListItem;
+        }
     }
 }

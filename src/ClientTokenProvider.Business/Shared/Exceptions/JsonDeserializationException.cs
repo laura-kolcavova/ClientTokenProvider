@@ -1,6 +1,6 @@
-﻿namespace ClientTokenProvider.Shared.Exceptions;
+﻿namespace ClientTokenProvider.Business.Shared.Exceptions;
 
-internal sealed class JsonDeserializationException : Exception
+public sealed class JsonDeserializationException : Exception
 {
     public JsonDeserializationException(string message)
         : base(message)

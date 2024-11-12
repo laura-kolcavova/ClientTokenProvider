@@ -5,7 +5,7 @@ namespace ClientTokenProvider.Core.AzureAd.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddCoreAzureAdClientTokenProvider(
+    public static IServiceCollection AddClientTokenProviderCoreAzureAd(
         this IServiceCollection services)
     {
         services

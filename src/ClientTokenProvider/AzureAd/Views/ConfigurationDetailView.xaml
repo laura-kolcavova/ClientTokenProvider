@@ -121,7 +121,7 @@
                         <Entry
                             x:Name="AuthorityEntry"
                             StyleClass="formControlEntry"
-                            Text="{Binding Configuration.AuthorityUrl, Mode=OneWay}">
+                            Text="{Binding ConfigurationData.AuthorityUrl, Mode=OneWay}">
                             <Entry.Behaviors>
                                 <toolkit:EventToCommandBehavior
                                     Command="{Binding UpdateAuthorityCommand}"
@@ -133,7 +133,7 @@
 
                     <VerticalStackLayout StyleClass="formGroup">
                         <Label StyleClass="formLabel" Text="Scope" />
-                        <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Scope, Mode=OneWay}">
+                        <Entry StyleClass="formControlEntry" Text="{Binding ConfigurationData.Scope, Mode=OneWay}">
                             <Entry.Behaviors>
                                 <toolkit:EventToCommandBehavior
                                     Command="{Binding UpdateScopeCommand}"
@@ -145,7 +145,7 @@
 
                     <VerticalStackLayout StyleClass="formGroup">
                         <Label StyleClass="formLabel" Text="Audience" />
-                        <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Audience, Mode=OneWay}">
+                        <Entry StyleClass="formControlEntry" Text="{Binding ConfigurationData.Audience, Mode=OneWay}">
                             <Entry.Behaviors>
                                 <toolkit:EventToCommandBehavior
                                     Command="{Binding UpdateAudienceCommand}"
@@ -157,7 +157,7 @@
 
                     <VerticalStackLayout StyleClass="formGroup">
                         <Label StyleClass="formLabel" Text="ClientId" />
-                        <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientId, Mode=OneWay}">
+                        <Entry StyleClass="formControlEntry" Text="{Binding ConfigurationData.ClientId, Mode=OneWay}">
                             <Entry.Behaviors>
                                 <toolkit:EventToCommandBehavior
                                     Command="{Binding UpdateClientIdCommand}"
@@ -169,7 +169,7 @@
 
                     <VerticalStackLayout StyleClass="formGroup">
                         <Label StyleClass="formLabel" Text="ClientSecret" />
-                        <Entry StyleClass="formControlEntry" Text="{Binding Configuration.ClientSecret, Mode=OneWay}">
+                        <Entry StyleClass="formControlEntry" Text="{Binding ConfigurationData.ClientSecret, Mode=OneWay}">
                             <Entry.Behaviors>
                                 <toolkit:EventToCommandBehavior
                                     Command="{Binding UpdateClientSecretCommand}"

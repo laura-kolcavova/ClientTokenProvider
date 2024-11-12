@@ -1,4 +1,4 @@
-﻿using ClientTokenProvider.Shared.Managers;
+﻿using ClientTokenProvider.Shared.Services;
 using ClientTokenProvider.Shared.ViewModels;
 using ClientTokenProvider.Shared.Views;
 using CommunityToolkit.Maui;
@@ -7,14 +7,16 @@ namespace ClientTokenProvider.Shared.Extensions;
 
 internal static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddSharedClientTokenProvider(
+    public static IServiceCollection AddClientTokenProviderShared(
         this IServiceCollection services)
     {
         services
-            .AddSingleton<IConfigurationIdentityManager, ConfigurationIdentityManager>();
+            .AddSingleton<INavigationService, NavigationService>();
 
         services
             .AddTransient<ConfigurationListView, ConfigurationListViewModel>();
+
+        Routes.RegisterRoutes();
 
         return services;
     }

@@ -1,105 +1,105 @@
-﻿using ClientTokenProvider.AzureAd.Models;
-using ClientTokenProvider.Shared.Exceptions;
-using ClientTokenProvider.Shared.Models;
-using CSharpFunctionalExtensions;
-using Microsoft.Extensions.Logging;
-using System.Text.Json;
+﻿//using ClientTokenProvider.AzureAd.Models;
+//using ClientTokenProvider.Business.Shared.Exceptions;
+//using ClientTokenProvider.Business.Shared.Models;
+//using CSharpFunctionalExtensions;
+//using Microsoft.Extensions.Logging;
+//using System.Text.Json;
 
-namespace ClientTokenProvider.AzureAd.Managers;
+//namespace ClientTokenProvider.AzureAd.Managers;
 
-internal sealed class AzureAdConfigurationManager(
-    ILogger<AzureAdConfigurationManager> logger) :
-    IAzureAdConfigurationManager
-{
-    public async Task<Result<ClientConfigurationModel, string>> OpenConfiguration(
-        ConfigurationIdentityModel configurationIdentity,
-        CancellationToken cancellationToken)
-    {
-        try
-        {
-            var path = GetPath(configurationIdentity);
+//internal sealed class AzureAdConfigurationManager(
+//    ILogger<AzureAdConfigurationManager> logger) :
+//    IAzureAdConfigurationManager
+//{
+//    public async Task<Result<ClientConfigurationModel, string>> OpenConfiguration(
+//        ConfigurationIdentity configurationIdentity,
+//        CancellationToken cancellationToken)
+//    {
+//        try
+//        {
+//            var path = GetPath(configurationIdentity);
 
-            var jsonString = await File.ReadAllTextAsync(path, cancellationToken);
+//            var jsonString = await File.ReadAllTextAsync(path, cancellationToken);
 
-            var configuration = JsonSerializer.Deserialize<ClientConfigurationModel>(jsonString) ??
-                throw new JsonDeserializationException($"Instance of {nameof(ClientConfigurationModel)} cannot be null");
+//            var configuration = JsonSerializer.Deserialize<ClientConfigurationModel>(jsonString) ??
+//                throw new JsonDeserializationException($"Instance of {nameof(ClientConfigurationModel)} cannot be null");
 
-            return configuration;
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(
-                ex,
-                "An unexpected error occurred while opening configuration");
+//            return configuration;
+//        }
+//        catch (Exception ex)
+//        {
+//            logger.LogError(
+//                ex,
+//                "An unexpected error occurred while opening configuration");
 
-            return Result.Failure<ClientConfigurationModel, string>(ex.Message);
-        }
-    }
+//            return Result.Failure<ClientConfigurationModel, string>(ex.Message);
+//        }
+//    }
 
-    public async Task<UnitResult<string>> SaveConfiguration(
-       ConfigurationIdentityModel configurationIdentity,
-       ClientConfigurationModel configuration,
-       CancellationToken cancellationToken)
-    {
-        try
-        {
-            var path = GetPath(configurationIdentity);
+//    public async Task<UnitResult<string>> SaveConfiguration(
+//       ConfigurationIdentity configurationIdentity,
+//       ClientConfigurationModel configuration,
+//       CancellationToken cancellationToken)
+//    {
+//        try
+//        {
+//            var path = GetPath(configurationIdentity);
 
-            var jsonString = JsonSerializer.Serialize(configuration);
+//            var jsonString = JsonSerializer.Serialize(configuration);
 
-            await File.WriteAllTextAsync(path, jsonString, cancellationToken);
+//            await File.WriteAllTextAsync(path, jsonString, cancellationToken);
 
-            return UnitResult.Success<string>();
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(
-                ex,
-                "An unexpected error occurred while saving configuration");
+//            return UnitResult.Success<string>();
+//        }
+//        catch (Exception ex)
+//        {
+//            logger.LogError(
+//                ex,
+//                "An unexpected error occurred while saving configuration");
 
-            return UnitResult.Failure<string>(ex.Message);
-        }
-    }
+//            return UnitResult.Failure<string>(ex.Message);
+//        }
+//    }
 
-    private string GetPath(ConfigurationIdentityModel configurationIdentity)
-    {
-        var fileName = $"{configurationIdentity.Name}_{configurationIdentity.Id}.json";
+//    private string GetPath(ConfigurationIdentity configurationIdentity)
+//    {
+//        var fileName = $"{configurationIdentity.Name}_{configurationIdentity.Id}.json";
 
-        var path = Path.Combine(
-            FileSystem.Current.AppDataDirectory,
-            fileName);
+//        var path = Path.Combine(
+//            FileSystem.Current.AppDataDirectory,
+//            fileName);
 
-        return path;
-    }
+//        return path;
+//    }
 
-    private string GetFixedPath(string path)
-    {
-        var exists = File.Exists(path);
+//    private string GetFixedPath(string path)
+//    {
+//        var exists = File.Exists(path);
 
-        if (!exists)
-        {
-            return path;
-        }
+//        if (!exists)
+//        {
+//            return path;
+//        }
 
-        var fileName = Path.GetFileName(path);
-        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
-        var extension = Path.GetExtension(path);
-        var pathWithoutFileName = path.Substring(0, path.Length - fileName.Length);
+//        var fileName = Path.GetFileName(path);
+//        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
+//        var extension = Path.GetExtension(path);
+//        var pathWithoutFileName = path.Substring(0, path.Length - fileName.Length);
 
-        var fixedPath = path;
-        int fileIndex = 0;
+//        var fixedPath = path;
+//        int fileIndex = 0;
 
-        while (exists)
-        {
-            fileIndex++;
+//        while (exists)
+//        {
+//            fileIndex++;
 
-            fixedPath = Path.Combine(
-                pathWithoutFileName,
-                $"{fileNameWithoutExtension} ({fileIndex}){extension}");
+//            fixedPath = Path.Combine(
+//                pathWithoutFileName,
+//                $"{fileNameWithoutExtension} ({fileIndex}){extension}");
 
-            exists = File.Exists(fixedPath);
-        }
+//            exists = File.Exists(fixedPath);
+//        }
 
-        return fixedPath;
-    }
-}
+//        return fixedPath;
+//    }
+//}

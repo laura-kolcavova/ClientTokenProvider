@@ -9,11 +9,11 @@ public sealed class AzureAdClientTokenProvider : IAzureAdClientTokenProvider
 
     public AzureAdClientTokenProvider(
         IHttpClientFactory httpClientFactory,
-        ClientConfiguration clientConfiguration)
+        ClientTokenProviderConfiguration clientTokenProviderConfiguration)
     {
         _handler = new AzureAdClientHandler(
             httpClientFactory,
-            clientConfiguration);
+            clientTokenProviderConfiguration);
     }
 
     public async Task<string> GetAccessToken(string scope, CancellationToken cancellationToken)

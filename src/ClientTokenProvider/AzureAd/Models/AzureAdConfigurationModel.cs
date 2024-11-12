@@ -1,6 +1,6 @@
 ﻿namespace ClientTokenProvider.AzureAd.Models;
 
-public sealed record ClientConfigurationModel
+public sealed record AzureAdConfigurationModel
 {
     public required string AuthorityUrl { get; init; }
 
@@ -40,7 +40,7 @@ public sealed record ClientConfigurationModel
         return false;
     }
 
-    public static ClientConfigurationModel Empty =>
+    public static AzureAdConfigurationModel Empty =>
         new()
         {
             AuthorityUrl = string.Empty,

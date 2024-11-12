@@ -1,8 +1,8 @@
-﻿using ClientTokenProvider.Shared.Models;
+﻿using ClientTokenProvider.Business.Shared.Models;
 
 namespace ClientTokenProvider.Shared.Messages;
 
-internal sealed record ConfigurationSelectedMessage
+public sealed record ConfigurationSelectedMessage
 {
-    public required ConfigurationIdentityModel ConfigurationIdentity { get; init; }
+    public required ConfigurationIdentity ConfigurationIdentity { get; init; }
 }

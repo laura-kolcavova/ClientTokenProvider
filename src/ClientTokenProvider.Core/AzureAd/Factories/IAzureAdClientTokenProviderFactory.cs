@@ -6,5 +6,5 @@ namespace ClientTokenProvider.Core.AzureAd.Factories;
 public interface IAzureAdClientTokenProviderFactory
 {
     public IAzureAdClientTokenProvider Create(
-        ClientConfiguration clientConfiguration);
+        ClientTokenProviderConfiguration clientConfiguration);
 }
