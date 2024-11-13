@@ -20,11 +20,15 @@ public partial class ConfigurationDetailView :
             WeakReferenceMessenger.Default.RegisterAll(this);
 
             AuthorityEntry.Focus();
+
+            viewModel.LoadCommand.Execute(null);
         };
 
         Unloaded += (s, e) =>
         {
             WeakReferenceMessenger.Default.UnregisterAll(this);
+
+            viewModel.UnloadCommand.Execute(null);
         };
     }
 

@@ -8,10 +8,10 @@ namespace ClientTokenProvider.AzureAd.Mappers;
 internal static partial class ClientConfigurationMapper
 {
     [MapProperty(
-        nameof(ClientConfigurationModel.AuthorityUrl),
-        nameof(ClientConfiguration.AuthorityUri))]
+        nameof(AzureAdConfigurationModel.AuthorityUrl),
+        nameof(ClientTokenProviderConfiguration.AuthorityUri))]
     [MapperIgnoreSource(
-        nameof(ClientConfigurationModel.Scope))]
-    public static partial ClientConfiguration ToClientConfiguration(
-        this ClientConfigurationModel source);
+        nameof(AzureAdConfigurationModel.Scope))]
+    public static partial ClientTokenProviderConfiguration ToClientConfiguration(
+        this AzureAdConfigurationModel source);
 }

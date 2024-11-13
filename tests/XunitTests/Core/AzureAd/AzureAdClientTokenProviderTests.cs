@@ -85,9 +85,9 @@ public class AzureAdClientTokenProviderTests
             .ThrowAsync<ClientHandlerException>();
     }
 
-    private static ClientConfiguration CreateClientConfiguration()
+    private static ClientTokenProviderConfiguration CreateClientConfiguration()
     {
-        return new ClientConfiguration
+        return new ClientTokenProviderConfiguration
         {
             AuthorityUri = "https://example.com",
             Audience = "test_audience",

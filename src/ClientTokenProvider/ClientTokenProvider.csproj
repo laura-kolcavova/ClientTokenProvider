@@ -81,6 +81,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\ClientTokenProvider.Business\ClientTokenProvider.Business.csproj" />
 	  <ProjectReference Include="..\ClientTokenProvider.Core\ClientTokenProvider.Core.csproj" />
 	</ItemGroup>
 

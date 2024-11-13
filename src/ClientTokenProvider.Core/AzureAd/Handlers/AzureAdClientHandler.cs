@@ -12,14 +12,14 @@ internal sealed class AzureAdClientHandler : IAzureAdClientHandler
 {
     private readonly IHttpClientFactory _httpClientFactory;
 
-    public IClientConfiguration Configuration { get; }
+    public IClientTokenProviderConfiguration Configuration { get; }
 
     public AzureAdClientHandler(
         IHttpClientFactory httpClientFactory,
-        ClientConfiguration clientConfiguration)
+        ClientTokenProviderConfiguration clientTokenProviderConfiguration)
     {
         _httpClientFactory = httpClientFactory;
-        Configuration = clientConfiguration;
+        Configuration = clientTokenProviderConfiguration;
     }
 
     public async Task<GetClientTokenResponse> GetClientToken(
