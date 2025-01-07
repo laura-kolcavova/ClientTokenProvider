@@ -107,6 +107,9 @@
 	  <MauiXaml Update="Shared\Views\ConfigurationListView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Shared\Views\ConfigurationManagerPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Shared\Views\PageLayout.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -4,13 +4,12 @@ namespace ClientTokenProvider.Business.Shared.Services;
 
 public interface IConfigurationCache
 {
-    public void Save(ConfigurationBase configuration);
+    public void Save(Configuration configuration);
 
-    public IReadOnlyCollection<ConfigurationBase>? GetAll();
+    public IReadOnlyCollection<Configuration>? GetAll();
 
-    public Configuration<TConfigurationDataType>? Get<TConfigurationDataType>(
-        Guid configurationId)
-        where TConfigurationDataType : notnull;
+    public Configuration? Get(
+        Guid configurationId);
 
     public void Remove(Guid configurationId);
 }

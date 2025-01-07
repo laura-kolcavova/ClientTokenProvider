@@ -1,4 +1,5 @@
 ﻿using ClientTokenProvider.AzureAd.Extensions;
+using ClientTokenProvider.Business.AzureAd.Extensions;
 using ClientTokenProvider.Business.Shared.Extensions;
 using ClientTokenProvider.Core.AzureAd.Extensions;
 using ClientTokenProvider.Shared.Extensions;
@@ -36,6 +37,7 @@ public static class MauiProgram
 
         services
             .AddClientTokenProviderCoreAzureAd()
+            .AddClientTokenProviderBusinessAzureAd()
             .AddClientTokenProviderAzureAd();
 
         return builder.Build();

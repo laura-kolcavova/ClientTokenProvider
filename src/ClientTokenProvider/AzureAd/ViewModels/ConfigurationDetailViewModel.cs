@@ -1,13 +1,13 @@
-﻿using ClientTokenProvider.AzureAd.Mappers;
-using ClientTokenProvider.AzureAd.Messages;
+﻿using ClientTokenProvider.AzureAd.Messages;
 using ClientTokenProvider.AzureAd.Models;
+using ClientTokenProvider.Business.AzureAd.Mappers;
+using ClientTokenProvider.Business.AzureAd.Models;
 using ClientTokenProvider.Business.Shared.Models;
 using ClientTokenProvider.Business.Shared.Providers;
 using ClientTokenProvider.Business.Shared.Services;
 using ClientTokenProvider.Core.AzureAd.Factories;
 using ClientTokenProvider.Shared;
 using ClientTokenProvider.Shared.Messages;
-using ClientTokenProvider.Shared.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -16,20 +16,18 @@ using Microsoft.Extensions.Logging;
 namespace ClientTokenProvider.AzureAd.ViewModels;
 
 public partial class ConfigurationDetailViewModel : ObservableObject,
-    IQueryAttributable,
-    IRecipient<ConfigurationSelectedMessage>
+    IQueryAttributable
 {
     private readonly IAzureAdClientTokenProviderFactory _azureAdClientTokenProviderFactory;
-    private readonly IConfigurationRepository _configurationRepository;
-    private readonly IConfigurationIdentityProvider _configurationIdentityManager;
-    private readonly INavigationService _navigationService;
+    private readonly IConfigurationService _configurationService;
+    private readonly IConfigurationIdentityProvider _configurationIdentityProvider;
     private readonly ILogger _logger;
 
     [ObservableProperty]
     private ConfigurationIdentity configurationIdentity;
 
     [ObservableProperty]
-    private AzureAdConfigurationModel configurationData;
+    private AzureAdConfigurationData configurationData;
 
     [ObservableProperty]
     private ActionState state;
@@ -57,19 +55,17 @@ public partial class ConfigurationDetailViewModel : ObservableObject,
 
     public ConfigurationDetailViewModel(
         IAzureAdClientTokenProviderFactory azureAdClientTokenProviderFactory,
-        IConfigurationRepository configurationRepository,
-        IConfigurationIdentityProvider configurationIdentityManager,
-        INavigationService navigationService,
+        IConfigurationService configurationService,
+        IConfigurationIdentityProvider configurationIdentityProvider,
         ILogger<ConfigurationDetailViewModel> logger)
     {
-        _configurationIdentityManager = configurationIdentityManager;
         _azureAdClientTokenProviderFactory = azureAdClientTokenProviderFactory;
-        _configurationRepository = configurationRepository;
-        _navigationService = navigationService;
+        _configurationService = configurationService;
+        _configurationIdentityProvider = configurationIdentityProvider;
         _logger = logger;
 
-        configurationIdentity = configurationIdentityManager.NewIdentity();
-        configurationData = AzureAdConfigurationModel.Empty;
+        configurationIdentity = configurationIdentityProvider.NewIdentity();
+        configurationData = AzureAdConfigurationData.Empty;
         state = ActionState.Idle;
 
         errorMessage = string.Empty;
@@ -101,28 +97,10 @@ public partial class ConfigurationDetailViewModel : ObservableObject,
         }
     }
 
-    partial void OnConfigurationDataChanged(AzureAdConfigurationModel value)
+    partial void OnConfigurationDataChanged(AzureAdConfigurationData value)
     {
         GetAccessTokenButtonEnabled = ConfigurationData.IsValid();
         SaveConfigurationButtonEnabled = !ConfigurationData.IsEmpty();
-    }
-
-    public async void Receive(ConfigurationSelectedMessage message)
-    {
-        await _navigationService.GoToAzureAdConfigurationDetail(
-            message.ConfigurationIdentity.Id);
-    }
-
-    [RelayCommand]
-    private void Load()
-    {
-        WeakReferenceMessenger.Default.RegisterAll(this);
-    }
-
-    [RelayCommand]
-    private void Unload()
-    {
-        WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 
     [RelayCommand]
@@ -243,13 +221,14 @@ public partial class ConfigurationDetailViewModel : ObservableObject,
         if (IsConfigurationSaved)
         {
             // TODO Add ChangeName method
-            var configuration = new Configuration<AzureAdConfigurationModel>
+            var configuration = new Configuration
             {
+                Kind = ConfigurationKind.AzureAd,
                 Identity = ConfigurationIdentity,
                 Data = ConfigurationData
             };
 
-            await _configurationRepository.Save(
+            await _configurationService.Save(
                 configuration,
                 cancellationToken);
 
@@ -271,13 +250,14 @@ public partial class ConfigurationDetailViewModel : ObservableObject,
     {
         try
         {
-            var configuration = new Configuration<AzureAdConfigurationModel>
+            var configuration = new Configuration
             {
+                Kind = ConfigurationKind.AzureAd,
                 Identity = ConfigurationIdentity,
                 Data = ConfigurationData,
             };
 
-            await _configurationRepository.Save(
+            await _configurationService.Save(
                 configuration,
                 cancellationToken);
 
@@ -300,8 +280,8 @@ public partial class ConfigurationDetailViewModel : ObservableObject,
         Guid configurationId,
         CancellationToken cancellationToken)
     {
-        var configuration = await _configurationRepository
-            .Get<AzureAdConfigurationModel>(
+        var configuration = await _configurationService
+            .Get(
                 configurationId,
                 cancellationToken);
 
@@ -312,7 +292,7 @@ public partial class ConfigurationDetailViewModel : ObservableObject,
         }
 
         ConfigurationIdentity = configuration.Identity;
-        ConfigurationData = configuration.Data;
+        ConfigurationData = (AzureAdConfigurationData)configuration.Data;
         IsConfigurationSaved = true;
     }
 

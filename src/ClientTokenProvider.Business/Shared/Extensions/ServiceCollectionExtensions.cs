@@ -1,4 +1,5 @@
-﻿using ClientTokenProvider.Business.Shared.Providers;
+﻿using ClientTokenProvider.Business.Shared.Factories;
+using ClientTokenProvider.Business.Shared.Providers;
 using ClientTokenProvider.Business.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,10 +15,11 @@ public static class ServiceCollectionExtensions
 
         services
             .AddSingleton<IConfigurationIdentityProvider, ConfigurationIdentityProvider>()
+            .AddSingleton<IConfigurationFactory, ConfigurationFactory>()
             .AddSingleton<IConfigurationCache, ConfigurationCache>();
 
         services
-            .AddScoped<IConfigurationRepository, ConfigurationRepository>();
+            .AddScoped<IConfigurationService, ConfigurationService>();
 
         return services;
     }

@@ -1,15 +1,10 @@
 ﻿namespace ClientTokenProvider.Business.Shared.Models;
 
-public abstract record ConfigurationBase
+public record Configuration
 {
     public required ConfigurationIdentity Identity { get; init; }
+
+    public required ConfigurationKind Kind { get; init; }
+
+    public required IConfigurationData Data { get; init; }
 }
-
-public sealed record Configuration<TConfigurationDataType>
-    : ConfigurationBase
-    where TConfigurationDataType : notnull
-{
-    public required TConfigurationDataType Data { get; init; }
-}
-
-

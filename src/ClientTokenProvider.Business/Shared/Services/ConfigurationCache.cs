@@ -8,7 +8,7 @@ internal sealed class ConfigurationCache(
 {
     private const string CacheKey = "SavedConfigurations";
 
-    public void Save(ConfigurationBase configuration)
+    public void Save(Configuration configuration)
     {
         if (!memoryCache.TryGetValue<ConfigurationTree>((CacheKey), out var configurationTree)
             || configurationTree is null)
@@ -16,15 +16,15 @@ internal sealed class ConfigurationCache(
             configurationTree = [];
         }
 
-        var key = configuration.Identity.Id.ToString();
+        var configurationId = configuration.Identity.Id;
 
-        if (configurationTree.ContainsKey(key))
+        if (configurationTree.ContainsKey(configurationId))
         {
-            configurationTree[key] = configuration;
+            configurationTree[configurationId] = configuration;
         }
         else
         {
-            configurationTree.Add(key, configuration);
+            configurationTree.Add(configurationId, configuration);
         }
 
         memoryCache.Set(CacheKey, configurationTree);
@@ -38,18 +38,17 @@ internal sealed class ConfigurationCache(
             return;
         }
 
-        var key = configurationId.ToString();
-
-        if (configurationTree.ContainsKey(key))
+        if (configurationTree.ContainsKey(configurationId))
         {
             return;
         }
 
-        configurationTree.Remove(key);
+        configurationTree.Remove(configurationId);
+
         memoryCache.Set(CacheKey, configurationTree);
     }
 
-    public IReadOnlyCollection<ConfigurationBase>? GetAll()
+    public IReadOnlyCollection<Configuration>? GetAll()
     {
         if (!memoryCache.TryGetValue<ConfigurationTree>((CacheKey), out var configurationTree)
             || configurationTree is null)
@@ -62,7 +61,7 @@ internal sealed class ConfigurationCache(
             .ToList();
     }
 
-    public Configuration<TConfigurationDataType>? Get<TConfigurationDataType>(Guid configurationId) where TConfigurationDataType : notnull
+    public Configuration? Get(Guid configurationId)
     {
         if (!memoryCache.TryGetValue<ConfigurationTree>((CacheKey), out var configurationTree) ||
             configurationTree is null)
@@ -70,14 +69,12 @@ internal sealed class ConfigurationCache(
             return null;
         }
 
-        var key = configurationId.ToString();
-
-        if (!configurationTree.TryGetValue(key, out var configuration)
+        if (!configurationTree.TryGetValue(configurationId, out var configuration)
             || configuration is null)
         {
             return null;
         }
 
-        return (Configuration<TConfigurationDataType>)configuration;
+        return configuration;
     }
 }

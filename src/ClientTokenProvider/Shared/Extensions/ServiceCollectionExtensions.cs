@@ -14,7 +14,8 @@ internal static class ServiceCollectionExtensions
             .AddSingleton<INavigationService, NavigationService>();
 
         services
-            .AddTransient<ConfigurationListView, ConfigurationListViewModel>();
+            .AddTransient<ConfigurationListView, ConfigurationListViewModel>()
+            .AddTransient<ConfigurationManagerPage, ConfigurationManagerViewModel>();
 
         Routes.RegisterRoutes();
 

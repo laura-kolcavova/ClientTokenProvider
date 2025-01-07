@@ -1,5 +1,4 @@
-﻿using ClientTokenProvider.AzureAd.Models;
-using ClientTokenProvider.Business.Shared.Models;
+﻿using ClientTokenProvider.Business.Shared.Models;
 using ClientTokenProvider.Business.Shared.Services;
 using ClientTokenProvider.Shared.Messages;
 using ClientTokenProvider.Shared.Models;
@@ -14,7 +13,7 @@ public partial class ConfigurationListViewModel : ObservableObject,
     IRecipient<ConfigurationSavedMessage>,
     IRecipient<ConfigurationNameChangedMessage>
 {
-    private readonly IConfigurationRepository _configurationRepository;
+    private readonly IConfigurationService _configurationService;
 
     [ObservableProperty]
     private ObservableCollection<ConfigurationListItemModel> configurationList;
@@ -26,9 +25,9 @@ public partial class ConfigurationListViewModel : ObservableObject,
     private bool isItemSelected;
 
     public ConfigurationListViewModel(
-        IConfigurationRepository configurationRepository)
+        IConfigurationService configurationService)
     {
-        _configurationRepository = configurationRepository;
+        _configurationService = configurationService;
 
         ConfigurationList = [];
     }
@@ -84,7 +83,7 @@ public partial class ConfigurationListViewModel : ObservableObject,
     {
         WeakReferenceMessenger.Default.RegisterAll(this);
 
-        var configurations = await _configurationRepository
+        var configurations = await _configurationService
             .GetAll(cancellationToken);
 
         var configurationListItems = configurations
@@ -127,9 +126,9 @@ public partial class ConfigurationListViewModel : ObservableObject,
         AllowConcurrentExecutions = false)]
     private async Task AddNewConfiguration(CancellationToken cancellationToken)
     {
-        var configuration = await _configurationRepository
-            .Create<AzureAdConfigurationModel>(
-                () => AzureAdConfigurationModel.Empty,
+        var configuration = await _configurationService
+            .Create(
+                ConfigurationKind.AzureAd,
                 cancellationToken);
 
         AddConfiguration(configuration.Identity);

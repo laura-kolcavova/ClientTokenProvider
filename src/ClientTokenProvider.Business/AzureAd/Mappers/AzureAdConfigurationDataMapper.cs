@@ -1,17 +1,17 @@
-﻿using ClientTokenProvider.AzureAd.Models;
+﻿using ClientTokenProvider.Business.AzureAd.Models;
 using ClientTokenProvider.Core.AzureAd.Models;
 using Riok.Mapperly.Abstractions;
 
-namespace ClientTokenProvider.AzureAd.Mappers;
+namespace ClientTokenProvider.Business.AzureAd.Mappers;
 
 [Mapper(EnumMappingStrategy = EnumMappingStrategy.ByName, EnumMappingIgnoreCase = true)]
-internal static partial class ClientConfigurationMapper
+public static partial class AzureAdConfigurationDataMapper
 {
     [MapProperty(
-        nameof(AzureAdConfigurationModel.AuthorityUrl),
+        nameof(AzureAdConfigurationData.AuthorityUrl),
         nameof(ClientTokenProviderConfiguration.AuthorityUri))]
     [MapperIgnoreSource(
-        nameof(AzureAdConfigurationModel.Scope))]
+        nameof(AzureAdConfigurationData.Scope))]
     public static partial ClientTokenProviderConfiguration ToClientConfiguration(
-        this AzureAdConfigurationModel source);
+        this AzureAdConfigurationData source);
 }

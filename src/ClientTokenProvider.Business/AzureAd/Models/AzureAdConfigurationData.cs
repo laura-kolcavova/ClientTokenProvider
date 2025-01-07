@@ -1,6 +1,9 @@
-﻿namespace ClientTokenProvider.AzureAd.Models;
+﻿using ClientTokenProvider.Business.Shared.Models;
 
-public sealed record AzureAdConfigurationModel
+namespace ClientTokenProvider.Business.AzureAd.Models;
+
+public sealed record AzureAdConfigurationData :
+    IConfigurationData
 {
     public required string AuthorityUrl { get; init; }
 
@@ -40,7 +43,7 @@ public sealed record AzureAdConfigurationModel
         return false;
     }
 
-    public static AzureAdConfigurationModel Empty =>
+    public static AzureAdConfigurationData Empty =>
         new()
         {
             AuthorityUrl = string.Empty,
