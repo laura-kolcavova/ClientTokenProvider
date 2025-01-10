@@ -3,14 +3,14 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ClientTokenProvider.Business.Shared.Services;
 
-internal sealed class ConfigurationCache(
-    IMemoryCache memoryCache) : IConfigurationCache
+internal sealed class ConfigurationCacheService(
+    IMemoryCache memoryCache) : IConfigurationCacheService
 {
     private const string CacheKey = "SavedConfigurations";
 
     public void Save(Configuration configuration)
     {
-        if (!memoryCache.TryGetValue<ConfigurationTree>((CacheKey), out var configurationTree)
+        if (!memoryCache.TryGetValue<ConfigurationTree>(CacheKey, out var configurationTree)
             || configurationTree is null)
         {
             configurationTree = [];
@@ -32,7 +32,7 @@ internal sealed class ConfigurationCache(
 
     public void Remove(Guid configurationId)
     {
-        if (!memoryCache.TryGetValue<ConfigurationTree>((CacheKey), out var configurationTree) ||
+        if (!memoryCache.TryGetValue<ConfigurationTree>(CacheKey, out var configurationTree) ||
             configurationTree is null)
         {
             return;
@@ -50,7 +50,7 @@ internal sealed class ConfigurationCache(
 
     public IReadOnlyCollection<Configuration>? GetAll()
     {
-        if (!memoryCache.TryGetValue<ConfigurationTree>((CacheKey), out var configurationTree)
+        if (!memoryCache.TryGetValue<ConfigurationTree>(CacheKey, out var configurationTree)
             || configurationTree is null)
         {
             return null;
@@ -63,7 +63,7 @@ internal sealed class ConfigurationCache(
 
     public Configuration? Get(Guid configurationId)
     {
-        if (!memoryCache.TryGetValue<ConfigurationTree>((CacheKey), out var configurationTree) ||
+        if (!memoryCache.TryGetValue<ConfigurationTree>(CacheKey, out var configurationTree) ||
             configurationTree is null)
         {
             return null;

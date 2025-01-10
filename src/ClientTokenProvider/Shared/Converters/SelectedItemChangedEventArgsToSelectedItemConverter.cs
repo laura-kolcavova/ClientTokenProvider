@@ -3,7 +3,6 @@ using System.Globalization;
 
 namespace ClientTokenProvider.Shared.Converters;
 
-
 internal sealed class SelectedItemChangedEventArgsToSelectedItemConverter : BaseConverterOneWay<SelectedItemChangedEventArgs, object>
 {
     public override object DefaultConvertReturnValue { get; set; } = null!;

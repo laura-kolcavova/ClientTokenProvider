@@ -16,7 +16,7 @@ public static class ServiceCollectionExtensions
         services
             .AddSingleton<IConfigurationIdentityProvider, ConfigurationIdentityProvider>()
             .AddSingleton<IConfigurationFactory, ConfigurationFactory>()
-            .AddSingleton<IConfigurationCache, ConfigurationCache>();
+            .AddSingleton<IConfigurationCacheService, ConfigurationCacheService>();
 
         services
             .AddScoped<IConfigurationService, ConfigurationService>();

@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
+<baseViews:ContentPageBase
     x:Class="ClientTokenProvider.Shared.Views.ConfigurationManagerPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:baseViews="clr-namespace:ClientTokenProvider.Shared.Views.Base"
     xmlns:sharedViews="clr-namespace:ClientTokenProvider.Shared.Views"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    Title="">
+    xmlns:viewModels="clr-namespace:ClientTokenProvider.Shared.ViewModels"
+    Title=""
+    x:DataType="viewModels:ConfigurationManagerViewModel">
     <sharedViews:PageLayout ControlTemplate="{StaticResource PageLayoutTemplate}">
-        <Label />
+        <Grid ColumnDefinitions="auto, *">
+            <sharedViews:ConfigurationListView Grid.Column="0" />
+
+
+        </Grid>
     </sharedViews:PageLayout>
-</ContentPage>
+</baseViews:ContentPageBase>

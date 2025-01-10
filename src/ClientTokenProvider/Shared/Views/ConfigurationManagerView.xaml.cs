@@ -1,11 +1,12 @@
 using ClientTokenProvider.Shared.Messages;
 using ClientTokenProvider.Shared.ViewModels;
+using ClientTokenProvider.Shared.Views.Base;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace ClientTokenProvider.Shared.Views;
 
 public partial class ConfigurationManagerPage :
-    ContentPage,
+    ContentPageBase,
     IRecipient<ShowSavingFileFailedErrorMessage>
 {
     public ConfigurationManagerPage(ConfigurationManagerViewModel viewModel)
@@ -13,20 +14,20 @@ public partial class ConfigurationManagerPage :
         InitializeComponent();
 
         BindingContext = viewModel;
+    }
 
-        Loaded += (s, e) =>
-        {
-            WeakReferenceMessenger.Default.RegisterAll(this);
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
 
-            viewModel.LoadCommand.Execute(null);
-        };
+        WeakReferenceMessenger.Default.RegisterAll(this);
+    }
 
-        Unloaded += (s, e) =>
-        {
-            WeakReferenceMessenger.Default.UnregisterAll(this);
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
 
-            viewModel.UnloadCommand.Execute(null);
-        };
+        WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 
     async void IRecipient<ShowSavingFileFailedErrorMessage>.Receive(

@@ -95,6 +95,9 @@
 	  <Compile Update="Shared\Views\ConfigurationListView.xaml.cs">
 	    <DependentUpon>ConfigurationListView.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Shared\Views\ConfigurationManagerView.xaml.cs">
+	    <DependentUpon>ConfigurationManagerView.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -107,7 +110,7 @@
 	  <MauiXaml Update="Shared\Views\ConfigurationListView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Shared\Views\ConfigurationManagerPage.xaml">
+	  <MauiXaml Update="Shared\Views\ConfigurationManagerView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Shared\Views\PageLayout.xaml">

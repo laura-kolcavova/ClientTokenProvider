@@ -13,7 +13,7 @@ namespace XunitTests.Application.AzureAd;
 
 [Category("unit")]
 [Category("coverage")]
-public sealed class AzureArClientHandlerTests
+public sealed class AzureAdClientHandlerTests
 {
     [Fact]
     public async Task GetClientToken_ShouldReturnResponse_WhenStatusCodeIsOk()

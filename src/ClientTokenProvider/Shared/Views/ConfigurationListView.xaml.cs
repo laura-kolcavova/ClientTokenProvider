@@ -1,4 +1,3 @@
-using ClientTokenProvider.Shared.Helpers;
 using ClientTokenProvider.Shared.ViewModels;
 
 namespace ClientTokenProvider.Shared.Views;
@@ -9,7 +8,9 @@ public partial class ConfigurationListView : ContentView
     {
         InitializeComponent();
 
-        var viewModel = ServiceHelper.GetRequiredService<ConfigurationListViewModel>();
+        var viewModel = Handler!.MauiContext!.Services.GetRequiredService<ConfigurationListViewModel>();
+
+        //var viewModel = ServiceHelper.GetRequiredService<ConfigurationListViewModel>();
 
         BindingContext = viewModel;
 

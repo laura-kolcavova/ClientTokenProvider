@@ -2,14 +2,13 @@
 <ContentView
     x:Class="ClientTokenProvider.Shared.Views.PageLayout"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:sharedViews="clr-namespace:ClientTokenProvider.Shared.Views">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <ContentView.Resources>
         <ControlTemplate x:Key="PageLayoutTemplate">
-            <Grid ColumnDefinitions="auto, *">
-                <sharedViews:ConfigurationListView Grid.Column="0" />
+            <Grid RowDefinitions="auto, *">
+                <!--  TODO Toolbar  -->
 
-                <Grid Grid.Column="1">
+                <Grid Grid.Row="1">
                     <ContentPresenter />
                 </Grid>
             </Grid>

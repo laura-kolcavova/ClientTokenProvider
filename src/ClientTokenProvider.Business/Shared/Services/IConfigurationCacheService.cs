@@ -2,7 +2,7 @@
 
 namespace ClientTokenProvider.Business.Shared.Services;
 
-public interface IConfigurationCache
+public interface IConfigurationCacheService
 {
     public void Save(Configuration configuration);
 

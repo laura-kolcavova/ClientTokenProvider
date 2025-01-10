@@ -12,7 +12,6 @@
             <sharedConverters:SelectedItemChangedEventArgsToSelectedItemConverter x:Key="SelectedItemChangedEventArgsToSelectedItemConverter" />
         </ResourceDictionary>
 
-
         <Style Class="configurationList" TargetType="ListView">
             <Setter Property="MinimumWidthRequest" Value="180" />
             <Setter Property="MaximumWidthRequest" Value="180" />

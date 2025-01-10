@@ -5,7 +5,7 @@ namespace ClientTokenProvider.Business.Shared.Services;
 
 internal sealed class ConfigurationService(
     IConfigurationFactory configurationFactory,
-    IConfigurationCache configurationCache) :
+    IConfigurationCacheService configurationCacheService) :
     IConfigurationService
 {
     public async Task<Configuration> Create(
@@ -17,7 +17,7 @@ internal sealed class ConfigurationService(
         // TODO Store it in the database
         await Task.CompletedTask;
 
-        configurationCache.Save(configuration);
+        configurationCacheService.Save(configuration);
 
         return configuration;
     }
@@ -26,7 +26,7 @@ internal sealed class ConfigurationService(
         Guid configurationId,
         CancellationToken cancellationToken)
     {
-        var configuration = configurationCache.Get(
+        var configuration = configurationCacheService.Get(
             configurationId);
 
         if (configuration is null)
@@ -41,7 +41,7 @@ internal sealed class ConfigurationService(
     public async ValueTask<IReadOnlyCollection<Configuration>> GetAll(
         CancellationToken cancellationToken)
     {
-        var configurations = configurationCache.GetAll();
+        var configurations = configurationCacheService.GetAll();
 
         if (configurations is null)
         {
@@ -59,6 +59,6 @@ internal sealed class ConfigurationService(
         // TODO Store it in the database
         await Task.CompletedTask;
 
-        configurationCache.Save(configuration);
+        configurationCacheService.Save(configuration);
     }
 }
