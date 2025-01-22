@@ -1,8 +1,10 @@
 ﻿namespace ClientTokenProvider.Business.Shared.Models;
 
-public record Configuration
+public class Configuration
 {
-    public required ConfigurationIdentity Identity { get; init; }
+    public required Guid Id { get; init; }
+
+    public required string Name { get; init; }
 
     public required ConfigurationKind Kind { get; init; }
 

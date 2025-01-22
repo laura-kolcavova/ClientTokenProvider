@@ -1,5 +1,5 @@
 ﻿using ClientTokenProvider.Business.Shared.Factories;
-using ClientTokenProvider.Business.Shared.Providers;
+using ClientTokenProvider.Business.Shared.Repositories;
 using ClientTokenProvider.Business.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,12 +14,14 @@ public static class ServiceCollectionExtensions
             .AddMemoryCache();
 
         services
-            .AddSingleton<IConfigurationIdentityProvider, ConfigurationIdentityProvider>()
             .AddSingleton<IConfigurationFactory, ConfigurationFactory>()
             .AddSingleton<IConfigurationCacheService, ConfigurationCacheService>();
 
         services
             .AddScoped<IConfigurationService, ConfigurationService>();
+
+        services
+            .AddScoped<IConfigurationRepository, ConfigurationRepositoryMock>();
 
         return services;
     }

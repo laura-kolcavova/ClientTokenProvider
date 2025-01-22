@@ -4,16 +4,18 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:baseViews="clr-namespace:ClientTokenProvider.Shared.Views.Base"
-    xmlns:sharedViews="clr-namespace:ClientTokenProvider.Shared.Views"
+    xmlns:controls="clr-namespace:ClientTokenProvider.Shared.Controls"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewModels="clr-namespace:ClientTokenProvider.Shared.ViewModels"
     Title=""
     x:DataType="viewModels:ConfigurationManagerViewModel">
-    <sharedViews:PageLayout ControlTemplate="{StaticResource PageLayoutTemplate}">
+    <baseViews:PageLayout ControlTemplate="{StaticResource PageLayoutTemplate}">
         <Grid ColumnDefinitions="auto, *">
-            <sharedViews:ConfigurationListView Grid.Column="0" />
-
-
+            <controls:ConfigurationList
+                Grid.Column="0"
+                AddNewConfigurationCommand="{Binding AddNewConfigurationCommand}"
+                Configurations="{Binding Configurations}"
+                SelectedConfiguration="{Binding ActiveConfiguration}" />
         </Grid>
-    </sharedViews:PageLayout>
+    </baseViews:PageLayout>
 </baseViews:ContentPageBase>

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView
-    x:Class="ClientTokenProvider.Shared.Views.ConfigurationListView"
+    x:Class="ClientTokenProvider.Shared.Controls.ConfigurationList"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:sharedConverters="clr-namespace:ClientTokenProvider.Shared.Converters"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    xmlns:viewModels="clr-namespace:ClientTokenProvider.Shared.ViewModels">
-
+    x:Name="this">
     <ContentView.Resources>
         <ResourceDictionary>
-            <sharedConverters:SelectedItemChangedEventArgsToSelectedItemConverter x:Key="SelectedItemChangedEventArgsToSelectedItemConverter" />
+            <sharedConverters:ConfigurationNameFallbackConverter x:Key="ConfigurationNameFallbackConverter" />
         </ResourceDictionary>
 
         <Style Class="configurationList" TargetType="ListView">
@@ -35,18 +33,21 @@
         </Style>
     </ContentView.Resources>
 
-    <Grid BackgroundColor="{StaticResource SecondaryBackground}" ColumnDefinitions="*, 1">
+    <Grid
+        BackgroundColor="{StaticResource SecondaryBackground}"
+        BindingContext="{x:Reference this}"
+        ColumnDefinitions="*, 1">
         <Grid Grid.Column="0" RowDefinitions="auto, *">
             <VerticalStackLayout Grid.Row="0">
                 <HorizontalStackLayout VerticalOptions="Center">
-                    <Button Command="{Binding AddNewConfigurationCommand}" StyleClass="iconButton, addNewConfigurationButton" />
+                    <Button Clicked="AddNewConfigurationButton_Clicked" StyleClass="iconButton, addNewConfigurationButton" />
                 </HorizontalStackLayout>
             </VerticalStackLayout>
 
             <ListView
                 Grid.Row="1"
-                ItemsSource="{Binding ConfigurationList}"
-                SelectedItem="{Binding SelectedItem, Mode=OneWay}"
+                ItemsSource="{Binding Configurations}"
+                SelectedItem="{Binding SelectedConfiguration, Mode=OneWay}"
                 StyleClass="configurationList">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -59,16 +60,16 @@
                                     Grid.Row="0"
                                     Grid.Column="0"
                                     StyleClass="configurationListItemName"
-                                    Text="{Binding Name}" />
+                                    Text="{Binding Name, Converter={StaticResource ConfigurationNameFallbackConverter}}" />
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.Behaviors>
-                    <toolkit:EventToCommandBehavior
-                        Command="{Binding SelectOrDeselectItemCommand}"
-                        EventArgsConverter="{StaticResource SelectedItemChangedEventArgsToSelectedItemConverter}"
-                        EventName="ItemSelected" />
+                    <!--<toolkit:EventToCommandBehavior
+                     Command="{Binding SelectOrDeselectItemCommand}"
+                     EventArgsConverter="{StaticResource SelectedItemChangedEventArgsToSelectedItemConverter}"
+                     EventName="ItemSelected" />-->
                 </ListView.Behaviors>
             </ListView>
 

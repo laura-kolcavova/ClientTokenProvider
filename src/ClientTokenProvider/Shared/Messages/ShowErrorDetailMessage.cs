@@ -1,4 +1,4 @@
-﻿namespace ClientTokenProvider.AzureAd.Messages;
+﻿namespace ClientTokenProvider.Shared.Messages;
 
 internal sealed record ShowErrorDetailMessage
 {

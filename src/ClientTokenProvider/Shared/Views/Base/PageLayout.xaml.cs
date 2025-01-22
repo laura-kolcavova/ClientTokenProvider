@@ -1,4 +1,4 @@
-namespace ClientTokenProvider.Shared.Views;
+namespace ClientTokenProvider.Shared.Views.Base;
 
 public partial class PageLayout : ContentView
 {

@@ -7,13 +7,16 @@ namespace ClientTokenProvider.Shared.Views;
 
 public partial class ConfigurationManagerPage :
     ContentPageBase,
-    IRecipient<ShowSavingFileFailedErrorMessage>
+    IRecipient<AddingNewConfigurationFailedMessage>,
+    IRecipient<DeletingConfigurationFailedMessage>,
+    IRecipient<SavingConfigurationFailedMessage>
 {
     public ConfigurationManagerPage(ConfigurationManagerViewModel viewModel)
     {
+        BindingContext = viewModel;
         InitializeComponent();
 
-        BindingContext = viewModel;
+
     }
 
     protected override void OnAppearing()
@@ -30,12 +33,30 @@ public partial class ConfigurationManagerPage :
         WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 
-    async void IRecipient<ShowSavingFileFailedErrorMessage>.Receive(
-        ShowSavingFileFailedErrorMessage message)
+    public async void Receive(AddingNewConfigurationFailedMessage message)
     {
+        // TODO Localization
         await DisplayAlert(
-            "Saving file failed",
-            "File could not be saved",
+            "Adding configuration failed",
+            "Configuration could not be added",
+            "Close");
+    }
+
+    public async void Receive(DeletingConfigurationFailedMessage message)
+    {
+        // TODO Localization
+        await DisplayAlert(
+            "Deleting configuration failed",
+            "Configuration could not be deleted",
+            "Close");
+    }
+
+    public async void Receive(SavingConfigurationFailedMessage message)
+    {
+        // TODO Localization
+        await DisplayAlert(
+            "Saving configuration failed",
+            "Configuration could not be saved",
             "Close");
     }
 }

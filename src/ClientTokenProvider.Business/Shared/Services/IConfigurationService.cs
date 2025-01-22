@@ -18,4 +18,8 @@ public interface IConfigurationService
     public ValueTask<Configuration?> Get(
        Guid configurationId,
        CancellationToken cancellationToken);
+
+    public Task Delete(
+       Guid configurationId,
+       CancellationToken cancellationToken);
 }

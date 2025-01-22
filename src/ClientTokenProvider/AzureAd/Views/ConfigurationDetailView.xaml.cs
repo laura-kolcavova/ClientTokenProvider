@@ -1,38 +1,38 @@
-using ClientTokenProvider.AzureAd.Messages;
-using ClientTokenProvider.AzureAd.ViewModels;
-using CommunityToolkit.Mvvm.Messaging;
+//using ClientTokenProvider.AzureAd.Messages;
+//using ClientTokenProvider.AzureAd.ViewModels;
+//using CommunityToolkit.Mvvm.Messaging;
 
-namespace ClientTokenProvider.AzureAd.Views;
+//namespace ClientTokenProvider.AzureAd.Views;
 
-public partial class ConfigurationDetailView :
-    ContentPage,
-    IRecipient<ShowErrorDetailMessage>
-{
-    public ConfigurationDetailView(ConfigurationDetailViewModel viewModel)
-    {
-        InitializeComponent();
+//public partial class ConfigurationDetailView :
+//    ContentPage,
+//    IRecipient<ShowErrorDetailMessage>
+//{
+//    public ConfigurationDetailView(ConfigurationDetailViewModel viewModel)
+//    {
+//        InitializeComponent();
 
-        BindingContext = viewModel;
+//        BindingContext = viewModel;
 
-        Loaded += (s, e) =>
-        {
-            WeakReferenceMessenger.Default.RegisterAll(this);
+//        Loaded += (s, e) =>
+//        {
+//            WeakReferenceMessenger.Default.RegisterAll(this);
 
-            AuthorityEntry.Focus();
-        };
+//            AuthorityEntry.Focus();
+//        };
 
-        Unloaded += (s, e) =>
-        {
-            WeakReferenceMessenger.Default.UnregisterAll(this);
-        };
-    }
+//        Unloaded += (s, e) =>
+//        {
+//            WeakReferenceMessenger.Default.UnregisterAll(this);
+//        };
+//    }
 
-    async void IRecipient<ShowErrorDetailMessage>.Receive(
-        ShowErrorDetailMessage message)
-    {
-        await DisplayAlert(
-            "Error",
-            message.ErrorMessage,
-            "Close");
-    }
-}
+//    async void IRecipient<ShowErrorDetailMessage>.Receive(
+//        ShowErrorDetailMessage message)
+//    {
+//        await DisplayAlert(
+//            "Error",
+//            message.ErrorMessage,
+//            "Close");
+//    }
+//}

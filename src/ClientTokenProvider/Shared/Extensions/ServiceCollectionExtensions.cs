@@ -1,5 +1,4 @@
-﻿using ClientTokenProvider.Shared.Services;
-using ClientTokenProvider.Shared.ViewModels;
+﻿using ClientTokenProvider.Shared.ViewModels;
 using ClientTokenProvider.Shared.Views;
 using CommunityToolkit.Maui;
 
@@ -11,10 +10,6 @@ internal static class ServiceCollectionExtensions
         this IServiceCollection services)
     {
         services
-            .AddSingleton<INavigationService, NavigationService>();
-
-        services
-            .AddTransient<ConfigurationListView, ConfigurationListViewModel>()
             .AddTransient<ConfigurationManagerPage, ConfigurationManagerViewModel>();
 
         Routes.RegisterRoutes();

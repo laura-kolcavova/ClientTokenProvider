@@ -1,3 +1,3 @@
 ﻿namespace ClientTokenProvider.Shared.Messages;
 
-public sealed class AddingNewConfigurationFailedMessage;
+public sealed record AddingNewConfigurationFailedMessage;

@@ -1,4 +1,4 @@
-namespace ClientTokenProvider.Shared.Components;
+namespace ClientTokenProvider.Shared.Controls;
 
 public partial class CircularSpinner :
     ContentView

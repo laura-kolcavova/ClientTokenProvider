@@ -1,11 +1,13 @@
 ﻿using ClientTokenProvider.Business.Shared.Factories;
 using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Business.Shared.Repositories;
 
 namespace ClientTokenProvider.Business.Shared.Services;
 
 internal sealed class ConfigurationService(
     IConfigurationFactory configurationFactory,
-    IConfigurationCacheService configurationCacheService) :
+    IConfigurationCacheService configurationCacheService,
+    IConfigurationRepository configurationRepository) :
     IConfigurationService
 {
     public async Task<Configuration> Create(
@@ -14,12 +16,22 @@ internal sealed class ConfigurationService(
     {
         var configuration = configurationFactory.Create(kind);
 
+        configurationCacheService.Update(configuration);
+
         // TODO Store it in the database
         await Task.CompletedTask;
 
-        configurationCacheService.Save(configuration);
-
         return configuration;
+    }
+
+    public async Task Delete
+        (Guid configurationId,
+        CancellationToken cancellationToken)
+    {
+        configurationCacheService.Remove(configurationId);
+
+        // TODO Remove it in the database
+        await Task.CompletedTask;
     }
 
     public async ValueTask<Configuration?> Get(
@@ -31,8 +43,14 @@ internal sealed class ConfigurationService(
 
         if (configuration is null)
         {
-            // TODO Obtain data from DB
-            await Task.CompletedTask;
+            configuration = await configurationRepository.Get(
+                configurationId,
+                cancellationToken);
+
+            if (configuration is not null)
+            {
+                configurationCacheService.Add(configuration);
+            }
         }
 
         return configuration;
@@ -45,20 +63,22 @@ internal sealed class ConfigurationService(
 
         if (configurations is null)
         {
-            // TODO Obtain data from DB
-            await Task.CompletedTask;
+            configurations = await configurationRepository.GetAll(
+                cancellationToken);
+
+            configurationCacheService.AddMany(configurations);
         }
 
-        return configurations ?? new List<Configuration>();
+        return configurations;
     }
 
     public async Task Save(
         Configuration configuration,
         CancellationToken cancellationToken)
     {
+        configurationCacheService.Update(configuration);
+
         // TODO Store it in the database
         await Task.CompletedTask;
-
-        configurationCacheService.Save(configuration);
     }
 }

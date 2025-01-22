@@ -1,4 +1,4 @@
-﻿namespace ClientTokenProvider.AzureAd.Models;
+﻿namespace ClientTokenProvider.Shared.Models;
 
 public enum ActionState
 {

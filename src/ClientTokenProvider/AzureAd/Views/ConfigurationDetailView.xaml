@@ -10,7 +10,7 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Title="">
 
-    <ContentPage.Resources>
+    <!--<ContentPage.Resources>
         <ResourceDictionary>
 
             <toolkit:EnumToBoolConverter x:Key="EnumToBoolConverter" />
@@ -283,6 +283,6 @@
                 </Grid>
             </Grid>
         </Grid>
-    </sharedViews:PageLayout>
+    </sharedViews:PageLayout>-->
 
 </ContentPage>

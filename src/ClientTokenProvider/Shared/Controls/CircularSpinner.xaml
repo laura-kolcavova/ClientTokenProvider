@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView
-    x:Class="ClientTokenProvider.Shared.Components.CircularSpinner"
+    x:Class="ClientTokenProvider.Shared.Controls.CircularSpinner"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:drawables="clr-namespace:ClientTokenProvider.Shared.Drawables"
-    x:Name="CircularSpinnerView">
+    x:Name="CircularSpinnerControl">
     <GraphicsView x:Name="GraphicsView">
         <GraphicsView.Drawable>
             <drawables:CircularSpinnerDrawable
                 x:Name="CircularSpinnerDrawableLocal"
-                BindingContext="{Binding Source={x:Reference CircularSpinnerView}}"
+                BindingContext="{Binding Source={x:Reference CircularSpinnerControl}}"
                 EndAngle="90"
                 PrimaryColor="{Binding PrimaryColor}"
                 SecondaryColor="{Binding SecondaryColor}"

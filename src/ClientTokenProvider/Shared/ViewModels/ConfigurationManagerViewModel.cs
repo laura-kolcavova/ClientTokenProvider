@@ -13,7 +13,7 @@ public partial class ConfigurationManagerViewModel(
     ViewModelBase
 {
     [ObservableProperty]
-    private IReadOnlyCollection<Configuration> _configurations = [];
+    private List<Configuration> _configurations = [];
 
     [ObservableProperty]
     private Configuration? _activeConfiguration;
@@ -24,7 +24,7 @@ public partial class ConfigurationManagerViewModel(
 
         var configurations = await configurationService.GetAll(cancellationToken);
 
-        Configurations = configurations;
+        Configurations = configurations.ToList();
     }
 
     protected override Task Unload(CancellationToken cancellationToken)
@@ -58,6 +58,52 @@ public partial class ConfigurationManagerViewModel(
         }
     }
 
+    [RelayCommand(
+        IncludeCancelCommand = true,
+        AllowConcurrentExecutions = false)]
+    private async Task DeleteConfiguration(
+        Guid configurationId,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            await configurationService.Delete(
+                configurationId,
+                cancellationToken);
+
+            RemoveConfigurationFromList(configurationId);
+
+            SetLastOpenedConfigurationAsActive();
+        }
+        catch
+        {
+            WeakReferenceMessenger.Default.Send(
+                new DeletingConfigurationFailedMessage());
+        }
+    }
+
+    [RelayCommand(
+        IncludeCancelCommand = true,
+        AllowConcurrentExecutions = false)]
+    private async Task SaveConfiguration(
+        Configuration configuration,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            await configurationService.Save(
+                configuration,
+                cancellationToken);
+
+            UpdateConfigurationInList(configuration);
+        }
+        catch
+        {
+            WeakReferenceMessenger.Default.Send(
+                new SavingConfigurationFailedMessage());
+        }
+    }
+
     private void AddConfigurationToList(Configuration configuration)
     {
         var newConfigurations = Configurations.ToList();
@@ -65,8 +111,45 @@ public partial class ConfigurationManagerViewModel(
         Configurations = newConfigurations;
     }
 
+    private void RemoveConfigurationFromList(Guid configurationGuid)
+    {
+        var index = Configurations
+            .FindIndex(configuration => configuration.Id == configurationGuid);
+
+        if (index == -1)
+        {
+            return;
+        }
+
+        var newConfigurations = Configurations.ToList();
+        newConfigurations.RemoveAt(index);
+        Configurations = newConfigurations;
+    }
+
+    private void UpdateConfigurationInList(Configuration configurationToUpdate)
+    {
+        var index = Configurations
+            .FindIndex(configuration => configuration.Id == configurationToUpdate.Id);
+
+        if (index == -1)
+        {
+            return;
+        }
+
+        var newConfigurations = Configurations.ToList();
+        newConfigurations[index] = configurationToUpdate;
+        Configurations = newConfigurations;
+    }
+
     private void SetActiveConfiguration(Configuration configuration)
     {
         ActiveConfiguration = configuration;
+    }
+
+    private void SetLastOpenedConfigurationAsActive()
+    {
+        // TODO List of opened configurations
+
+        ActiveConfiguration = null;
     }
 }
