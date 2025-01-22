@@ -15,7 +15,8 @@
                 Grid.Column="0"
                 AddNewConfigurationCommand="{Binding AddNewConfigurationCommand}"
                 Configurations="{Binding Configurations}"
-                SelectedConfiguration="{Binding ActiveConfiguration}" />
+                SelectedConfiguration="{Binding ActiveConfiguration}"
+                SetActiveConfigurationCommand="{Binding SetActiveConfigurationCommand}" />
         </Grid>
     </baseViews:PageLayout>
 </baseViews:ContentPageBase>

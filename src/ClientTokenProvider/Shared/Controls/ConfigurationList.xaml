@@ -46,6 +46,7 @@
 
             <ListView
                 Grid.Row="1"
+                ItemSelected="ConfigurationListView_ItemSelected"
                 ItemsSource="{Binding Configurations}"
                 SelectedItem="{Binding SelectedConfiguration, Mode=OneWay}"
                 StyleClass="configurationList">
@@ -65,12 +66,6 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-                <ListView.Behaviors>
-                    <!--<toolkit:EventToCommandBehavior
-                     Command="{Binding SelectOrDeselectItemCommand}"
-                     EventArgsConverter="{StaticResource SelectedItemChangedEventArgsToSelectedItemConverter}"
-                     EventName="ItemSelected" />-->
-                </ListView.Behaviors>
             </ListView>
 
         </Grid>

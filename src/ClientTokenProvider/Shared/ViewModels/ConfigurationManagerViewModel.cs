@@ -5,6 +5,7 @@ using ClientTokenProvider.Shared.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using System.Collections.ObjectModel;
 
 namespace ClientTokenProvider.Shared.ViewModels;
 
@@ -13,10 +14,11 @@ public partial class ConfigurationManagerViewModel(
     ViewModelBase
 {
     [ObservableProperty]
-    private List<Configuration> _configurations = [];
-
-    [ObservableProperty]
     private Configuration? _activeConfiguration;
+
+    private readonly ObservableCollection<Configuration> _configurations = [];
+
+    public IReadOnlyCollection<Configuration> Configurations => _configurations;
 
     protected override async Task Load(CancellationToken cancellationToken)
     {
@@ -24,7 +26,10 @@ public partial class ConfigurationManagerViewModel(
 
         var configurations = await configurationService.GetAll(cancellationToken);
 
-        Configurations = configurations.ToList();
+        foreach (var configuration in configurations)
+        {
+            _configurations.Add(configuration);
+        }
     }
 
     protected override Task Unload(CancellationToken cancellationToken)
@@ -47,9 +52,9 @@ public partial class ConfigurationManagerViewModel(
                 configurationKind,
                 cancellationToken);
 
-            AddConfigurationToList(newConfiguration);
+            AddConfigurationToList_Internal(newConfiguration);
 
-            SetActiveConfiguration(newConfiguration);
+            SetActiveConfiguration_Internal(newConfiguration);
         }
         catch
         {
@@ -62,18 +67,18 @@ public partial class ConfigurationManagerViewModel(
         IncludeCancelCommand = true,
         AllowConcurrentExecutions = false)]
     private async Task DeleteConfiguration(
-        Guid configurationId,
+        Configuration configuration,
         CancellationToken cancellationToken)
     {
         try
         {
             await configurationService.Delete(
-                configurationId,
+                configuration.Id,
                 cancellationToken);
 
-            RemoveConfigurationFromList(configurationId);
+            RemoveConfigurationFromList_Internal(configuration);
 
-            SetLastOpenedConfigurationAsActive();
+            SetLastOpenedConfigurationAsActive_Internal();
         }
         catch
         {
@@ -94,8 +99,6 @@ public partial class ConfigurationManagerViewModel(
             await configurationService.Save(
                 configuration,
                 cancellationToken);
-
-            UpdateConfigurationInList(configuration);
         }
         catch
         {
@@ -104,49 +107,33 @@ public partial class ConfigurationManagerViewModel(
         }
     }
 
-    private void AddConfigurationToList(Configuration configuration)
-    {
-        var newConfigurations = Configurations.ToList();
-        newConfigurations.Add(configuration);
-        Configurations = newConfigurations;
-    }
-
-    private void RemoveConfigurationFromList(Guid configurationGuid)
-    {
-        var index = Configurations
-            .FindIndex(configuration => configuration.Id == configurationGuid);
-
-        if (index == -1)
-        {
-            return;
-        }
-
-        var newConfigurations = Configurations.ToList();
-        newConfigurations.RemoveAt(index);
-        Configurations = newConfigurations;
-    }
-
-    private void UpdateConfigurationInList(Configuration configurationToUpdate)
-    {
-        var index = Configurations
-            .FindIndex(configuration => configuration.Id == configurationToUpdate.Id);
-
-        if (index == -1)
-        {
-            return;
-        }
-
-        var newConfigurations = Configurations.ToList();
-        newConfigurations[index] = configurationToUpdate;
-        Configurations = newConfigurations;
-    }
-
+    [RelayCommand]
     private void SetActiveConfiguration(Configuration configuration)
     {
-        ActiveConfiguration = configuration;
+        SetActiveConfiguration_Internal(configuration);
     }
 
-    private void SetLastOpenedConfigurationAsActive()
+    private void AddConfigurationToList_Internal(Configuration configuration)
+    {
+        _configurations.Add(configuration); ;
+    }
+
+    private void RemoveConfigurationFromList_Internal(Configuration configuration)
+    {
+        _configurations.Remove(configuration);
+    }
+
+    private void SetActiveConfiguration_Internal(Configuration configurationToBeActive)
+    {
+        if (ActiveConfiguration?.Id == configurationToBeActive.Id)
+        {
+            return;
+        }
+
+        ActiveConfiguration = configurationToBeActive;
+    }
+
+    private void SetLastOpenedConfigurationAsActive_Internal()
     {
         // TODO List of opened configurations
 

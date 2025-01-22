@@ -13,10 +13,9 @@ public partial class ConfigurationManagerPage :
 {
     public ConfigurationManagerPage(ConfigurationManagerViewModel viewModel)
     {
-        BindingContext = viewModel;
         InitializeComponent();
 
-
+        BindingContext = viewModel;
     }
 
     protected override void OnAppearing()

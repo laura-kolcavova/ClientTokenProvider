@@ -4,12 +4,13 @@ using System.Globalization;
 namespace ClientTokenProvider.Shared.Converters;
 
 internal sealed class ConfigurationNameFallbackConverter :
-     BaseConverterOneWay<string?, object>
+     BaseConverterOneWay<string?, string>
 {
-    public override object DefaultConvertReturnValue { get; set; } = string.Empty;
+    public override string DefaultConvertReturnValue { get; set; } = string.Empty;
 
-    public override object ConvertFrom(string? value, CultureInfo? culture)
+    public override string ConvertFrom(string? value, CultureInfo? culture)
     {
+        // TODO Localization
         return !string.IsNullOrEmpty(value)
             ? value
             : "New Configuration";

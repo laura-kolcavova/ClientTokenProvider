@@ -20,6 +20,11 @@ public partial class ConfigurationList : ContentView
         typeof(IAsyncRelayCommand<ConfigurationKind>),
         typeof(ConfigurationList));
 
+    public static readonly BindableProperty SetActiveConfigurationCommandProperty = BindableProperty.Create(
+        nameof(SetActiveConfigurationCommand),
+        typeof(IRelayCommand<Configuration>),
+        typeof(ConfigurationList));
+
     public IEnumerable<Configuration> Configurations
     {
         get => (IEnumerable<Configuration>)GetValue(ConfigurationsProperty);
@@ -38,6 +43,12 @@ public partial class ConfigurationList : ContentView
         set => SetValue(AddNewConfigurationCommandProperty, value);
     }
 
+    public IRelayCommand<Configuration> SetActiveConfigurationCommand
+    {
+        get => (IRelayCommand<Configuration>)GetValue(SetActiveConfigurationCommandProperty);
+        set => SetValue(SetActiveConfigurationCommandProperty, value);
+    }
+
     public ConfigurationList()
     {
         InitializeComponent();
@@ -46,5 +57,17 @@ public partial class ConfigurationList : ContentView
     private void AddNewConfigurationButton_Clicked(object sender, EventArgs e)
     {
         AddNewConfigurationCommand?.Execute(ConfigurationKind.AzureAd);
+    }
+
+    private void ConfigurationListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        var configuration = (Configuration?)e.SelectedItem;
+
+        if (configuration is null)
+        {
+            return;
+        }
+
+        SetActiveConfigurationCommand?.Execute(configuration);
     }
 }
