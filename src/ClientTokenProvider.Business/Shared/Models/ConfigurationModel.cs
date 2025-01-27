@@ -2,11 +2,29 @@
 
 public class ConfigurationModel
 {
-    public required Guid Id { get; init; }
+    public Guid Id { get; }
 
-    public required string Name { get; init; }
+    public string Name { get; private set; }
 
-    public required ConfigurationKind Kind { get; init; }
+    public ConfigurationKind Kind { get; }
 
-    public required IConfigurationData Data { get; init; }
+    public IConfigurationData Data { get; }
+
+    public ConfigurationModel(Guid id, string name, ConfigurationKind kind, IConfigurationData data)
+    {
+        Id = id;
+        Name = name;
+        Kind = kind;
+        Data = data;
+    }
+
+    public ConfigurationModel(Guid id, ConfigurationKind kind, IConfigurationData data) :
+        this(id, string.Empty, kind, data)
+    {
+    }
+
+    public void Rename(string newName)
+    {
+        Name = newName;
+    }
 }

@@ -1,6 +1,5 @@
-﻿using ClientTokenProvider.Business.Shared.Factories;
-using ClientTokenProvider.Business.Shared.Models;
-using ClientTokenProvider.Business.Shared.Repositories;
+﻿using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Business.Shared.Services.Abstractions;
 
 namespace ClientTokenProvider.Business.Shared.Services;
 

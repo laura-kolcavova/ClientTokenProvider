@@ -1,5 +1,5 @@
 ﻿using ClientTokenProvider.Business.Shared.Models;
-using ClientTokenProvider.Business.Shared.Services;
+using ClientTokenProvider.Business.Shared.Services.Abstractions;
 using ClientTokenProvider.Shared.Messages;
 using ClientTokenProvider.Shared.Models;
 using ClientTokenProvider.Shared.ViewModels.Base;
@@ -135,6 +135,15 @@ public partial class ConfigurationManagerViewModel(
     private void SetActiveConfiguration(ConfigurationModel configuration)
     {
         SetActiveConfiguration_Internal(configuration);
+    }
+
+    [RelayCommand]
+    private void RenameConfiguration(ConfigurationModel configuration, string newName)
+    {
+        configuration.Rename(newName);
+
+        OnPropertyChanged(nameof(ActiveConfiguration));
+        OnPropertyChanged(nameof(Configurations));
     }
 
     private void AddConfigurationToList_Internal(ConfigurationModel configuration)

@@ -1,7 +1,7 @@
-﻿using ClientTokenProvider.Core.AzureAd.Handlers;
-using ClientTokenProvider.Core.AzureAd.Models;
+﻿using ClientTokenProvider.Core.AzureAd.Models;
+using ClientTokenProvider.Core.AzureAd.Services.Abstractions;
 
-namespace ClientTokenProvider.Core.AzureAd.Providers;
+namespace ClientTokenProvider.Core.AzureAd.Services;
 
 public sealed class AzureAdClientTokenProvider : IAzureAdClientTokenProvider
 {

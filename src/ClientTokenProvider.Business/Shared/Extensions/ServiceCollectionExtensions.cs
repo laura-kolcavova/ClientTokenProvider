@@ -1,6 +1,5 @@
-﻿using ClientTokenProvider.Business.Shared.Factories;
-using ClientTokenProvider.Business.Shared.Repositories;
-using ClientTokenProvider.Business.Shared.Services;
+﻿using ClientTokenProvider.Business.Shared.Services;
+using ClientTokenProvider.Business.Shared.Services.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ClientTokenProvider.Business.Shared.Extensions;

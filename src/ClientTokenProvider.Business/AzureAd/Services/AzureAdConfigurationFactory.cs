@@ -1,7 +1,8 @@
 ﻿using ClientTokenProvider.Business.AzureAd.Models;
+using ClientTokenProvider.Business.AzureAd.Services.Abstractions;
 using ClientTokenProvider.Business.Shared.Models;
 
-namespace ClientTokenProvider.Business.AzureAd.Factories;
+namespace ClientTokenProvider.Business.AzureAd.Services;
 
 internal sealed class AzureAdConfigurationFactory :
     IAzureAdConfigurationFactory
@@ -10,13 +11,10 @@ internal sealed class AzureAdConfigurationFactory :
     {
         var data = AzureAdConfigurationData.Empty;
 
-        var configuration = new ConfigurationModel()
-        {
-            Id = Guid.NewGuid(),
-            Name = string.Empty,
-            Kind = ConfigurationKind.AzureAd,
-            Data = data
-        };
+        var configuration = new ConfigurationModel(
+            id: Guid.NewGuid(),
+            kind: ConfigurationKind.AzureAd,
+            data: data);
 
         return configuration;
     }

@@ -16,4 +16,8 @@
     <ProjectReference Include="..\ClientTokenProvider.Core\ClientTokenProvider.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Shared\Repositories\" />
+  </ItemGroup>
+
 </Project>

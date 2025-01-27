@@ -1,12 +1,13 @@
 ﻿using ClientTokenProvider.Core.AzureAd.Dto;
 using ClientTokenProvider.Core.AzureAd.Exceptions;
 using ClientTokenProvider.Core.AzureAd.Models;
+using ClientTokenProvider.Core.AzureAd.Services.Abstractions;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace ClientTokenProvider.Core.AzureAd.Handlers;
+namespace ClientTokenProvider.Core.AzureAd.Services;
 
 internal sealed class AzureAdClientHandler : IAzureAdClientHandler
 {

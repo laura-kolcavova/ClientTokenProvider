@@ -1,7 +1,8 @@
-﻿using ClientTokenProvider.Business.AzureAd.Factories;
+﻿using ClientTokenProvider.Business.AzureAd.Services.Abstractions;
 using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Business.Shared.Services.Abstractions;
 
-namespace ClientTokenProvider.Business.Shared.Factories;
+namespace ClientTokenProvider.Business.Shared.Services;
 
 internal class ConfigurationFactory(
     IAzureAdConfigurationFactory azureAdConfigurationFactory) :

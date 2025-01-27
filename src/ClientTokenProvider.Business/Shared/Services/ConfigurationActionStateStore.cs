@@ -1,4 +1,5 @@
 ﻿using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Business.Shared.Services.Abstractions;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace ClientTokenProvider.Business.Shared.Services;

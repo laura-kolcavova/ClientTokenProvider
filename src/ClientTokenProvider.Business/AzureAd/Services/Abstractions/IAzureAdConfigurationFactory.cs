@@ -1,6 +1,6 @@
 ﻿using ClientTokenProvider.Business.Shared.Models;
 
-namespace ClientTokenProvider.Business.AzureAd.Factories;
+namespace ClientTokenProvider.Business.AzureAd.Services.Abstractions;
 
 public interface IAzureAdConfigurationFactory
 {

@@ -1,7 +1,8 @@
 ﻿using ClientTokenProvider.Business.AzureAd.Models;
 using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Business.Shared.Services.Abstractions;
 
-namespace ClientTokenProvider.Business.Shared.Repositories;
+namespace ClientTokenProvider.Business.Shared.Services;
 
 internal sealed class ConfigurationRepositoryMock :
     IConfigurationRepository

@@ -1,7 +1,7 @@
 ﻿using ClientTokenProvider.Core.AzureAd.Models;
-using ClientTokenProvider.Core.AzureAd.Providers;
+using ClientTokenProvider.Core.AzureAd.Services.Abstractions;
 
-namespace ClientTokenProvider.Core.AzureAd.Factories;
+namespace ClientTokenProvider.Core.AzureAd.Services;
 
 internal sealed class AzureAdClientTokenProviderFactory(
     IHttpClientFactory httpClientFactory) : IAzureAdClientTokenProviderFactory

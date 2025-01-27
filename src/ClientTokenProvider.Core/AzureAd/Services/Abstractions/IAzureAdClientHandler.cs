@@ -1,6 +1,6 @@
 ﻿using ClientTokenProvider.Core.AzureAd.Dto;
 
-namespace ClientTokenProvider.Core.AzureAd.Handlers;
+namespace ClientTokenProvider.Core.AzureAd.Services.Abstractions;
 
 public interface IAzureAdClientHandler
 {
