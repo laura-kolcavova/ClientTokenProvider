@@ -1,6 +1,7 @@
 ﻿using ClientTokenProvider.Business.Shared.Models;
 using ClientTokenProvider.Business.Shared.Services;
 using ClientTokenProvider.Shared.Messages;
+using ClientTokenProvider.Shared.Models;
 using ClientTokenProvider.Shared.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,15 +11,24 @@ using System.Collections.ObjectModel;
 namespace ClientTokenProvider.Shared.ViewModels;
 
 public partial class ConfigurationManagerViewModel(
-    IConfigurationService configurationService) :
+    IConfigurationService configurationService,
+    IConfigurationActionStateStore configurationActionStateStore) :
     ViewModelBase
 {
     [ObservableProperty]
-    private Configuration? _activeConfiguration;
+    private ConfigurationModel? activeConfiguration;
 
-    private readonly ObservableCollection<Configuration> _configurations = [];
+    private readonly ObservableCollection<ConfigurationModel> _configurations = [];
 
-    public IReadOnlyCollection<Configuration> Configurations => _configurations;
+    public IReadOnlyCollection<ConfigurationModel> Configurations => _configurations;
+
+    [ObservableProperty]
+    private ConfigurationManagerState currentState = ConfigurationManagerState.NoContent;
+
+    [ObservableProperty]
+    private ConfigurationActionState configurationActionState = ConfigurationActionState.Idle;
+
+    public bool CanChangeState => true;
 
     protected override async Task Load(CancellationToken cancellationToken)
     {
@@ -37,6 +47,20 @@ public partial class ConfigurationManagerViewModel(
         WeakReferenceMessenger.Default.UnregisterAll(this);
 
         return Task.CompletedTask;
+    }
+
+    partial void OnActiveConfigurationChanged(ConfigurationModel? value)
+    {
+        if (value is null)
+        {
+            CurrentState = ConfigurationManagerState.NoContent;
+        }
+        else
+        {
+            CurrentState = ConfigurationManagerState.ShowConfigurationPresenter;
+
+            ConfigurationActionState = configurationActionStateStore.Get(value);
+        }
     }
 
     [RelayCommand(
@@ -67,7 +91,7 @@ public partial class ConfigurationManagerViewModel(
         IncludeCancelCommand = true,
         AllowConcurrentExecutions = false)]
     private async Task DeleteConfiguration(
-        Configuration configuration,
+        ConfigurationModel configuration,
         CancellationToken cancellationToken)
     {
         try
@@ -91,7 +115,7 @@ public partial class ConfigurationManagerViewModel(
         IncludeCancelCommand = true,
         AllowConcurrentExecutions = false)]
     private async Task SaveConfiguration(
-        Configuration configuration,
+        ConfigurationModel configuration,
         CancellationToken cancellationToken)
     {
         try
@@ -108,22 +132,22 @@ public partial class ConfigurationManagerViewModel(
     }
 
     [RelayCommand]
-    private void SetActiveConfiguration(Configuration configuration)
+    private void SetActiveConfiguration(ConfigurationModel configuration)
     {
         SetActiveConfiguration_Internal(configuration);
     }
 
-    private void AddConfigurationToList_Internal(Configuration configuration)
+    private void AddConfigurationToList_Internal(ConfigurationModel configuration)
     {
         _configurations.Add(configuration); ;
     }
 
-    private void RemoveConfigurationFromList_Internal(Configuration configuration)
+    private void RemoveConfigurationFromList_Internal(ConfigurationModel configuration)
     {
         _configurations.Remove(configuration);
     }
 
-    private void SetActiveConfiguration_Internal(Configuration configurationToBeActive)
+    private void SetActiveConfiguration_Internal(ConfigurationModel configurationToBeActive)
     {
         if (ActiveConfiguration?.Id == configurationToBeActive.Id)
         {

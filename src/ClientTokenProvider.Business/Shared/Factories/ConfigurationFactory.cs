@@ -7,7 +7,7 @@ internal class ConfigurationFactory(
     IAzureAdConfigurationFactory azureAdConfigurationFactory) :
     IConfigurationFactory
 {
-    public Configuration Create(ConfigurationKind kind)
+    public ConfigurationModel Create(ConfigurationKind kind)
     {
         // Keyed services should be used instead
         if (kind == ConfigurationKind.AzureAd)

@@ -7,12 +7,12 @@ public partial class ConfigurationList : ContentView
 {
     public static readonly BindableProperty ConfigurationsProperty = BindableProperty.Create(
         nameof(Configurations),
-        typeof(IEnumerable<Configuration>),
+        typeof(IEnumerable<ConfigurationModel>),
         typeof(ConfigurationList));
 
     public static readonly BindableProperty SelectedConfigurationProperty = BindableProperty.Create(
         nameof(SelectedConfiguration),
-        typeof(Configuration),
+        typeof(ConfigurationModel),
         typeof(ConfigurationList));
 
     public static readonly BindableProperty AddNewConfigurationCommandProperty = BindableProperty.Create(
@@ -22,18 +22,18 @@ public partial class ConfigurationList : ContentView
 
     public static readonly BindableProperty SetActiveConfigurationCommandProperty = BindableProperty.Create(
         nameof(SetActiveConfigurationCommand),
-        typeof(IRelayCommand<Configuration>),
+        typeof(IRelayCommand<ConfigurationModel>),
         typeof(ConfigurationList));
 
-    public IEnumerable<Configuration> Configurations
+    public IEnumerable<ConfigurationModel> Configurations
     {
-        get => (IEnumerable<Configuration>)GetValue(ConfigurationsProperty);
+        get => (IEnumerable<ConfigurationModel>)GetValue(ConfigurationsProperty);
         set => SetValue(ConfigurationsProperty, value);
     }
 
-    public Configuration? SelectedConfiguration
+    public ConfigurationModel? SelectedConfiguration
     {
-        get => (Configuration?)GetValue(SelectedConfigurationProperty);
+        get => (ConfigurationModel?)GetValue(SelectedConfigurationProperty);
         set => SetValue(SelectedConfigurationProperty, value);
     }
 
@@ -43,9 +43,9 @@ public partial class ConfigurationList : ContentView
         set => SetValue(AddNewConfigurationCommandProperty, value);
     }
 
-    public IRelayCommand<Configuration> SetActiveConfigurationCommand
+    public IRelayCommand<ConfigurationModel> SetActiveConfigurationCommand
     {
-        get => (IRelayCommand<Configuration>)GetValue(SetActiveConfigurationCommandProperty);
+        get => (IRelayCommand<ConfigurationModel>)GetValue(SetActiveConfigurationCommandProperty);
         set => SetValue(SetActiveConfigurationCommandProperty, value);
     }
 
@@ -61,7 +61,7 @@ public partial class ConfigurationList : ContentView
 
     private void ConfigurationListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        var configuration = (Configuration?)e.SelectedItem;
+        var configuration = (ConfigurationModel?)e.SelectedItem;
 
         if (configuration is null)
         {

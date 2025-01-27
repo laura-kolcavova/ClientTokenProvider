@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="ClientTokenProvider.Shared.Controls.ConfigurationDetailPresenter"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:azureAdControls="clr-namespace:ClientTokenProvider.AzureAd.Controls"
+    xmlns:bussinessModels="clr-namespace:ClientTokenProvider.Business.Shared.Models;assembly=ClientTokenProvider.Business"
+    xmlns:sharedControls="clr-namespace:ClientTokenProvider.Shared.Controls"
+    xmlns:sharedConverters="clr-namespace:ClientTokenProvider.Shared.Converters"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <sharedConverters:EnumToStringConverter x:Key="EnumToStringConverter" />
+
+            <toolkit:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+
+            <toolkit:EnumToBoolConverter x:Key="CanSendRequestConverter">
+                <toolkit:EnumToBoolConverter.TrueValues>
+                    <bussinessModels:ConfigurationActionState>Idle</bussinessModels:ConfigurationActionState>
+                    <bussinessModels:ConfigurationActionState>Error</bussinessModels:ConfigurationActionState>
+                    <bussinessModels:ConfigurationActionState>Success</bussinessModels:ConfigurationActionState>
+                </toolkit:EnumToBoolConverter.TrueValues>
+            </toolkit:EnumToBoolConverter>
+
+        </ResourceDictionary>
+
+        <Style Class="requestButton" TargetType="Button">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontAttributes" Value="Bold" />
+        </Style>
+
+        <Style Class="configurationNameEntry" TargetType="Entry">
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="MaximumWidthRequest" Value="200" />
+        </Style>
+
+        <Style Class="saveButton" TargetType="Button">
+            <Setter Property="ImageSource" Value="save_small_grey400.png" />
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <Setter Property="ImageSource" Value="save_small_grey500.png" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="PointerOver" />
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+
+        <Style Class="alertWrapper" TargetType="VerticalStackLayout">
+            <Setter Property="Spacing" Value="20" />
+        </Style>
+
+        <Style Class="alertImage" TargetType="Image">
+            <Setter Property="WidthRequest" Value="100" />
+        </Style>
+
+        <Style Class="alertMessage" TargetType="Label">
+            <Setter Property="HorizontalTextAlignment" Value="Center" />
+        </Style>
+
+        <Style Class="errorWrapper" TargetType="Border">
+
+            <Setter Property="BackgroundColor" Value="{StaticResource Danger}" />
+            <Setter Property="Stroke" Value="{StaticResource Danger}" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape" Value=" RoundRectangle 50" />
+            <Setter Property="Padding" Value="14,6" />
+        </Style>
+
+        <Style Class="errorMessage" TargetType="Label">
+            <Setter Property="MaxLines" Value="2" />
+            <Setter Property="MaximumWidthRequest" Value="150" />
+            <Setter Property="LineBreakMode" Value="TailTruncation" />
+        </Style>
+
+        <Style Class="viewErrorDetailLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource Orange300}" />
+            <Setter Property="FontAttributes" Value="Bold" />
+        </Style>
+
+        <Style Class="configurationHeader" TargetType="FlexLayout">
+            <Setter Property="Padding" Value="20" />
+        </Style>
+    </ContentView.Resources>
+
+    <Grid BindingContext="{x:Reference this}" ColumnDefinitions="*, *">
+        <Grid Grid.Column="0" RowDefinitions="auto, *, auto">
+            <VerticalStackLayout Grid.Column="0" StyleClass="container">
+                <FlexLayout>
+                    <HorizontalStackLayout FlexLayout.Grow="1" VerticalOptions="Center">
+                        <Entry StyleClass="configurationNameEntry" Text="{Binding Configuration.Name}">
+                            <!--<Entry.Behaviors>
+                    <toolkit:EventToCommandBehavior
+                    Command="{Binding UpdateConfigurationNameCommand}"
+                    EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                    EventName="TextChanged" />
+                </Entry.Behaviors>-->
+                        </Entry>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout VerticalOptions="Center">
+                        <Button
+                            Command="{Binding SaveConfigurationCommand}"
+                            StyleClass="textIconButton, saveButton"
+                            Text="Save" />
+                    </HorizontalStackLayout>
+                </FlexLayout>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout
+                Grid.Row="1"
+                toolkit:StateContainer.CanStateChange="{Binding CanStateChange}"
+                toolkit:StateContainer.CurrentState="{Binding Configuration.Kind, Converter={StaticResource EnumToStringConverter}}">
+
+                <toolkit:StateContainer.StateViews>
+                    <azureAdControls:ConfigurationDataForm toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:ConfigurationKind.AzureAd}, Converter={StaticResource EnumToStringConverter}}" Configuration="{Binding Configuration}" />
+                </toolkit:StateContainer.StateViews>
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="2" StyleClass="container">
+                <Button
+                    Command="{Binding GetAccessTokenCommand}"
+                    IsVisible="{Binding ConfigurationActionState, Converter={StaticResource CanSendRequestConverter}}"
+                    StyleClass="button, btnPrimary, requestButton"
+                    Text="Get Access Token" />
+
+                <Button
+                    Command="{Binding CancelRequestCommand}"
+                    IsVisible="{Binding ConfigurationActionState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Loading}}"
+                    StyleClass="button, btnSecondary, requestButton"
+                    Text="Cancel" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <Grid Grid.Column="2" ColumnDefinitions="1, *">
+            <BoxView
+                Grid.Column="0"
+                Margin="0,0,0,0"
+                VerticalOptions="Fill"
+                WidthRequest="1"
+                Color="{StaticResource Gray600}" />
+
+            <Grid Grid.Column="1" RowDefinitions="auto, *">
+                <VerticalStackLayout Grid.Row="0" StyleClass="container">
+                    <Label Grid.Row="0" Padding="0,5,0,0">Access token</Label>
+                </VerticalStackLayout>
+
+                <FlexLayout
+                    Grid.Row="1"
+                    AlignContent="Center"
+                    AlignItems="Center"
+                    JustifyContent="Center"
+                    StyleClass="flexContainer">
+
+                    <VerticalStackLayout IsVisible="{Binding ConfigurationActionState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Idle}}" StyleClass="alertWrapper">
+                        <Image Source="rocket.png" StyleClass="alertImage" />
+
+                        <Label StyleClass="alertMessage">
+                            Enter Azure AD configuration and click Get Access Token to get a response
+                        </Label>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout IsVisible="{Binding ConfigurationActionState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Loading}}" StyleClass="alertWrapper">
+                        <sharedControls:CircularSpinner
+                            Enabled="{Binding ConfigurationActionState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Loading}}"
+                            PrimaryColor="{StaticResource Primary}"
+                            SecondaryColor="{StaticResource White}"
+                            Size="60"
+                            Speed="3"
+                            Thickness="4" />
+
+                        <Label StyleClass="alertMessage">
+                            Sending request ...
+                        </Label>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout IsVisible="{Binding ConfigurationActionState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Error}}" StyleClass="alertWrapper">
+                        <Image Source="repair.png" StyleClass="alertImage" />
+
+                        <Label StyleClass="alertMessage">
+                            Could not send request
+                        </Label>
+
+                        <Border StyleClass="errorWrapper">
+                            <FlexLayout>
+                                <Label
+                                    Padding="0,0,10,0"
+                                    HorizontalTextAlignment="Center"
+                                    StyleClass="errorMessage"
+                                    VerticalTextAlignment="Center">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Error: " />
+                                            <Span Text="{Binding ErrorMessage}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+
+                                <Label
+                                    Padding="10,0,0,0"
+                                    HorizontalTextAlignment="Center"
+                                    StyleClass="viewErrorDetailLabel"
+                                    Text="View Detail"
+                                    VerticalTextAlignment="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ShowErrorDetailModalCommand}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </FlexLayout>
+
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout IsVisible="{Binding ConfigurationActionState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Success}}">
+                        <Label Text="{Binding AccessToken}" />
+                    </VerticalStackLayout>
+
+                </FlexLayout>
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentView>

@@ -6,9 +6,9 @@ namespace ClientTokenProvider.Business.Shared.Repositories;
 internal sealed class ConfigurationRepositoryMock :
     IConfigurationRepository
 {
-    private List<Configuration> _configurations = new List<Configuration>()
+    private List<ConfigurationModel> _configurations = new List<ConfigurationModel>()
         {
-            new Configuration
+            new ConfigurationModel
             {
                 Id = Guid.NewGuid(),
                 Name = "Configuration 1",
@@ -16,7 +16,7 @@ internal sealed class ConfigurationRepositoryMock :
                 Data = AzureAdConfigurationData.Empty,
             },
 
-            new Configuration
+            new ConfigurationModel
             {
                 Id = Guid.NewGuid(),
                 Name = "Configuration 2",
@@ -25,7 +25,7 @@ internal sealed class ConfigurationRepositoryMock :
             }
         };
 
-    public async Task<Configuration?> Get(
+    public async Task<ConfigurationModel?> Get(
         Guid configurationId,
         CancellationToken cancellationToken)
     {
@@ -35,7 +35,7 @@ internal sealed class ConfigurationRepositoryMock :
             .FirstOrDefault(configuration => configuration.Id == configurationId);
     }
 
-    public async Task<IReadOnlyCollection<Configuration>> GetAll(
+    public async Task<IReadOnlyCollection<ConfigurationModel>> GetAll(
         CancellationToken cancellationToken)
     {
         await Task.CompletedTask;

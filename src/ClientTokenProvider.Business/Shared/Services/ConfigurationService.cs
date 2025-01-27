@@ -10,7 +10,7 @@ internal sealed class ConfigurationService(
     IConfigurationRepository configurationRepository) :
     IConfigurationService
 {
-    public async Task<Configuration> Create(
+    public async Task<ConfigurationModel> Create(
         ConfigurationKind kind,
         CancellationToken cancellationToken)
     {
@@ -34,7 +34,7 @@ internal sealed class ConfigurationService(
         await Task.CompletedTask;
     }
 
-    public async ValueTask<Configuration?> Get(
+    public async ValueTask<ConfigurationModel?> Get(
         Guid configurationId,
         CancellationToken cancellationToken)
     {
@@ -56,7 +56,7 @@ internal sealed class ConfigurationService(
         return configuration;
     }
 
-    public async ValueTask<IReadOnlyCollection<Configuration>> GetAll(
+    public async ValueTask<IReadOnlyCollection<ConfigurationModel>> GetAll(
         CancellationToken cancellationToken)
     {
         var configurations = configurationCacheService.GetAll();
@@ -73,7 +73,7 @@ internal sealed class ConfigurationService(
     }
 
     public async Task Save(
-        Configuration configuration,
+        ConfigurationModel configuration,
         CancellationToken cancellationToken)
     {
         configurationCacheService.Update(configuration);

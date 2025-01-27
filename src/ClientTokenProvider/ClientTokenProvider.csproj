@@ -86,8 +86,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="AzureAd\Views\ConfigurationDetailView.xaml.cs">
-	    <DependentUpon>ConfigurationDetailView.xaml</DependentUpon>
+	  <Compile Update="AzureAd\Controls\ConfigurationDataForm.xaml.cs">
+	    <DependentUpon>ConfigurationDataForm.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Shared\Controls\CircularSpinner.xaml.cs">
 	    <DependentUpon>CircularSpinner.xaml</DependentUpon>
@@ -98,10 +98,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="AzureAd\Views\ConfigurationDetailView.xaml">
+	  <MauiXaml Update="AzureAd\Controls\ConfigurationDataForm.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Shared\Controls\CircularSpinner.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Shared\Controls\ConfigurationDetailPresenter.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Shared\Controls\ConfigurationList.xaml">

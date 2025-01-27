@@ -12,8 +12,6 @@ internal static class ServiceCollectionExtensions
         services
             .AddTransient<ConfigurationManagerPage, ConfigurationManagerViewModel>();
 
-        Routes.RegisterRoutes();
-
         return services;
     }
 }

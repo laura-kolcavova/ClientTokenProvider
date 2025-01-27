@@ -4,19 +4,41 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:baseViews="clr-namespace:ClientTokenProvider.Shared.Views.Base"
-    xmlns:controls="clr-namespace:ClientTokenProvider.Shared.Controls"
+    xmlns:sahredModels="clr-namespace:ClientTokenProvider.Shared.Models"
+    xmlns:sharedControls="clr-namespace:ClientTokenProvider.Shared.Controls"
+    xmlns:sharedConverters="clr-namespace:ClientTokenProvider.Shared.Converters"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewModels="clr-namespace:ClientTokenProvider.Shared.ViewModels"
     Title=""
     x:DataType="viewModels:ConfigurationManagerViewModel">
+    <baseViews:ContentPageBase.Resources>
+        <ResourceDictionary>
+            <sharedConverters:EnumToStringConverter x:Key="EnumToStringConverter" />
+        </ResourceDictionary>
+    </baseViews:ContentPageBase.Resources>
+
     <baseViews:PageLayout ControlTemplate="{StaticResource PageLayoutTemplate}">
         <Grid ColumnDefinitions="auto, *">
-            <controls:ConfigurationList
+            <sharedControls:ConfigurationList
                 Grid.Column="0"
                 AddNewConfigurationCommand="{Binding AddNewConfigurationCommand}"
                 Configurations="{Binding Configurations}"
                 SelectedConfiguration="{Binding ActiveConfiguration}"
                 SetActiveConfigurationCommand="{Binding SetActiveConfigurationCommand}" />
+
+            <Grid
+                Grid.Column="1"
+                toolkit:StateContainer.CanStateChange="{Binding CanChangeState}"
+                toolkit:StateContainer.CurrentState="{Binding CurrentState, Converter={StaticResource EnumToStringConverter}}">
+
+                <toolkit:StateContainer.StateViews>
+                    <sharedControls:ConfigurationDetailPresenter toolkit:StateView.StateKey="{Binding Source={x:Static sahredModels:ConfigurationManagerState.ShowConfigurationPresenter}, Converter={StaticResource EnumToStringConverter}}" Configuration="{Binding ActiveConfiguration}" />
+
+                    <VerticalStackLayout toolkit:StateView.StateKey="{Binding Source={x:Static sahredModels:ConfigurationManagerState.NoContent}, Converter={StaticResource EnumToStringConverter}}">
+                        <Label Text="No content" />
+                    </VerticalStackLayout>
+                </toolkit:StateContainer.StateViews>
+            </Grid>
         </Grid>
     </baseViews:PageLayout>
 </baseViews:ContentPageBase>

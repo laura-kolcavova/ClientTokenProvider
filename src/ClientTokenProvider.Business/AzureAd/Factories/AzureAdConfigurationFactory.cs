@@ -6,11 +6,11 @@ namespace ClientTokenProvider.Business.AzureAd.Factories;
 internal sealed class AzureAdConfigurationFactory :
     IAzureAdConfigurationFactory
 {
-    public Configuration Create()
+    public ConfigurationModel Create()
     {
         var data = AzureAdConfigurationData.Empty;
 
-        var configuration = new Configuration()
+        var configuration = new ConfigurationModel()
         {
             Id = Guid.NewGuid(),
             Name = string.Empty,

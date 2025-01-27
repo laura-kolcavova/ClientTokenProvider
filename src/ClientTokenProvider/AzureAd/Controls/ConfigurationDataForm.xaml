@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="ClientTokenProvider.AzureAd.Controls.ConfigurationDataForm"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sharedControls="clr-namespace:ClientTokenProvider.Shared.Controls"
+    xmlns:sharedConverters="clr-namespace:ClientTokenProvider.Shared.Converters"
+    xmlns:sharedModels="clr-namespace:ClientTokenProvider.Shared.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Name="this">
+
+    <Grid BindingContext="{x:Reference this}">
+        <VerticalStackLayout StyleClass="container">
+            <VerticalStackLayout StyleClass="formGroup">
+                <Label StyleClass="formLabel" Text="Authority" />
+                <Entry
+                    x:Name="AuthorityEntry"
+                    StyleClass="formControlEntry"
+                    Text="{Binding Configuration.Data.AuthorityUrl}">
+                    <!--<Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateAuthorityCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>-->
+                </Entry>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout StyleClass="formGroup">
+                <Label StyleClass="formLabel" Text="Scope" />
+                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Data.Scope}">
+                    <!--<Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateScopeCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>-->
+                </Entry>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout StyleClass="formGroup">
+                <Label StyleClass="formLabel" Text="Audience" />
+                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Data.Audience}">
+                    <!--<Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateAudienceCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>-->
+                </Entry>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout StyleClass="formGroup">
+                <Label StyleClass="formLabel" Text="ClientId" />
+                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Data.ClientId}">
+                    <!--<Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateClientIdCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>-->
+                </Entry>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout StyleClass="formGroup">
+                <Label StyleClass="formLabel" Text="ClientSecret" />
+                <Entry StyleClass="formControlEntry" Text="{Binding Configuration.Data.ClientSecret}">
+                    <!--<Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                Command="{Binding UpdateClientSecretCommand}"
+                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
+                                EventName="TextChanged" />
+                        </Entry.Behaviors>-->
+                </Entry>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>

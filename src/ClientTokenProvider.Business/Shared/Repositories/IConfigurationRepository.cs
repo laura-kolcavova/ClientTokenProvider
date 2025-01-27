@@ -4,10 +4,10 @@ namespace ClientTokenProvider.Business.Shared.Repositories;
 
 public interface IConfigurationRepository
 {
-    public Task<Configuration?> Get(
+    public Task<ConfigurationModel?> Get(
         Guid configurationId,
         CancellationToken cancellationToken);
 
-    public Task<IReadOnlyCollection<Configuration>> GetAll(
+    public Task<IReadOnlyCollection<ConfigurationModel>> GetAll(
         CancellationToken cancellationToken);
 }

@@ -8,7 +8,7 @@ internal sealed class ConfigurationCacheService(
 {
     private const string CacheKey = "SavedConfigurations";
 
-    public void Add(Configuration configuration)
+    public void Add(ConfigurationModel configuration)
     {
         if (!memoryCache.TryGetValue<ConfigurationTree>(CacheKey, out var configurationTree) ||
             configurationTree is null)
@@ -21,7 +21,7 @@ internal sealed class ConfigurationCacheService(
         memoryCache.Set(CacheKey, configurationTree);
     }
 
-    public void AddMany(IEnumerable<Configuration> configurations)
+    public void AddMany(IEnumerable<ConfigurationModel> configurations)
     {
         if (!memoryCache.TryGetValue<ConfigurationTree>(CacheKey, out var configurationTree) ||
             configurationTree is null)
@@ -37,7 +37,7 @@ internal sealed class ConfigurationCacheService(
         memoryCache.Set(CacheKey, configurationTree);
     }
 
-    public void Update(Configuration configuration)
+    public void Update(ConfigurationModel configuration)
     {
         if (!memoryCache.TryGetValue<ConfigurationTree>(CacheKey, out var configurationTree)
             || configurationTree is null)
@@ -77,7 +77,7 @@ internal sealed class ConfigurationCacheService(
         memoryCache.Set(CacheKey, configurationTree);
     }
 
-    public IReadOnlyCollection<Configuration>? GetAll()
+    public IReadOnlyCollection<ConfigurationModel>? GetAll()
     {
         if (!memoryCache.TryGetValue<ConfigurationTree>(CacheKey, out var configurationTree)
             || configurationTree is null)
@@ -90,7 +90,7 @@ internal sealed class ConfigurationCacheService(
             .ToList();
     }
 
-    public Configuration? Get(Guid configurationId)
+    public ConfigurationModel? Get(Guid configurationId)
     {
         if (!memoryCache.TryGetValue<ConfigurationTree>(CacheKey, out var configurationTree) ||
             configurationTree is null)

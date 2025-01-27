@@ -4,5 +4,5 @@ namespace ClientTokenProvider.Business.Shared.Factories;
 
 public interface IConfigurationFactory
 {
-    public Configuration Create(ConfigurationKind kind);
+    public ConfigurationModel Create(ConfigurationKind kind);
 }

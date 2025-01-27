@@ -4,5 +4,5 @@ namespace ClientTokenProvider.Business.AzureAd.Factories;
 
 public interface IAzureAdConfigurationFactory
 {
-    public Configuration Create();
+    public ConfigurationModel Create();
 }

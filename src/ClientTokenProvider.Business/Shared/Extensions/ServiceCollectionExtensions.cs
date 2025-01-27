@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
             .AddMemoryCache();
 
         services
+            .AddSingleton<IConfigurationActionStateStore, ConfigurationActionStateStore>()
             .AddSingleton<IConfigurationFactory, ConfigurationFactory>()
             .AddSingleton<IConfigurationCacheService, ConfigurationCacheService>();
 

@@ -4,18 +4,18 @@ namespace ClientTokenProvider.Business.Shared.Services;
 
 public interface IConfigurationService
 {
-    public Task<Configuration> Create(
+    public Task<ConfigurationModel> Create(
         ConfigurationKind kind,
         CancellationToken cancellationToken);
 
     public Task Save(
-        Configuration configuration,
+        ConfigurationModel configuration,
         CancellationToken cancellationToken);
 
-    public ValueTask<IReadOnlyCollection<Configuration>> GetAll(
+    public ValueTask<IReadOnlyCollection<ConfigurationModel>> GetAll(
         CancellationToken cancellationToken);
 
-    public ValueTask<Configuration?> Get(
+    public ValueTask<ConfigurationModel?> Get(
        Guid configurationId,
        CancellationToken cancellationToken);
 

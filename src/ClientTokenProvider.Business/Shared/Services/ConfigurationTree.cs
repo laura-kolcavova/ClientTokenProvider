@@ -3,4 +3,4 @@
 namespace ClientTokenProvider.Business.Shared.Services;
 
 internal sealed class ConfigurationTree :
-    Dictionary<Guid, Configuration>;
+    Dictionary<Guid, ConfigurationModel>;

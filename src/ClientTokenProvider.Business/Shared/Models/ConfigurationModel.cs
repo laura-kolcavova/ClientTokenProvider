@@ -1,6 +1,6 @@
 ﻿namespace ClientTokenProvider.Business.Shared.Models;
 
-public class Configuration
+public class ConfigurationModel
 {
     public required Guid Id { get; init; }
 

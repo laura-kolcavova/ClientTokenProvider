@@ -4,15 +4,15 @@ namespace ClientTokenProvider.Business.Shared.Services;
 
 public interface IConfigurationCacheService
 {
-    public void Add(Configuration configuration);
+    public void Add(ConfigurationModel configuration);
 
-    public void AddMany(IEnumerable<Configuration> configurations);
+    public void AddMany(IEnumerable<ConfigurationModel> configurations);
 
-    public Configuration? Get(Guid configurationId);
+    public ConfigurationModel? Get(Guid configurationId);
 
-    public IReadOnlyCollection<Configuration>? GetAll();
+    public IReadOnlyCollection<ConfigurationModel>? GetAll();
 
-    public void Update(Configuration configuration);
+    public void Update(ConfigurationModel configuration);
 
     public void Remove(Guid configurationId);
 }
