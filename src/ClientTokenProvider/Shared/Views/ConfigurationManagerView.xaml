@@ -31,8 +31,12 @@
                 toolkit:StateContainer.CanStateChange="{Binding CanChangeState}"
                 toolkit:StateContainer.CurrentState="{Binding CurrentState, Converter={StaticResource EnumToStringConverter}}">
 
+
                 <toolkit:StateContainer.StateViews>
-                    <sharedControls:ConfigurationDetailPresenter toolkit:StateView.StateKey="{Binding Source={x:Static sahredModels:ConfigurationManagerState.ShowConfigurationPresenter}, Converter={StaticResource EnumToStringConverter}}" Configuration="{Binding ActiveConfiguration}" />
+                    <sharedControls:ConfigurationDetailPresenter
+                        toolkit:StateView.StateKey="{Binding Source={x:Static sahredModels:ConfigurationManagerState.ShowConfigurationPresenter}, Converter={StaticResource EnumToStringConverter}}"
+                        Configuration="{Binding ActiveConfiguration}"
+                        RenameConfigurationCommand="{Binding RenameConfigurationCommand}" />
 
                     <VerticalStackLayout toolkit:StateView.StateKey="{Binding Source={x:Static sahredModels:ConfigurationManagerState.NoContent}, Converter={StaticResource EnumToStringConverter}}">
                         <Label Text="No content" />

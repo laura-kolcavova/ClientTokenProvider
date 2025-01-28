@@ -8,23 +8,19 @@ internal sealed class ConfigurationRepositoryMock :
     IConfigurationRepository
 {
     private List<ConfigurationModel> _configurations = new List<ConfigurationModel>()
-        {
-            new ConfigurationModel
-            {
-                Id = Guid.NewGuid(),
-                Name = "Configuration 1",
-                Kind = ConfigurationKind.AzureAd,
-                Data = AzureAdConfigurationData.Empty,
-            },
+    {
+        new ConfigurationModel(
+            id: Guid.NewGuid(),
+            name: "Configuration 1",
+            kind: ConfigurationKind.AzureAd,
+            data: AzureAdConfigurationData.Empty),
 
-            new ConfigurationModel
-            {
-                Id = Guid.NewGuid(),
-                Name = "Configuration 2",
-                Kind = ConfigurationKind.AzureAd,
-                Data = AzureAdConfigurationData.Empty,
-            }
-        };
+        new ConfigurationModel(
+            id: Guid.NewGuid(),
+            name: "Configuration 2",
+            kind: ConfigurationKind.AzureAd,
+            data: AzureAdConfigurationData.Empty),
+    };
 
     public async Task<ConfigurationModel?> Get(
         Guid configurationId,

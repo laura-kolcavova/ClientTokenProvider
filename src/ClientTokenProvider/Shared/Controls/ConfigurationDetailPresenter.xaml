@@ -11,6 +11,7 @@
     x:Name="this">
     <ContentView.Resources>
         <ResourceDictionary>
+            <sharedConverters:ConfigurationNameFallbackConverter x:Key="ConfigurationNameFallbackConverter" />
             <sharedConverters:EnumToStringConverter x:Key="EnumToStringConverter" />
 
             <toolkit:EnumToBoolConverter x:Key="EnumToBoolConverter" />
@@ -94,14 +95,10 @@
             <VerticalStackLayout Grid.Column="0" StyleClass="container">
                 <FlexLayout>
                     <HorizontalStackLayout FlexLayout.Grow="1" VerticalOptions="Center">
-                        <Entry StyleClass="configurationNameEntry" Text="{Binding Configuration.Name}">
-                            <!--<Entry.Behaviors>
-                    <toolkit:EventToCommandBehavior
-                    Command="{Binding UpdateConfigurationNameCommand}"
-                    EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
-                    EventName="TextChanged" />
-                </Entry.Behaviors>-->
-                        </Entry>
+                        <Entry
+                            StyleClass="configurationNameEntry"
+                            Text="{Binding Configuration.Name, Converter={StaticResource ConfigurationNameFallbackConverter}}"
+                            TextChanged="ConfigurationNameEntry_TextChanged" />
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout VerticalOptions="Center">

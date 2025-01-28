@@ -48,7 +48,7 @@
                 Grid.Row="1"
                 ItemSelected="ConfigurationListView_ItemSelected"
                 ItemsSource="{Binding Configurations}"
-                SelectedItem="{Binding SelectedConfiguration, Mode=OneWay}"
+                SelectedItem="{Binding SelectedConfiguration}"
                 StyleClass="configurationList">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -67,7 +67,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
         </Grid>
 
         <BoxView

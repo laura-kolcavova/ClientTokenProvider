@@ -16,17 +16,18 @@ public partial class ConfigurationManagerViewModel(
     ViewModelBase
 {
     [ObservableProperty]
-    private ConfigurationModel? activeConfiguration;
-
-    private readonly ObservableCollection<ConfigurationModel> _configurations = [];
-
-    public IReadOnlyCollection<ConfigurationModel> Configurations => _configurations;
+    private ConfigurationModel? _activeConfiguration;
 
     [ObservableProperty]
-    private ConfigurationManagerState currentState = ConfigurationManagerState.NoContent;
+    private ObservableCollection<ConfigurationModel> _configurations = [];
+
+    //public IReadOnlyList<ConfigurationModel> Configurations => _configurations;
 
     [ObservableProperty]
-    private ConfigurationActionState configurationActionState = ConfigurationActionState.Idle;
+    private ConfigurationManagerState _currentState = ConfigurationManagerState.NoContent;
+
+    [ObservableProperty]
+    private ConfigurationActionState _configurationActionState = ConfigurationActionState.Idle;
 
     public bool CanChangeState => true;
 
@@ -38,7 +39,7 @@ public partial class ConfigurationManagerViewModel(
 
         foreach (var configuration in configurations)
         {
-            _configurations.Add(configuration);
+            Configurations.Add(configuration);
         }
     }
 
@@ -138,22 +139,42 @@ public partial class ConfigurationManagerViewModel(
     }
 
     [RelayCommand]
-    private void RenameConfiguration(ConfigurationModel configuration, string newName)
+    private void RenameConfiguration(RenameConfigurationRequest renameConfigurationRequest)
     {
-        configuration.Rename(newName);
+        var configuration = renameConfigurationRequest.Configuration;
+        var newName = renameConfigurationRequest.NewName;
 
-        OnPropertyChanged(nameof(ActiveConfiguration));
-        OnPropertyChanged(nameof(Configurations));
+        if (configuration.Name == newName)
+        {
+            return;
+        }
+
+        var index = Configurations.IndexOf(configuration);
+
+        if (index == -1)
+        {
+            return;
+        }
+
+        configuration
+            .Rename(renameConfigurationRequest.NewName);
+
+        //Configurations[index] = configuration;
+
+        //if (ActiveConfiguration == configuration)
+        //{
+        //    OnPropertyChanged(nameof(ActiveConfiguration));
+        //}
     }
 
     private void AddConfigurationToList_Internal(ConfigurationModel configuration)
     {
-        _configurations.Add(configuration); ;
+        Configurations.Add(configuration);
     }
 
     private void RemoveConfigurationFromList_Internal(ConfigurationModel configuration)
     {
-        _configurations.Remove(configuration);
+        Configurations.Remove(configuration);
     }
 
     private void SetActiveConfiguration_Internal(ConfigurationModel configurationToBeActive)

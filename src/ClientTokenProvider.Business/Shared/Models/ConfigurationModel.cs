@@ -1,6 +1,9 @@
-﻿namespace ClientTokenProvider.Business.Shared.Models;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-public class ConfigurationModel
+namespace ClientTokenProvider.Business.Shared.Models;
+
+public class ConfigurationModel : INotifyPropertyChanged
 {
     public Guid Id { get; }
 
@@ -23,8 +26,16 @@ public class ConfigurationModel
     {
     }
 
+    public event PropertyChangedEventHandler? PropertyChanged;
+
     public void Rename(string newName)
     {
         Name = newName;
+        OnPropertyChanged(nameof(Name));
+    }
+
+    protected void OnPropertyChanged([CallerMemberName] string? name = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
