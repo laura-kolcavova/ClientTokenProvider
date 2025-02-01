@@ -10,4 +10,12 @@ public interface IConfigurationRepository
 
     public Task<IReadOnlyCollection<ConfigurationModel>> GetAll(
         CancellationToken cancellationToken);
+
+    public Task Add(
+        ConfigurationModel configuration,
+        CancellationToken cancellationToken);
+
+    public Task Update(
+        ConfigurationModel configuration,
+        CancellationToken cancellationToken);
 }

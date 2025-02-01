@@ -13,12 +13,7 @@ public static class ServiceCollectionExtensions
             .AddMemoryCache();
 
         services
-            .AddSingleton<IConfigurationActionStateStore, ConfigurationActionStateStore>()
-            .AddSingleton<IConfigurationFactory, ConfigurationFactory>()
-            .AddSingleton<IConfigurationCacheService, ConfigurationCacheService>();
-
-        services
-            .AddScoped<IConfigurationService, ConfigurationService>();
+            .AddSingleton<IConfigurationFactory, ConfigurationFactory>();
 
         services
             .AddScoped<IConfigurationRepository, ConfigurationRepositoryMock>();

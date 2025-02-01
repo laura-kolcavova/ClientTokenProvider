@@ -22,6 +22,13 @@ internal sealed class ConfigurationRepositoryMock :
             data: AzureAdConfigurationData.Empty),
     };
 
+    public Task Add(ConfigurationModel configuration, CancellationToken cancellationToken)
+    {
+        _configurations.Add(configuration);
+
+        return Task.CompletedTask;
+    }
+
     public async Task<ConfigurationModel?> Get(
         Guid configurationId,
         CancellationToken cancellationToken)
@@ -38,5 +45,10 @@ internal sealed class ConfigurationRepositoryMock :
         await Task.CompletedTask;
 
         return _configurations.ToList();
+    }
+
+    public Task Update(ConfigurationModel configuration, CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
     }
 }

@@ -21,10 +21,10 @@
         <Grid ColumnDefinitions="auto, *">
             <sharedControls:ConfigurationList
                 Grid.Column="0"
+                ActiveConfigurationListItem="{Binding ActiveConfigurationListItem}"
                 AddNewConfigurationCommand="{Binding AddNewConfigurationCommand}"
-                Configurations="{Binding Configurations}"
-                SelectedConfiguration="{Binding ActiveConfiguration}"
-                SetActiveConfigurationCommand="{Binding SetActiveConfigurationCommand}" />
+                ConfigurationListItems="{Binding ConfigurationListItems}"
+                SetActiveConfigurationListItemCommand="{Binding SetActiveConfigurationListItemCommand}" />
 
             <Grid
                 Grid.Column="1"
@@ -35,7 +35,7 @@
                 <toolkit:StateContainer.StateViews>
                     <sharedControls:ConfigurationDetailPresenter
                         toolkit:StateView.StateKey="{Binding Source={x:Static sahredModels:ConfigurationManagerState.ShowConfigurationPresenter}, Converter={StaticResource EnumToStringConverter}}"
-                        Configuration="{Binding ActiveConfiguration}"
+                        ConfigurationDetail="{Binding ActiveConfigurationDetail}"
                         RenameConfigurationCommand="{Binding RenameConfigurationCommand}" />
 
                     <VerticalStackLayout toolkit:StateView.StateKey="{Binding Source={x:Static sahredModels:ConfigurationManagerState.NoContent}, Converter={StaticResource EnumToStringConverter}}">

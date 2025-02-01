@@ -1,18 +1,18 @@
-using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.AzureAd.BindableViewModels;
 
 namespace ClientTokenProvider.AzureAd.Controls;
 
 public partial class ConfigurationDataForm : ContentView
 {
-    public static readonly BindableProperty ConfigurationProperty = BindableProperty.Create(
-        nameof(Configuration),
-        typeof(ConfigurationModel),
+    public static readonly BindableProperty ConfigurationDataProperty = BindableProperty.Create(
+        nameof(ConfigurationData),
+        typeof(ConfigurationDataBindableModel),
         typeof(ConfigurationDataForm));
 
-    public ConfigurationModel Configuration
+    public ConfigurationDataBindableModel ConfigurationData
     {
-        get => (ConfigurationModel)GetValue(ConfigurationProperty);
-        set => SetValue(ConfigurationProperty, value);
+        get => (ConfigurationDataBindableModel)GetValue(ConfigurationDataProperty);
+        set => SetValue(ConfigurationDataProperty, value);
     }
 
     public ConfigurationDataForm()

@@ -1,52 +1,53 @@
 using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Shared.BindableModels;
 using CommunityToolkit.Mvvm.Input;
 
 namespace ClientTokenProvider.Shared.Controls;
 
 public partial class ConfigurationList : ContentView
 {
-    public static readonly BindableProperty ConfigurationsProperty = BindableProperty.Create(
-        nameof(Configurations),
-        typeof(IEnumerable<ConfigurationModel>),
+    public static readonly BindableProperty ConfigurationListItemsProperty = BindableProperty.Create(
+        nameof(ConfigurationListItems),
+        typeof(IEnumerable<ConfigurationListItemBindableModel>),
         typeof(ConfigurationList));
 
-    public static readonly BindableProperty SelectedConfigurationProperty = BindableProperty.Create(
-        nameof(SelectedConfiguration),
-        typeof(ConfigurationModel),
+    public static readonly BindableProperty ActiveConfigurationListItemProperty = BindableProperty.Create(
+        nameof(ActiveConfigurationListItem),
+        typeof(ConfigurationListItemBindableModel),
         typeof(ConfigurationList));
 
     public static readonly BindableProperty AddNewConfigurationCommandProperty = BindableProperty.Create(
         nameof(AddNewConfigurationCommand),
-        typeof(IAsyncRelayCommand<ConfigurationKind>),
+        typeof(IRelayCommand<ConfigurationKind>),
         typeof(ConfigurationList));
 
-    public static readonly BindableProperty SetActiveConfigurationCommandProperty = BindableProperty.Create(
-        nameof(SetActiveConfigurationCommand),
-        typeof(IRelayCommand<ConfigurationModel>),
+    public static readonly BindableProperty SetActiveConfigurationListItemCommandProperty = BindableProperty.Create(
+        nameof(SetActiveConfigurationListItemCommand),
+        typeof(IRelayCommand<ConfigurationListItemBindableModel>),
         typeof(ConfigurationList));
 
-    public IEnumerable<ConfigurationModel> Configurations
+    public IEnumerable<ConfigurationListItemBindableModel> ConfigurationListItems
     {
-        get => (IEnumerable<ConfigurationModel>)GetValue(ConfigurationsProperty);
-        set => SetValue(ConfigurationsProperty, value);
+        get => (IEnumerable<ConfigurationListItemBindableModel>)GetValue(ConfigurationListItemsProperty);
+        set => SetValue(ConfigurationListItemsProperty, value);
     }
 
-    public ConfigurationModel? SelectedConfiguration
+    public ConfigurationListItemBindableModel? ActiveConfigurationListItem
     {
-        get => (ConfigurationModel?)GetValue(SelectedConfigurationProperty);
-        set => SetValue(SelectedConfigurationProperty, value);
+        get => (ConfigurationListItemBindableModel?)GetValue(ActiveConfigurationListItemProperty);
+        set => SetValue(ActiveConfigurationListItemProperty, value);
     }
 
-    public IAsyncRelayCommand<ConfigurationKind> AddNewConfigurationCommand
+    public IRelayCommand<ConfigurationKind> AddNewConfigurationCommand
     {
-        get => (IAsyncRelayCommand<ConfigurationKind>)GetValue(AddNewConfigurationCommandProperty);
+        get => (IRelayCommand<ConfigurationKind>)GetValue(AddNewConfigurationCommandProperty);
         set => SetValue(AddNewConfigurationCommandProperty, value);
     }
 
-    public IRelayCommand<ConfigurationModel> SetActiveConfigurationCommand
+    public IRelayCommand<ConfigurationListItemBindableModel> SetActiveConfigurationListItemCommand
     {
-        get => (IRelayCommand<ConfigurationModel>)GetValue(SetActiveConfigurationCommandProperty);
-        set => SetValue(SetActiveConfigurationCommandProperty, value);
+        get => (IRelayCommand<ConfigurationListItemBindableModel>)GetValue(SetActiveConfigurationListItemCommandProperty);
+        set => SetValue(SetActiveConfigurationListItemCommandProperty, value);
     }
 
     public ConfigurationList()
@@ -61,13 +62,13 @@ public partial class ConfigurationList : ContentView
 
     private void ConfigurationListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        var configuration = (ConfigurationModel?)e.SelectedItem;
+        var configurationListItem = (ConfigurationListItemBindableModel?)e.SelectedItem;
 
-        if (configuration is null)
+        if (configurationListItem is null)
         {
             return;
         }
 
-        SetActiveConfigurationCommand?.Execute(configuration);
+        SetActiveConfigurationListItemCommand?.Execute(configurationListItem);
     }
 }

@@ -7,7 +7,6 @@ namespace ClientTokenProvider.Shared.Views;
 
 public partial class ConfigurationManagerPage :
     ContentPageBase,
-    IRecipient<AddingNewConfigurationFailedMessage>,
     IRecipient<DeletingConfigurationFailedMessage>,
     IRecipient<SavingConfigurationFailedMessage>
 {
@@ -30,15 +29,6 @@ public partial class ConfigurationManagerPage :
         base.OnDisappearing();
 
         WeakReferenceMessenger.Default.UnregisterAll(this);
-    }
-
-    public async void Receive(AddingNewConfigurationFailedMessage message)
-    {
-        // TODO Localization
-        await DisplayAlert(
-            "Adding configuration failed",
-            "Configuration could not be added",
-            "Close");
     }
 
     public async void Receive(DeletingConfigurationFailedMessage message)

@@ -1,5 +1,4 @@
-using ClientTokenProvider.Business.Shared.Models;
-using ClientTokenProvider.Shared.Models;
+using ClientTokenProvider.Shared.BindableModels;
 using CommunityToolkit.Mvvm.Input;
 
 namespace ClientTokenProvider.Shared.Controls;
@@ -7,36 +6,27 @@ namespace ClientTokenProvider.Shared.Controls;
 public partial class ConfigurationDetailPresenter :
     ContentView
 {
-    public static readonly BindableProperty ConfigurationProperty = BindableProperty.Create(
-        nameof(Configuration),
-        typeof(ConfigurationModel),
-        typeof(ConfigurationDetailPresenter));
-
-    public static readonly BindableProperty ConfigurationActionStateProperty = BindableProperty.Create(
-        nameof(ConfigurationActionState),
-        typeof(ConfigurationActionState),
+    public static readonly BindableProperty ConfigurationDetailProperty = BindableProperty.Create(
+        nameof(ConfigurationDetail),
+        typeof(ConfigurationDetailBindableModel),
         typeof(ConfigurationDetailPresenter));
 
     public static readonly BindableProperty RenameConfigurationCommandProperty = BindableProperty.Create(
         nameof(RenameConfigurationCommand),
-        typeof(IRelayCommand<RenameConfigurationRequest>),
+        typeof(IRelayCommand<ConfigurationDetailBindableModel>),
         typeof(ConfigurationDetailPresenter));
 
-    public ConfigurationModel Configuration
+    private bool _canRenameConfiguration;
+
+    public ConfigurationDetailBindableModel ConfigurationDetail
     {
-        get => (ConfigurationModel)GetValue(ConfigurationProperty);
-        set => SetValue(ConfigurationProperty, value);
+        get => (ConfigurationDetailBindableModel)GetValue(ConfigurationDetailProperty);
+        set => SetValue(ConfigurationDetailProperty, value);
     }
 
-    public ConfigurationActionState ConfigurationActionState
+    public IRelayCommand<ConfigurationDetailBindableModel> RenameConfigurationCommand
     {
-        get => (ConfigurationActionState)GetValue(ConfigurationActionStateProperty);
-        set => SetValue(ConfigurationActionStateProperty, value);
-    }
-
-    public IRelayCommand<RenameConfigurationRequest> RenameConfigurationCommand
-    {
-        get => (IRelayCommand<RenameConfigurationRequest>)GetValue(RenameConfigurationCommandProperty);
+        get => (IRelayCommand<ConfigurationDetailBindableModel>)GetValue(RenameConfigurationCommandProperty);
         set => SetValue(RenameConfigurationCommandProperty, value);
     }
 
@@ -47,14 +37,39 @@ public partial class ConfigurationDetailPresenter :
         InitializeComponent();
     }
 
+    private void ConfigurationNameEntry_Completed(object sender, EventArgs e)
+    {
+        var entry = (Entry)sender;
+
+        TryRenameConfiguration(entry.Text);
+    }
+
+    private void ConfigurationNameEntry_Unfocused(object sender, FocusEventArgs e)
+    {
+        var entry = (Entry)sender;
+
+        TryRenameConfiguration(entry.Text);
+
+        _canRenameConfiguration = false;
+    }
+
     private void ConfigurationNameEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
-        var request = new RenameConfigurationRequest
-        {
-            Configuration = Configuration,
-            NewName = e.NewTextValue
-        };
+        var entry = (Entry)sender;
 
-        RenameConfigurationCommand?.Execute(request);
+        if (entry.IsFocused)
+        {
+            _canRenameConfiguration = true;
+        }
+    }
+
+    private void TryRenameConfiguration(string newName)
+    {
+        if (_canRenameConfiguration)
+        {
+            ConfigurationDetail.Name = newName;
+            RenameConfigurationCommand?.Execute(ConfigurationDetail);
+            _canRenameConfiguration = false;
+        }
     }
 }

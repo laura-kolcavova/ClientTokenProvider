@@ -2,7 +2,7 @@
 
 namespace ClientTokenProvider.Business.AzureAd.Models;
 
-public sealed record AzureAdConfigurationData :
+public sealed class AzureAdConfigurationData :
     IConfigurationData
 {
     public required string AuthorityUrl { get; init; }

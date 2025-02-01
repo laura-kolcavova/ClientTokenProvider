@@ -47,8 +47,8 @@
             <ListView
                 Grid.Row="1"
                 ItemSelected="ConfigurationListView_ItemSelected"
-                ItemsSource="{Binding Configurations}"
-                SelectedItem="{Binding SelectedConfiguration}"
+                ItemsSource="{Binding ConfigurationListItems}"
+                SelectedItem="{Binding ActiveConfigurationListItem}"
                 StyleClass="configurationList">
                 <ListView.ItemTemplate>
                     <DataTemplate>

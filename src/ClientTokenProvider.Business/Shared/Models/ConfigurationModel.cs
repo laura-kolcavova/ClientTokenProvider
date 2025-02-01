@@ -1,9 +1,6 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿namespace ClientTokenProvider.Business.Shared.Models;
 
-namespace ClientTokenProvider.Business.Shared.Models;
-
-public class ConfigurationModel : INotifyPropertyChanged
+public sealed class ConfigurationModel
 {
     public Guid Id { get; }
 
@@ -26,16 +23,8 @@ public class ConfigurationModel : INotifyPropertyChanged
     {
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-
     public void Rename(string newName)
     {
         Name = newName;
-        OnPropertyChanged(nameof(Name));
-    }
-
-    protected void OnPropertyChanged([CallerMemberName] string? name = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

@@ -95,10 +95,13 @@
             <VerticalStackLayout Grid.Column="0" StyleClass="container">
                 <FlexLayout>
                     <HorizontalStackLayout FlexLayout.Grow="1" VerticalOptions="Center">
+                        <!--  The Mode hast to be set to OneWay because of the converter  -->
                         <Entry
+                            Completed="ConfigurationNameEntry_Completed"
                             StyleClass="configurationNameEntry"
-                            Text="{Binding Configuration.Name, Converter={StaticResource ConfigurationNameFallbackConverter}}"
-                            TextChanged="ConfigurationNameEntry_TextChanged" />
+                            Text="{Binding ConfigurationDetail.Name, Mode=OneWay, Converter={StaticResource ConfigurationNameFallbackConverter}}"
+                            TextChanged="ConfigurationNameEntry_TextChanged"
+                            Unfocused="ConfigurationNameEntry_Unfocused" />
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout VerticalOptions="Center">
@@ -110,30 +113,32 @@
                 </FlexLayout>
             </VerticalStackLayout>
 
-            <VerticalStackLayout
+            <!--<VerticalStackLayout
                 Grid.Row="1"
                 toolkit:StateContainer.CanStateChange="{Binding CanStateChange}"
-                toolkit:StateContainer.CurrentState="{Binding Configuration.Kind, Converter={StaticResource EnumToStringConverter}}">
+                toolkit:StateContainer.CurrentState="{Binding ConfigurationDetail.Kind, Mode=OneWay, Converter={StaticResource EnumToStringConverter}}">
 
-                <toolkit:StateContainer.StateViews>
-                    <azureAdControls:ConfigurationDataForm toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:ConfigurationKind.AzureAd}, Converter={StaticResource EnumToStringConverter}}" Configuration="{Binding Configuration}" />
-                </toolkit:StateContainer.StateViews>
+            -->
+            <!--<toolkit:StateContainer.StateViews>
+                    <azureAdControls:ConfigurationDataForm toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:ConfigurationKind.AzureAd}, Converter={StaticResource EnumToStringConverter}}" ConfigurationData="{Binding ConfiugrationDetail.Data}" />
+                </toolkit:StateContainer.StateViews>-->
+            <!--
 
-            </VerticalStackLayout>
+            </VerticalStackLayout>-->
 
-            <VerticalStackLayout Grid.Row="2" StyleClass="container">
+            <!--<VerticalStackLayout Grid.Row="2" StyleClass="container">
                 <Button
                     Command="{Binding GetAccessTokenCommand}"
-                    IsVisible="{Binding ConfigurationActionState, Converter={StaticResource CanSendRequestConverter}}"
+                    IsVisible="{Binding ConfigurationDetail.ActionState, Mode=OneWay, Converter={StaticResource CanSendRequestConverter}}"
                     StyleClass="button, btnPrimary, requestButton"
                     Text="Get Access Token" />
 
                 <Button
                     Command="{Binding CancelRequestCommand}"
-                    IsVisible="{Binding ConfigurationActionState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Loading}}"
+                    IsVisible="{Binding ConfigurationDetail.ActionState, Mode=OneWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Loading}}"
                     StyleClass="button, btnSecondary, requestButton"
                     Text="Cancel" />
-            </VerticalStackLayout>
+            </VerticalStackLayout>-->
         </Grid>
 
         <Grid Grid.Column="2" ColumnDefinitions="1, *">
@@ -156,15 +161,15 @@
                     JustifyContent="Center"
                     StyleClass="flexContainer">
 
-                    <VerticalStackLayout IsVisible="{Binding ConfigurationActionState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Idle}}" StyleClass="alertWrapper">
+                    <!--<VerticalStackLayout IsVisible="{Binding ConfigurationDetail.ActionState, Mode=OneWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Idle}}" StyleClass="alertWrapper">
                         <Image Source="rocket.png" StyleClass="alertImage" />
 
                         <Label StyleClass="alertMessage">
                             Enter Azure AD configuration and click Get Access Token to get a response
                         </Label>
-                    </VerticalStackLayout>
+                    </VerticalStackLayout>-->
 
-                    <VerticalStackLayout IsVisible="{Binding ConfigurationActionState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Loading}}" StyleClass="alertWrapper">
+                    <!--<VerticalStackLayout IsVisible="{Binding ConfigurationDetail.ActionState, Mode=OneWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Loading}}" StyleClass="alertWrapper">
                         <sharedControls:CircularSpinner
                             Enabled="{Binding ConfigurationActionState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Loading}}"
                             PrimaryColor="{StaticResource Primary}"
@@ -176,9 +181,9 @@
                         <Label StyleClass="alertMessage">
                             Sending request ...
                         </Label>
-                    </VerticalStackLayout>
+                    </VerticalStackLayout>-->
 
-                    <VerticalStackLayout IsVisible="{Binding ConfigurationActionState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Error}}" StyleClass="alertWrapper">
+                    <!--<VerticalStackLayout IsVisible="{Binding ConfigurationDetail.ActionState, Mode=OneWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Error}}" StyleClass="alertWrapper">
                         <Image Source="repair.png" StyleClass="alertImage" />
 
                         <Label StyleClass="alertMessage">
@@ -213,11 +218,11 @@
                             </FlexLayout>
 
                         </Border>
-                    </VerticalStackLayout>
+                    </VerticalStackLayout>-->
 
-                    <VerticalStackLayout IsVisible="{Binding ConfigurationActionState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Success}}">
+                    <!--<VerticalStackLayout IsVisible="{Binding ConfigurationDetail.ActionState, Mode=OneWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Success}}">
                         <Label Text="{Binding AccessToken}" />
-                    </VerticalStackLayout>
+                    </VerticalStackLayout>-->
 
                 </FlexLayout>
             </Grid>
