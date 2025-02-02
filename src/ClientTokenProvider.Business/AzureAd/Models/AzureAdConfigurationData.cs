@@ -2,7 +2,7 @@
 
 namespace ClientTokenProvider.Business.AzureAd.Models;
 
-public sealed class AzureAdConfigurationData :
+public sealed record AzureAdConfigurationData :
     IConfigurationData
 {
     public required string AuthorityUrl { get; init; }
@@ -14,34 +14,6 @@ public sealed class AzureAdConfigurationData :
     public required string ClientId { get; init; }
 
     public required string ClientSecret { get; init; }
-
-    public bool IsValid()
-    {
-        if (string.IsNullOrEmpty(Audience) ||
-             string.IsNullOrEmpty(AuthorityUrl) ||
-             string.IsNullOrEmpty(ClientId) ||
-             string.IsNullOrEmpty(ClientSecret) ||
-             string.IsNullOrEmpty(Scope))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    public bool IsEmpty()
-    {
-        if (string.IsNullOrEmpty(Audience) &&
-            string.IsNullOrEmpty(AuthorityUrl) &&
-            string.IsNullOrEmpty(ClientId) &&
-            string.IsNullOrEmpty(ClientSecret) &&
-            string.IsNullOrEmpty(Scope))
-        {
-            return true;
-        }
-
-        return false;
-    }
 
     public static AzureAdConfigurationData Empty =>
         new()

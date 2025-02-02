@@ -8,7 +8,7 @@ public sealed class ConfigurationModel
 
     public ConfigurationKind Kind { get; }
 
-    public IConfigurationData Data { get; }
+    public IConfigurationData Data { get; private set; }
 
     public ConfigurationModel(Guid id, string name, ConfigurationKind kind, IConfigurationData data)
     {
@@ -26,5 +26,10 @@ public sealed class ConfigurationModel
     public void Rename(string newName)
     {
         Name = newName;
+    }
+
+    public void UpdateData(IConfigurationData newData)
+    {
+        Data = newData;
     }
 }

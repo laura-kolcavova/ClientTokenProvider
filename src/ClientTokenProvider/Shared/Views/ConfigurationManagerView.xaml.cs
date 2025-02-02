@@ -7,8 +7,9 @@ namespace ClientTokenProvider.Shared.Views;
 
 public partial class ConfigurationManagerPage :
     ContentPageBase,
+    IRecipient<RenamingConfigurationFailedMessage>,
     IRecipient<DeletingConfigurationFailedMessage>,
-    IRecipient<SavingConfigurationFailedMessage>
+    IRecipient<SavingConfigurationDataFailedMessage>
 {
     public ConfigurationManagerPage(ConfigurationManagerViewModel viewModel)
     {
@@ -31,6 +32,15 @@ public partial class ConfigurationManagerPage :
         WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 
+    public async void Receive(RenamingConfigurationFailedMessage message)
+    {
+        // TODO Localization
+        await DisplayAlert(
+            "Renaming configuration failed",
+            "Configuration could not be renamed",
+            "Close");
+    }
+
     public async void Receive(DeletingConfigurationFailedMessage message)
     {
         // TODO Localization
@@ -40,12 +50,12 @@ public partial class ConfigurationManagerPage :
             "Close");
     }
 
-    public async void Receive(SavingConfigurationFailedMessage message)
+    public async void Receive(SavingConfigurationDataFailedMessage message)
     {
         // TODO Localization
         await DisplayAlert(
-            "Saving configuration failed",
-            "Configuration could not be saved",
+            "Saving configuration data failed",
+            "Configuration data could not be saved",
             "Close");
     }
 }

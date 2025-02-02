@@ -16,62 +16,40 @@
                 <Entry
                     x:Name="AuthorityEntry"
                     StyleClass="formControlEntry"
-                    Text="{Binding ConfigurationData.AuthorityUrl}">
-                    <!--<Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                Command="{Binding UpdateAuthorityCommand}"
-                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
-                                EventName="TextChanged" />
-                        </Entry.Behaviors>-->
-                </Entry>
+                    Text="{Binding ConfigurationData.AuthorityUrl, Mode=TwoWay}"
+                    TextChanged="DataEntry_TextChanged" />
             </VerticalStackLayout>
 
             <VerticalStackLayout StyleClass="formGroup">
                 <Label StyleClass="formLabel" Text="Scope" />
-                <Entry StyleClass="formControlEntry" Text="{Binding ConfigurationData.Scope}">
-                    <!--<Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                Command="{Binding UpdateScopeCommand}"
-                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
-                                EventName="TextChanged" />
-                        </Entry.Behaviors>-->
-                </Entry>
+                <Entry
+                    StyleClass="formControlEntry"
+                    Text="{Binding ConfigurationData.Scope, Mode=TwoWay}"
+                    TextChanged="DataEntry_TextChanged" />
             </VerticalStackLayout>
 
             <VerticalStackLayout StyleClass="formGroup">
                 <Label StyleClass="formLabel" Text="Audience" />
-                <Entry StyleClass="formControlEntry" Text="{Binding ConfigurationData.Audience}">
-                    <!--<Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                Command="{Binding UpdateAudienceCommand}"
-                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
-                                EventName="TextChanged" />
-                        </Entry.Behaviors>-->
-                </Entry>
+                <Entry
+                    StyleClass="formControlEntry"
+                    Text="{Binding ConfigurationData.Audience, Mode=TwoWay}"
+                    TextChanged="DataEntry_TextChanged" />
             </VerticalStackLayout>
 
             <VerticalStackLayout StyleClass="formGroup">
                 <Label StyleClass="formLabel" Text="ClientId" />
-                <Entry StyleClass="formControlEntry" Text="{Binding ConfigurationData.ClientId}">
-                    <!--<Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                Command="{Binding UpdateClientIdCommand}"
-                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
-                                EventName="TextChanged" />
-                        </Entry.Behaviors>-->
-                </Entry>
+                <Entry
+                    StyleClass="formControlEntry"
+                    Text="{Binding ConfigurationData.ClientId, Mode=TwoWay}"
+                    TextChanged="DataEntry_TextChanged" />
             </VerticalStackLayout>
 
             <VerticalStackLayout StyleClass="formGroup">
                 <Label StyleClass="formLabel" Text="ClientSecret" />
-                <Entry StyleClass="formControlEntry" Text="{Binding ConfigurationData.ClientSecret}">
-                    <!--<Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                Command="{Binding UpdateClientSecretCommand}"
-                                EventArgsConverter="{StaticResource TextChangedEventArgsToNewValueConverter}"
-                                EventName="TextChanged" />
-                        </Entry.Behaviors>-->
-                </Entry>
+                <Entry
+                    StyleClass="formControlEntry"
+                    Text="{Binding ConfigurationData.ClientSecret, Mode=TwoWay}"
+                    TextChanged="DataEntry_TextChanged" />
             </VerticalStackLayout>
         </VerticalStackLayout>
     </Grid>

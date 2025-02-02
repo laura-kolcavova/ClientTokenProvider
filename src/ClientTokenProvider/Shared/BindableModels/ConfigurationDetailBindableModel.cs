@@ -18,6 +18,9 @@ public partial class ConfigurationDetailBindableModel :
     [ObservableProperty]
     private ConfigurationActionState _actionState;
 
+    [ObservableProperty]
+    private bool _canBeSaved;
+
     public ConfigurationDetailBindableModel(
         Guid id,
         ConfigurationKind kind,

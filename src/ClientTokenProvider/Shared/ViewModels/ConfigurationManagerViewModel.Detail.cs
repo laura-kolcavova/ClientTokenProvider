@@ -42,40 +42,66 @@ public partial class ConfigurationManagerViewModel
         ConfigurationDetailBindableModel configurationDetail,
         CancellationToken cancellationToken)
     {
-        var configuration = _configurations
-            .FirstOrDefault(configuration => configuration.Id == configurationDetail.Id);
-
-        if (configuration is null)
-        {
-            return;
-        }
-
         var renameResult = await RenameConfiguration_Internal(
-               configuration,
+               configurationDetail.Id,
                configurationDetail.Name,
                cancellationToken);
 
         if (renameResult.IsFailure)
         {
             WeakReferenceMessenger.Default.Send(
-               new SavingConfigurationFailedMessage());
+               new RenamingConfigurationFailedMessage());
 
             return;
         }
 
         RenameConfigurationListItem_Internal(
-            configuration.Id,
+            configurationDetail.Id,
             configurationDetail.Name);
+    }
+
+    [RelayCommand]
+    private void OnConfigurationDataChanged(
+        ConfigurationDetailBindableModel configurationDetail)
+    {
+        configurationDetail.CanBeSaved = true;
+    }
+
+    [RelayCommand(
+        IncludeCancelCommand = true,
+        AllowConcurrentExecutions = false)]
+    private async Task SaveConfigurationData(
+        ConfigurationDetailBindableModel configurationDetail,
+        CancellationToken cancellationToken)
+    {
+        var configurationData = configurationDataMapper.ToModel(
+            configurationDetail.Data,
+            configurationDetail.Kind);
+
+        var saveConfigurationDataResult = await SaveConfigurationData_Internal(
+            configurationDetail.Id,
+            configurationData,
+            cancellationToken);
+
+        if (saveConfigurationDataResult.IsFailure)
+        {
+            WeakReferenceMessenger.Default.Send(
+               new SavingConfigurationDataFailedMessage());
+        }
     }
 
     private ConfigurationDetailBindableModel CreateAndAddConfigurationDetail_Internal(
         ConfigurationModel configuration)
     {
+        var configurationData = configurationDataMapper.ToBindableModel(
+           configuration.Data,
+           configuration.Kind);
+
         var configurationDetail = new ConfigurationDetailBindableModel(
             configuration.Id,
             configuration.Kind,
             configuration.Name,
-            null!);
+            configurationData);
 
         ConfigurationDetails.Add(configurationDetail);
 
@@ -107,4 +133,6 @@ public partial class ConfigurationManagerViewModel
 
         ActiveConfigurationDetail = activeConfigurationDetail;
     }
+
+
 }

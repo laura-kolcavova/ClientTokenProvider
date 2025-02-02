@@ -36,7 +36,8 @@
                     <sharedControls:ConfigurationDetailPresenter
                         toolkit:StateView.StateKey="{Binding Source={x:Static sahredModels:ConfigurationManagerState.ShowConfigurationPresenter}, Converter={StaticResource EnumToStringConverter}}"
                         ConfigurationDetail="{Binding ActiveConfigurationDetail}"
-                        RenameConfigurationCommand="{Binding RenameConfigurationCommand}" />
+                        RenameConfigurationCommand="{Binding RenameConfigurationCommand}"
+                        SaveConfigurationDataCommand="{Binding SaveConfigurationDataCommand}" />
 
                     <VerticalStackLayout toolkit:StateView.StateKey="{Binding Source={x:Static sahredModels:ConfigurationManagerState.NoContent}, Converter={StaticResource EnumToStringConverter}}">
                         <Label Text="No content" />

@@ -16,6 +16,16 @@ public partial class ConfigurationDetailPresenter :
         typeof(IRelayCommand<ConfigurationDetailBindableModel>),
         typeof(ConfigurationDetailPresenter));
 
+    public static readonly BindableProperty SaveConfigurationDataCommandProperty = BindableProperty.Create(
+        nameof(SaveConfigurationDataCommand),
+        typeof(IAsyncRelayCommand<ConfigurationDetailBindableModel>),
+        typeof(ConfigurationDetailPresenter));
+
+    public static readonly BindableProperty OnConfigurationDataChangedCommandProperty = BindableProperty.Create(
+        nameof(OnConfigurationDataChangedCommand),
+        typeof(IRelayCommand<ConfigurationDetailBindableModel>),
+        typeof(ConfigurationDetailPresenter));
+
     private bool _canRenameConfiguration;
 
     public ConfigurationDetailBindableModel ConfigurationDetail
@@ -28,6 +38,23 @@ public partial class ConfigurationDetailPresenter :
     {
         get => (IRelayCommand<ConfigurationDetailBindableModel>)GetValue(RenameConfigurationCommandProperty);
         set => SetValue(RenameConfigurationCommandProperty, value);
+    }
+
+    public IAsyncRelayCommand<ConfigurationDetailBindableModel> SaveConfigurationDataCommand
+    {
+        get => (IAsyncRelayCommand<ConfigurationDetailBindableModel>)GetValue(SaveConfigurationDataCommandProperty);
+        set => SetValue(SaveConfigurationDataCommandProperty, value);
+    }
+
+    public IRelayCommand<ConfigurationDetailBindableModel> OnConfigurationDataChangedCommand
+    {
+        get => (IRelayCommand<ConfigurationDetailBindableModel>)GetValue(OnConfigurationDataChangedCommandProperty);
+        set => SetValue(OnConfigurationDataChangedCommandProperty, value);
+    }
+
+    private void OnConfigurationDataChangedInternal()
+    {
+        OnConfigurationDataChangedCommand?.Execute(ConfigurationDetail);
     }
 
     public bool CanStateChange { get; private set; } = true;
@@ -71,5 +98,10 @@ public partial class ConfigurationDetailPresenter :
             RenameConfigurationCommand?.Execute(ConfigurationDetail);
             _canRenameConfiguration = false;
         }
+    }
+
+    private void SaveConfigurationButton_Clicked(object sender, EventArgs e)
+    {
+        SaveConfigurationDataCommand?.Execute(ConfigurationDetail);
     }
 }

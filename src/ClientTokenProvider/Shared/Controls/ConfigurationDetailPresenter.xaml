@@ -106,27 +106,29 @@
 
                     <HorizontalStackLayout VerticalOptions="Center">
                         <Button
-                            Command="{Binding SaveConfigurationCommand}"
+                            Clicked="SaveConfigurationButton_Clicked"
+                            IsEnabled="{Binding ConfigurationDetail.CanBeSaved, Mode=OneWay}"
                             StyleClass="textIconButton, saveButton"
                             Text="Save" />
                     </HorizontalStackLayout>
                 </FlexLayout>
             </VerticalStackLayout>
 
-            <!--<VerticalStackLayout
+            <VerticalStackLayout
                 Grid.Row="1"
                 toolkit:StateContainer.CanStateChange="{Binding CanStateChange}"
                 toolkit:StateContainer.CurrentState="{Binding ConfigurationDetail.Kind, Mode=OneWay, Converter={StaticResource EnumToStringConverter}}">
 
-            -->
-            <!--<toolkit:StateContainer.StateViews>
-                    <azureAdControls:ConfigurationDataForm toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:ConfigurationKind.AzureAd}, Converter={StaticResource EnumToStringConverter}}" ConfigurationData="{Binding ConfiugrationDetail.Data}" />
-                </toolkit:StateContainer.StateViews>-->
-            <!--
+                <toolkit:StateContainer.StateViews>
+                    <azureAdControls:ConfigurationDataForm
+                        toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:ConfigurationKind.AzureAd}, Converter={StaticResource EnumToStringConverter}}"
+                        ConfigurationData="{Binding ConfiugrationDetail.Data}"
+                        OnConfigurationDataChangedCommand="{Binding OnConfigurationDataChangedInternalCommand}" />
+                </toolkit:StateContainer.StateViews>
 
-            </VerticalStackLayout>-->
+            </VerticalStackLayout>
 
-            <!--<VerticalStackLayout Grid.Row="2" StyleClass="container">
+            <VerticalStackLayout Grid.Row="2" StyleClass="container">
                 <Button
                     Command="{Binding GetAccessTokenCommand}"
                     IsVisible="{Binding ConfigurationDetail.ActionState, Mode=OneWay, Converter={StaticResource CanSendRequestConverter}}"
@@ -138,7 +140,7 @@
                     IsVisible="{Binding ConfigurationDetail.ActionState, Mode=OneWay, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static bussinessModels:ConfigurationActionState.Loading}}"
                     StyleClass="button, btnSecondary, requestButton"
                     Text="Cancel" />
-            </VerticalStackLayout>-->
+            </VerticalStackLayout>
         </Grid>
 
         <Grid Grid.Column="2" ColumnDefinitions="1, *">

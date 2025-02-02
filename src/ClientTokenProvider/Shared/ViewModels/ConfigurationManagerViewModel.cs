@@ -1,5 +1,6 @@
 ﻿using ClientTokenProvider.Business.Shared.Models;
 using ClientTokenProvider.Business.Shared.Services.Abstractions;
+using ClientTokenProvider.Shared.Services.Abstractions;
 using ClientTokenProvider.Shared.ViewModels.Base;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -9,7 +10,8 @@ namespace ClientTokenProvider.Shared.ViewModels;
 
 public partial class ConfigurationManagerViewModel(
     IConfigurationRepository configurationRepository,
-    IConfigurationFactory configurationFactory) :
+    IConfigurationFactory configurationFactory,
+    IConfigurationDataMapper configurationDataMapper) :
     ViewModelBase
 {
     private List<ConfigurationModel> _configurations = [];
@@ -66,21 +68,60 @@ public partial class ConfigurationManagerViewModel(
     }
 
     private async Task<Result> RenameConfiguration_Internal(
-        ConfigurationModel configuration,
+        Guid configurationId,
         string newName,
         CancellationToken cancellationToken)
     {
+        // Maybe it will be better to have REST ConfigurationService
         try
         {
+            var configuration = _configurations
+                .FirstOrDefault(configuration => configuration.Id == configurationId);
+
+            if (configuration is null)
+            {
+                return Result.Failure("Configuration not found");
+            }
+
             configuration.Rename(newName);
 
             await configurationRepository.Update(configuration, cancellationToken);
 
             return Result.Success();
         }
-        catch (Exception ex)
+        catch
         {
-            return Result.Failure(ex.Message);
+            return Result.Failure("An unexpected error occurred");
+        }
+    }
+
+    private async Task<Result> SaveConfigurationData_Internal(
+        Guid configurationId,
+        IConfigurationData configurationData,
+        CancellationToken cancellationToken)
+    {
+        // Maybe it will be better to have REST ConfigurationService
+
+        try
+        {
+            var configuration = _configurations
+               .FirstOrDefault(configuration => configuration.Id == configurationId);
+
+            if (configuration is null)
+            {
+                return Result.Failure("Configuration not found");
+            }
+
+            configuration.UpdateData(configurationData);
+
+            // Maybe it will be better to have REST ConfigurationService
+            await configurationRepository.Update(configuration, cancellationToken);
+
+            return Result.Success();
+        }
+        catch
+        {
+            return Result.Failure("An unexpected error occurred");
         }
     }
 }
