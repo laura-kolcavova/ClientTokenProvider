@@ -1,4 +1,5 @@
 ﻿using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Shared.BindableModels.Abstractions;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ClientTokenProvider.Shared.BindableModels;

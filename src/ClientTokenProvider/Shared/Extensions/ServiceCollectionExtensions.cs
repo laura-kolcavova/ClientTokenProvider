@@ -15,7 +15,8 @@ internal static class ServiceCollectionExtensions
             .AddTransient<ConfigurationManagerPage, ConfigurationManagerViewModel>();
 
         services
-            .AddSingleton<IConfigurationDataMapper, ConfigurationDataMapper>();
+            .AddSingleton<IConfigurationDataMapper, ConfigurationDataMapper>()
+            .AddSingleton<IConfigurationDataBackupStore, ConfigurationDataBackupStore>();
 
         return services;
     }

@@ -11,7 +11,8 @@ namespace ClientTokenProvider.Shared.ViewModels;
 public partial class ConfigurationManagerViewModel(
     IConfigurationRepository configurationRepository,
     IConfigurationFactory configurationFactory,
-    IConfigurationDataMapper configurationDataMapper) :
+    IConfigurationDataMapper configurationDataMapper,
+    IConfigurationDataBackupStore configurationDataBackupStore) :
     ViewModelBase
 {
     private List<ConfigurationModel> _configurations = [];

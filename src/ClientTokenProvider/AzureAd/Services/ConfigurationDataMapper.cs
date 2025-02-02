@@ -2,6 +2,7 @@
 using ClientTokenProvider.AzureAd.Extensions;
 using ClientTokenProvider.Business.AzureAd.Models;
 using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Shared.BindableModels.Abstractions;
 using ClientTokenProvider.Shared.Services.Abstractions;
 
 namespace ClientTokenProvider.AzureAd.Services;

@@ -21,8 +21,8 @@ public partial class ConfigurationDetailPresenter :
         typeof(IAsyncRelayCommand<ConfigurationDetailBindableModel>),
         typeof(ConfigurationDetailPresenter));
 
-    public static readonly BindableProperty OnConfigurationDataChangedCommandProperty = BindableProperty.Create(
-        nameof(OnConfigurationDataChangedCommand),
+    public static readonly BindableProperty HandleConfigurationDataChangedCommandProperty = BindableProperty.Create(
+        nameof(HnaldeConfigurationDataChangedCommand),
         typeof(IRelayCommand<ConfigurationDetailBindableModel>),
         typeof(ConfigurationDetailPresenter));
 
@@ -46,15 +46,10 @@ public partial class ConfigurationDetailPresenter :
         set => SetValue(SaveConfigurationDataCommandProperty, value);
     }
 
-    public IRelayCommand<ConfigurationDetailBindableModel> OnConfigurationDataChangedCommand
+    public IRelayCommand<ConfigurationDetailBindableModel> HnaldeConfigurationDataChangedCommand
     {
-        get => (IRelayCommand<ConfigurationDetailBindableModel>)GetValue(OnConfigurationDataChangedCommandProperty);
-        set => SetValue(OnConfigurationDataChangedCommandProperty, value);
-    }
-
-    private void OnConfigurationDataChangedInternal()
-    {
-        OnConfigurationDataChangedCommand?.Execute(ConfigurationDetail);
+        get => (IRelayCommand<ConfigurationDetailBindableModel>)GetValue(HandleConfigurationDataChangedCommandProperty);
+        set => SetValue(HandleConfigurationDataChangedCommandProperty, value);
     }
 
     public bool CanStateChange { get; private set; } = true;
@@ -62,6 +57,12 @@ public partial class ConfigurationDetailPresenter :
     public ConfigurationDetailPresenter()
     {
         InitializeComponent();
+    }
+
+    [RelayCommand]
+    private void HandleConfigurationDataChangedInternal()
+    {
+        HnaldeConfigurationDataChangedCommand?.Execute(ConfigurationDetail);
     }
 
     private void ConfigurationNameEntry_Completed(object sender, EventArgs e)

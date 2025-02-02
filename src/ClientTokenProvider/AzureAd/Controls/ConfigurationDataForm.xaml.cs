@@ -10,8 +10,8 @@ public partial class ConfigurationDataForm : ContentView
         typeof(ConfigurationDataBindableModel),
         typeof(ConfigurationDataForm));
 
-    public static readonly BindableProperty OnConfigurationDataChangedCommandProperty = BindableProperty.Create(
-       nameof(OnConfigurationDataChangedCommand),
+    public static readonly BindableProperty HandleConfigurationDataChangedCommandProperty = BindableProperty.Create(
+       nameof(HandleConfigurationDataChangedCommand),
        typeof(IRelayCommand),
        typeof(ConfigurationDataForm));
 
@@ -21,10 +21,10 @@ public partial class ConfigurationDataForm : ContentView
         set => SetValue(ConfigurationDataProperty, value);
     }
 
-    public IRelayCommand OnConfigurationDataChangedCommand
+    public IRelayCommand HandleConfigurationDataChangedCommand
     {
-        get => (IRelayCommand)GetValue(OnConfigurationDataChangedCommandProperty);
-        set => SetValue(OnConfigurationDataChangedCommandProperty, value);
+        get => (IRelayCommand)GetValue(HandleConfigurationDataChangedCommandProperty);
+        set => SetValue(HandleConfigurationDataChangedCommandProperty, value);
     }
 
     public ConfigurationDataForm()
@@ -34,6 +34,6 @@ public partial class ConfigurationDataForm : ContentView
 
     private void DataEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
-        OnConfigurationDataChangedCommand?.Execute(null);
+        HandleConfigurationDataChangedCommand?.Execute(null);
     }
 }

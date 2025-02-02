@@ -122,8 +122,8 @@
                 <toolkit:StateContainer.StateViews>
                     <azureAdControls:ConfigurationDataForm
                         toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:ConfigurationKind.AzureAd}, Converter={StaticResource EnumToStringConverter}}"
-                        ConfigurationData="{Binding ConfiugrationDetail.Data}"
-                        OnConfigurationDataChangedCommand="{Binding OnConfigurationDataChangedInternalCommand}" />
+                        ConfigurationData="{Binding ConfigurationDetail.Data}"
+                        HandleConfigurationDataChangedCommand="{Binding HandleConfigurationDataChangedInternalCommand}" />
                 </toolkit:StateContainer.StateViews>
 
             </VerticalStackLayout>

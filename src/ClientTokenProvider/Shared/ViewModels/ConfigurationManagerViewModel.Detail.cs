@@ -61,10 +61,14 @@ public partial class ConfigurationManagerViewModel
     }
 
     [RelayCommand]
-    private void OnConfigurationDataChanged(
+    private void HandleConfigurationDataChanged(
         ConfigurationDetailBindableModel configurationDetail)
     {
-        configurationDetail.CanBeSaved = true;
+        var anyChanges = configurationDataBackupStore.AnyChanges(
+            configurationDetail.Id,
+            configurationDetail.Data);
+
+        configurationDetail.CanBeSaved = anyChanges;
     }
 
     [RelayCommand(
@@ -88,6 +92,12 @@ public partial class ConfigurationManagerViewModel
             WeakReferenceMessenger.Default.Send(
                new SavingConfigurationDataFailedMessage());
         }
+
+        configurationDataBackupStore.Set(
+          configurationDetail.Id,
+          configurationDetail.Data);
+
+        configurationDetail.CanBeSaved = false;
     }
 
     private ConfigurationDetailBindableModel CreateAndAddConfigurationDetail_Internal(
@@ -102,6 +112,10 @@ public partial class ConfigurationManagerViewModel
             configuration.Kind,
             configuration.Name,
             configurationData);
+
+        configurationDataBackupStore.Set(
+            configurationDetail.Id,
+            configurationDetail.Data);
 
         ConfigurationDetails.Add(configurationDetail);
 
