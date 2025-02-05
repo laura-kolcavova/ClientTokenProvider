@@ -17,10 +17,16 @@ public partial class ConfigurationDetailBindableModel :
     public IConfigurationDataBindableModel Data { get; }
 
     [ObservableProperty]
-    private ConfigurationActionState _actionState;
+    private bool _canBeSaved;
 
     [ObservableProperty]
-    private bool _canBeSaved;
+    private bool _canGetAccessToken;
+
+    [ObservableProperty]
+    private AccessTokenResult _accessTokenResult;
+
+    [ObservableProperty]
+    private bool _isLoading;
 
     public ConfigurationDetailBindableModel(
         Guid id,
@@ -32,6 +38,6 @@ public partial class ConfigurationDetailBindableModel :
         Kind = kind;
         Name = name;
         Data = data;
-        ActionState = ConfigurationActionState.Idle;
+        AccessTokenResult = AccessTokenResult.None();
     }
 }

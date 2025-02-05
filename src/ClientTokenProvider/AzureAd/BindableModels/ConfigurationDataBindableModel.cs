@@ -36,6 +36,16 @@ public partial class ConfigurationDataBindableModel :
         ClientSecret = clientSecret;
     }
 
+    public bool AreDataValid()
+    {
+        return
+            !string.IsNullOrEmpty(AuthorityUrl) &&
+            !string.IsNullOrEmpty(Scope) &&
+            !string.IsNullOrEmpty(Audience) &&
+            !string.IsNullOrEmpty(ClientId) &&
+            !string.IsNullOrEmpty(ClientSecret);
+    }
+
     public IConfigurationDataBindableModel Copy()
     {
         return new ConfigurationDataBindableModel(

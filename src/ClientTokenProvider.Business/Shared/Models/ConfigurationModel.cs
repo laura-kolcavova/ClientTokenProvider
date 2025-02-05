@@ -1,4 +1,6 @@
-﻿namespace ClientTokenProvider.Business.Shared.Models;
+﻿using ClientTokenProvider.Business.Shared.Models.Abstractions;
+
+namespace ClientTokenProvider.Business.Shared.Models;
 
 public sealed class ConfigurationModel
 {

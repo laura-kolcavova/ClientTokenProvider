@@ -1,6 +1,6 @@
 ﻿namespace ClientTokenProvider.Shared.Messages;
 
-internal sealed record ShowErrorDetailMessage
+public sealed record ShowAccessTokenErrorDetailMessage
 {
     public required string ErrorMessage { get; init; }
 }

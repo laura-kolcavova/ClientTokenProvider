@@ -13,7 +13,8 @@ public static class ServiceCollectionExtensions
             .AddMemoryCache();
 
         services
-            .AddSingleton<IConfigurationFactory, ConfigurationFactory>();
+            .AddSingleton<IConfigurationFactory, ConfigurationFactory>()
+            .AddSingleton<IClientTokenProviderFactory, ClientTokenProviderFactory>();
 
         services
             .AddScoped<IConfigurationRepository, ConfigurationRepositoryMock>();

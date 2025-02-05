@@ -18,7 +18,7 @@ public partial class ConfigurationList : ContentView
 
     public static readonly BindableProperty AddNewConfigurationCommandProperty = BindableProperty.Create(
         nameof(AddNewConfigurationCommand),
-        typeof(IRelayCommand<ConfigurationKind>),
+        typeof(IAsyncRelayCommand<ConfigurationKind>),
         typeof(ConfigurationList));
 
     public static readonly BindableProperty SetActiveConfigurationListItemCommandProperty = BindableProperty.Create(
@@ -38,9 +38,9 @@ public partial class ConfigurationList : ContentView
         set => SetValue(ActiveConfigurationListItemProperty, value);
     }
 
-    public IRelayCommand<ConfigurationKind> AddNewConfigurationCommand
+    public IAsyncRelayCommand<ConfigurationKind> AddNewConfigurationCommand
     {
-        get => (IRelayCommand<ConfigurationKind>)GetValue(AddNewConfigurationCommandProperty);
+        get => (IAsyncRelayCommand<ConfigurationKind>)GetValue(AddNewConfigurationCommandProperty);
         set => SetValue(AddNewConfigurationCommandProperty, value);
     }
 

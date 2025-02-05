@@ -9,13 +9,13 @@ internal static class ServiceCollectionExtensions
     public static IServiceCollection AddClientTokenProviderAzureAd(
         this IServiceCollection services)
     {
-        var configurationKindKind = Enum.GetName(
+        var azureAdConfigurationKindName = Enum.GetName(
            typeof(ConfigurationKind),
            ConfigurationKind.AzureAd)
                ?? throw new InvalidOperationException(
                    $"No name found for enum value '{ConfigurationKind.AzureAd}' of type '{nameof(ConfigurationKind)}'.");
         services
-          .AddKeyedSingleton<IConfigurationDataMapper, ConfigurationDataMapper>(configurationKindKind);
+            .AddKeyedSingleton<IConfigurationDataMapper, ConfigurationDataMapper>(azureAdConfigurationKindName);
 
         return services;
     }

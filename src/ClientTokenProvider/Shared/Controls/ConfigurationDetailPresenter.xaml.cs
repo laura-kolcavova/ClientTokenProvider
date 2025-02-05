@@ -1,5 +1,6 @@
 using ClientTokenProvider.Shared.BindableModels;
 using CommunityToolkit.Mvvm.Input;
+using System.Windows.Input;
 
 namespace ClientTokenProvider.Shared.Controls;
 
@@ -22,7 +23,22 @@ public partial class ConfigurationDetailPresenter :
         typeof(ConfigurationDetailPresenter));
 
     public static readonly BindableProperty HandleConfigurationDataChangedCommandProperty = BindableProperty.Create(
-        nameof(HnaldeConfigurationDataChangedCommand),
+        nameof(HandleConfigurationDataChangedCommand),
+        typeof(IRelayCommand<ConfigurationDetailBindableModel>),
+        typeof(ConfigurationDetailPresenter));
+
+    public static readonly BindableProperty GetAccessTokenCommandProperty = BindableProperty.Create(
+        nameof(GetAccessTokenCommand),
+        typeof(IAsyncRelayCommand<ConfigurationDetailBindableModel>),
+        typeof(ConfigurationDetailPresenter));
+
+    public static readonly BindableProperty GetAccessTokenCancelCommandProperty = BindableProperty.Create(
+        nameof(GetAccessTokenCancelCommand),
+        typeof(ICommand),
+        typeof(ConfigurationDetailPresenter));
+
+    public static readonly BindableProperty ShowAccessTokenErrorDetailCommandProperty = BindableProperty.Create(
+        nameof(ShowAccessTokenErrorDetailCommand),
         typeof(IRelayCommand<ConfigurationDetailBindableModel>),
         typeof(ConfigurationDetailPresenter));
 
@@ -46,10 +62,28 @@ public partial class ConfigurationDetailPresenter :
         set => SetValue(SaveConfigurationDataCommandProperty, value);
     }
 
-    public IRelayCommand<ConfigurationDetailBindableModel> HnaldeConfigurationDataChangedCommand
+    public IRelayCommand<ConfigurationDetailBindableModel> HandleConfigurationDataChangedCommand
     {
         get => (IRelayCommand<ConfigurationDetailBindableModel>)GetValue(HandleConfigurationDataChangedCommandProperty);
         set => SetValue(HandleConfigurationDataChangedCommandProperty, value);
+    }
+
+    public IAsyncRelayCommand<ConfigurationDetailBindableModel> GetAccessTokenCommand
+    {
+        get => (IAsyncRelayCommand<ConfigurationDetailBindableModel>)GetValue(GetAccessTokenCommandProperty);
+        set => SetValue(GetAccessTokenCommandProperty, value);
+    }
+
+    public ICommand GetAccessTokenCancelCommand
+    {
+        get => (ICommand)GetValue(GetAccessTokenCancelCommandProperty);
+        set => SetValue(GetAccessTokenCancelCommandProperty, value);
+    }
+
+    public IRelayCommand<ConfigurationDetailBindableModel> ShowAccessTokenErrorDetailCommand
+    {
+        get => (IRelayCommand<ConfigurationDetailBindableModel>)GetValue(ShowAccessTokenErrorDetailCommandProperty);
+        set => SetValue(ShowAccessTokenErrorDetailCommandProperty, value);
     }
 
     public bool CanStateChange { get; private set; } = true;
@@ -62,7 +96,7 @@ public partial class ConfigurationDetailPresenter :
     [RelayCommand]
     private void HandleConfigurationDataChangedInternal()
     {
-        HnaldeConfigurationDataChangedCommand?.Execute(ConfigurationDetail);
+        HandleConfigurationDataChangedCommand?.Execute(ConfigurationDetail);
     }
 
     private void ConfigurationNameEntry_Completed(object sender, EventArgs e)
@@ -77,8 +111,6 @@ public partial class ConfigurationDetailPresenter :
         var entry = (Entry)sender;
 
         TryRenameConfiguration(entry.Text);
-
-        _canRenameConfiguration = false;
     }
 
     private void ConfigurationNameEntry_TextChanged(object sender, TextChangedEventArgs e)
@@ -104,5 +136,20 @@ public partial class ConfigurationDetailPresenter :
     private void SaveConfigurationButton_Clicked(object sender, EventArgs e)
     {
         SaveConfigurationDataCommand?.Execute(ConfigurationDetail);
+    }
+
+    private void GetAccessTokenButton_Clicked(object sender, EventArgs e)
+    {
+        GetAccessTokenCommand?.Execute(ConfigurationDetail);
+    }
+
+    private void GetAccessTokenCancelButton_Clicked(object sender, EventArgs e)
+    {
+        GetAccessTokenCancelCommand?.Execute(null);
+    }
+
+    private void AccessTokenErrorLabel_Tapped(object sender, TappedEventArgs e)
+    {
+        ShowAccessTokenErrorDetailCommand?.Execute(ConfigurationDetail);
     }
 }

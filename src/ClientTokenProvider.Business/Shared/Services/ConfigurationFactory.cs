@@ -4,7 +4,7 @@ using ClientTokenProvider.Business.Shared.Services.Abstractions;
 
 namespace ClientTokenProvider.Business.Shared.Services;
 
-internal class ConfigurationFactory(
+internal sealed class ConfigurationFactory(
     IAzureAdConfigurationFactory azureAdConfigurationFactory) :
     IConfigurationFactory
 {

@@ -1,4 +1,5 @@
 ﻿using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Business.Shared.Models.Abstractions;
 using ClientTokenProvider.Shared.BindableModels.Abstractions;
 using ClientTokenProvider.Shared.Services.Abstractions;
 

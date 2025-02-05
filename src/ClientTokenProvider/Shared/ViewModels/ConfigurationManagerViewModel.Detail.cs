@@ -68,6 +68,13 @@ public partial class ConfigurationManagerViewModel
             configurationDetail.Id,
             configurationDetail.Data);
 
+        if (anyChanges)
+        {
+            configurationDetail.CanGetAccessToken = configurationDetail
+                .Data
+                .AreDataValid();
+        }
+
         configurationDetail.CanBeSaved = anyChanges;
     }
 
@@ -91,6 +98,8 @@ public partial class ConfigurationManagerViewModel
         {
             WeakReferenceMessenger.Default.Send(
                new SavingConfigurationDataFailedMessage());
+
+            return;
         }
 
         configurationDataBackupStore.Set(
@@ -98,6 +107,47 @@ public partial class ConfigurationManagerViewModel
           configurationDetail.Data);
 
         configurationDetail.CanBeSaved = false;
+    }
+
+    [RelayCommand(
+       IncludeCancelCommand = true,
+       AllowConcurrentExecutions = false)]
+    private async Task GetAccessToken(
+       ConfigurationDetailBindableModel configurationDetail,
+       CancellationToken cancellationToken)
+    {
+        var configurationData = configurationDataMapper.ToModel(
+            configurationDetail.Data,
+            configurationDetail.Kind);
+
+        configurationDetail.IsLoading = true;
+
+        var accessTokenResult = await GetAccessToken_Internal(
+            configurationDetail.Kind,
+            configurationData,
+            cancellationToken);
+
+        configurationDetail.IsLoading = false;
+
+        if (accessTokenResult.State == AccessTokenResultState.Cancelled)
+        {
+            return;
+        }
+
+        configurationDetail.AccessTokenResult = accessTokenResult;
+    }
+
+    [RelayCommand]
+    private void ShowAccessTokenErrorDetail(
+        ConfigurationDetailBindableModel configurationDetail)
+    {
+        if (configurationDetail.AccessTokenResult.State == AccessTokenResultState.Failed)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowAccessTokenErrorDetailMessage
+            {
+                ErrorMessage = configurationDetail.AccessTokenResult.Text!
+            });
+        }
     }
 
     private ConfigurationDetailBindableModel CreateAndAddConfigurationDetail_Internal(

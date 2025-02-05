@@ -2,6 +2,7 @@
 using ClientTokenProvider.AzureAd.Extensions;
 using ClientTokenProvider.Business.AzureAd.Models;
 using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Business.Shared.Models.Abstractions;
 using ClientTokenProvider.Shared.BindableModels.Abstractions;
 using ClientTokenProvider.Shared.Services.Abstractions;
 
@@ -14,7 +15,14 @@ internal sealed class ConfigurationDataMapper :
         IConfigurationData source,
         ConfigurationKind sourceConfigurationKind)
     {
-        return ((AzureAdConfigurationData)source).ToBindableModel();
+        if (source is AzureAdConfigurationData azureAdSource)
+        {
+            return azureAdSource.ToBindableModel();
+        }
+        else
+        {
+            throw new ArgumentException("Invalid configuration data type.", nameof(source));
+        }
     }
 
     public IConfigurationData ToModel(

@@ -1,4 +1,6 @@
-﻿using ClientTokenProvider.Business.Shared.Models;
+﻿using ClientTokenProvider.Business.AzureAd.Mappers;
+using ClientTokenProvider.Business.Shared.Models.Abstractions;
+using ClientTokenProvider.Core.AzureAd.Models;
 
 namespace ClientTokenProvider.Business.AzureAd.Models;
 
@@ -24,4 +26,9 @@ public sealed record AzureAdConfigurationData :
             ClientId = string.Empty,
             ClientSecret = string.Empty,
         };
+
+    public IClientTokenProviderConfiguration ToClientTokenProviderConfiguration()
+    {
+        return AzureAdConfigurationDataMapper.ToClientConfiguration(this);
+    }
 }

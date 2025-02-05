@@ -7,9 +7,12 @@ namespace ClientTokenProvider.Shared.Views;
 
 public partial class ConfigurationManagerPage :
     ContentPageBase,
+    IRecipient<GettingConfigurationsFailedMessage>,
+    IRecipient<AddingConfigurationFailedMessage>,
     IRecipient<RenamingConfigurationFailedMessage>,
+    IRecipient<SavingConfigurationDataFailedMessage>,
     IRecipient<DeletingConfigurationFailedMessage>,
-    IRecipient<SavingConfigurationDataFailedMessage>
+    IRecipient<ShowAccessTokenErrorDetailMessage>
 {
     public ConfigurationManagerPage(ConfigurationManagerViewModel viewModel)
     {
@@ -32,12 +35,39 @@ public partial class ConfigurationManagerPage :
         WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 
+    public async void Receive(GettingConfigurationsFailedMessage message)
+    {
+        // TODO Localization
+        await DisplayAlert(
+            "Getting configurations failed",
+            "Configurations could not be get",
+            "Close");
+    }
+
+    public async void Receive(AddingConfigurationFailedMessage message)
+    {
+        // TODO Localization
+        await DisplayAlert(
+            "Adding configuration failed",
+            "Configuration could not be added",
+            "Close");
+    }
+
     public async void Receive(RenamingConfigurationFailedMessage message)
     {
         // TODO Localization
         await DisplayAlert(
             "Renaming configuration failed",
             "Configuration could not be renamed",
+            "Close");
+    }
+
+    public async void Receive(SavingConfigurationDataFailedMessage message)
+    {
+        // TODO Localization
+        await DisplayAlert(
+            "Saving configuration data failed",
+            "Configuration data could not be saved",
             "Close");
     }
 
@@ -50,12 +80,11 @@ public partial class ConfigurationManagerPage :
             "Close");
     }
 
-    public async void Receive(SavingConfigurationDataFailedMessage message)
+    public async void Receive(ShowAccessTokenErrorDetailMessage message)
     {
-        // TODO Localization
         await DisplayAlert(
-            "Saving configuration data failed",
-            "Configuration data could not be saved",
+            "Error",
+            message.ErrorMessage,
             "Close");
     }
 }
