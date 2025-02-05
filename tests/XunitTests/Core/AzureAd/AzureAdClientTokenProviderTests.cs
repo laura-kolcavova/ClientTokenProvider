@@ -1,8 +1,8 @@
 ﻿using ClientTokenProvider.Core.AzureAd.Dto;
 using ClientTokenProvider.Core.AzureAd.Exceptions;
-using ClientTokenProvider.Core.AzureAd.Handlers;
 using ClientTokenProvider.Core.AzureAd.Models;
-using ClientTokenProvider.Core.AzureAd.Providers;
+using ClientTokenProvider.Core.AzureAd.Services;
+using ClientTokenProvider.Core.AzureAd.Services.Abstractions;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;

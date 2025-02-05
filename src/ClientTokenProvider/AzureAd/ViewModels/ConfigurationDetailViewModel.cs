@@ -1,342 +1,322 @@
-﻿using ClientTokenProvider.AzureAd.Mappers;
-using ClientTokenProvider.AzureAd.Messages;
-using ClientTokenProvider.AzureAd.Models;
-using ClientTokenProvider.Business.Shared.Models;
-using ClientTokenProvider.Business.Shared.Providers;
-using ClientTokenProvider.Business.Shared.Services;
-using ClientTokenProvider.Core.AzureAd.Factories;
-using ClientTokenProvider.Shared;
-using ClientTokenProvider.Shared.Messages;
-using ClientTokenProvider.Shared.Services;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.Logging;
+﻿//using ClientTokenProvider.AzureAd.Messages;
+//using ClientTokenProvider.AzureAd.Models;
+//using ClientTokenProvider.Business.AzureAd.Mappers;
+//using ClientTokenProvider.Business.AzureAd.Models;
+//using ClientTokenProvider.Business.Shared.Models;
+//using ClientTokenProvider.Business.Shared.Providers;
+//using ClientTokenProvider.Business.Shared.Services;
+//using ClientTokenProvider.Core.AzureAd.Factories;
+//using ClientTokenProvider.Shared;
+//using ClientTokenProvider.Shared.Messages;
+//using CommunityToolkit.Mvvm.ComponentModel;
+//using CommunityToolkit.Mvvm.Input;
+//using CommunityToolkit.Mvvm.Messaging;
+//using Microsoft.Extensions.Logging;
 
-namespace ClientTokenProvider.AzureAd.ViewModels;
+//namespace ClientTokenProvider.AzureAd.ViewModels;
 
-public partial class ConfigurationDetailViewModel : ObservableObject,
-    IQueryAttributable,
-    IRecipient<ConfigurationSelectedMessage>
-{
-    private readonly IAzureAdClientTokenProviderFactory _azureAdClientTokenProviderFactory;
-    private readonly IConfigurationRepository _configurationRepository;
-    private readonly IConfigurationIdentityProvider _configurationIdentityManager;
-    private readonly INavigationService _navigationService;
-    private readonly ILogger _logger;
+//public partial class ConfigurationDetailViewModel : ObservableObject,
+//    IQueryAttributable
+//{
+//    private readonly IAzureAdClientTokenProviderFactory _azureAdClientTokenProviderFactory;
+//    private readonly IConfigurationService _configurationService;
+//    private readonly IConfigurationIdentityProvider _configurationIdentityProvider;
+//    private readonly ILogger _logger;
 
-    [ObservableProperty]
-    private ConfigurationIdentity configurationIdentity;
+//    [ObservableProperty]
+//    private ConfigurationIdentity configurationIdentity;
 
-    [ObservableProperty]
-    private AzureAdConfigurationModel configurationData;
+//    [ObservableProperty]
+//    private AzureAdConfigurationData configurationData;
 
-    [ObservableProperty]
-    private ActionState state;
+//    [ObservableProperty]
+//    private ActionState state;
 
-    [ObservableProperty]
-    private string errorMessage;
+//    [ObservableProperty]
+//    private string errorMessage;
 
-    [ObservableProperty]
-    private string accessToken;
+//    [ObservableProperty]
+//    private string accessToken;
 
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(GetAccessTokenCommand))]
-    private bool getAccessTokenButtonEnabled;
+//    [ObservableProperty]
+//    [NotifyCanExecuteChangedFor(nameof(GetAccessTokenCommand))]
+//    private bool getAccessTokenButtonEnabled;
 
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SaveConfigurationCommand))]
-    private bool saveConfigurationButtonEnabled;
+//    [ObservableProperty]
+//    [NotifyCanExecuteChangedFor(nameof(SaveConfigurationCommand))]
+//    private bool saveConfigurationButtonEnabled;
 
-    [ObservableProperty]
-    private bool isConfigurationSaved;
+//    [ObservableProperty]
+//    private bool isConfigurationSaved;
 
-    private ActionState _previousState;
+//    private ActionState _previousState;
 
-    private CancellationTokenSource _cancellationTokenSource;
+//    private CancellationTokenSource _cancellationTokenSource;
 
-    public ConfigurationDetailViewModel(
-        IAzureAdClientTokenProviderFactory azureAdClientTokenProviderFactory,
-        IConfigurationRepository configurationRepository,
-        IConfigurationIdentityProvider configurationIdentityManager,
-        INavigationService navigationService,
-        ILogger<ConfigurationDetailViewModel> logger)
-    {
-        _configurationIdentityManager = configurationIdentityManager;
-        _azureAdClientTokenProviderFactory = azureAdClientTokenProviderFactory;
-        _configurationRepository = configurationRepository;
-        _navigationService = navigationService;
-        _logger = logger;
+//    public ConfigurationDetailViewModel(
+//        IAzureAdClientTokenProviderFactory azureAdClientTokenProviderFactory,
+//        IConfigurationService configurationService,
+//        IConfigurationIdentityProvider configurationIdentityProvider,
+//        ILogger<ConfigurationDetailViewModel> logger)
+//    {
+//        _azureAdClientTokenProviderFactory = azureAdClientTokenProviderFactory;
+//        _configurationService = configurationService;
+//        _configurationIdentityProvider = configurationIdentityProvider;
+//        _logger = logger;
 
-        configurationIdentity = configurationIdentityManager.NewIdentity();
-        configurationData = AzureAdConfigurationModel.Empty;
-        state = ActionState.Idle;
+//        configurationIdentity = configurationIdentityProvider.NewIdentity();
+//        configurationData = AzureAdConfigurationData.Empty;
+//        state = ActionState.Idle;
 
-        errorMessage = string.Empty;
-        accessToken = string.Empty;
+//        errorMessage = string.Empty;
+//        accessToken = string.Empty;
 
-        _cancellationTokenSource = new CancellationTokenSource();
-    }
+//        _cancellationTokenSource = new CancellationTokenSource();
+//    }
 
-    public async void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-        if (query.TryGetValue(
-            Routes.AzureAdConfigurationDetail.QueryParamConfigurationDetail,
-            out var configurationIdObject))
-        {
-            var configurationId = Guid.Parse(configurationIdObject!.ToString()!);
+//    public async void ApplyQueryAttributes(IDictionary<string, object> query)
+//    {
+//        if (query.TryGetValue(
+//            Routes.AzureAdConfigurationDetail.QueryParamConfigurationDetail,
+//            out var configurationIdObject))
+//        {
+//            var configurationId = Guid.Parse(configurationIdObject!.ToString()!);
 
-            try
-            {
-                _cancellationTokenSource = new CancellationTokenSource();
+//            try
+//            {
+//                _cancellationTokenSource = new CancellationTokenSource();
 
-                var cancellationToken = _cancellationTokenSource.Token;
+//                var cancellationToken = _cancellationTokenSource.Token;
 
-                await LoadConfiguration(configurationId, cancellationToken);
-            }
-            finally
-            {
-                _cancellationTokenSource.Dispose();
-            }
-        }
-    }
+//                await LoadConfiguration(configurationId, cancellationToken);
+//            }
+//            finally
+//            {
+//                _cancellationTokenSource.Dispose();
+//            }
+//        }
+//    }
 
-    partial void OnConfigurationDataChanged(AzureAdConfigurationModel value)
-    {
-        GetAccessTokenButtonEnabled = ConfigurationData.IsValid();
-        SaveConfigurationButtonEnabled = !ConfigurationData.IsEmpty();
-    }
+//    partial void OnConfigurationDataChanged(AzureAdConfigurationData value)
+//    {
+//        GetAccessTokenButtonEnabled = ConfigurationData.IsValid();
+//        SaveConfigurationButtonEnabled = !ConfigurationData.IsEmpty();
+//    }
 
-    public async void Receive(ConfigurationSelectedMessage message)
-    {
-        await _navigationService.GoToAzureAdConfigurationDetail(
-            message.ConfigurationIdentity.Id);
-    }
+//    [RelayCommand]
+//    private void UpdateAuthority(string authority)
+//    {
+//        ConfigurationData = ConfigurationData with
+//        {
+//            AuthorityUrl = authority
+//        };
+//    }
 
-    [RelayCommand]
-    private void Load()
-    {
-        WeakReferenceMessenger.Default.RegisterAll(this);
-    }
+//    [RelayCommand]
+//    private void UpdateScope(string scope)
+//    {
+//        ConfigurationData = ConfigurationData with
+//        {
+//            Scope = scope
+//        };
+//    }
 
-    [RelayCommand]
-    private void Unload()
-    {
-        WeakReferenceMessenger.Default.UnregisterAll(this);
-    }
+//    [RelayCommand]
+//    private void UpdateAudience(string audience)
+//    {
+//        ConfigurationData = ConfigurationData with
+//        {
+//            Audience = audience
+//        };
+//    }
 
-    [RelayCommand]
-    private void UpdateAuthority(string authority)
-    {
-        ConfigurationData = ConfigurationData with
-        {
-            AuthorityUrl = authority
-        };
-    }
+//    [RelayCommand]
+//    private void UpdateClientId(string clientId)
+//    {
+//        ConfigurationData = ConfigurationData with
+//        {
+//            ClientId = clientId
+//        };
+//    }
 
-    [RelayCommand]
-    private void UpdateScope(string scope)
-    {
-        ConfigurationData = ConfigurationData with
-        {
-            Scope = scope
-        };
-    }
+//    [RelayCommand]
+//    private void UpdateClientSecret(string clientSecret)
+//    {
+//        ConfigurationData = ConfigurationData with
+//        {
+//            ClientSecret = clientSecret
+//        };
+//    }
 
-    [RelayCommand]
-    private void UpdateAudience(string audience)
-    {
-        ConfigurationData = ConfigurationData with
-        {
-            Audience = audience
-        };
-    }
+//    [RelayCommand(
+//        CanExecute = nameof(GetAccessTokenButtonEnabled),
+//        IncludeCancelCommand = true,
+//        AllowConcurrentExecutions = false)]
+//    private async Task GetAccessToken(CancellationToken cancellationToken)
+//    {
+//        var azureAdClientConfiguration = ConfigurationData.ToClientConfiguration();
 
-    [RelayCommand]
-    private void UpdateClientId(string clientId)
-    {
-        ConfigurationData = ConfigurationData with
-        {
-            ClientId = clientId
-        };
-    }
+//        var azureAdClientTokenProvider = _azureAdClientTokenProviderFactory
+//            .Create(azureAdClientConfiguration);
 
-    [RelayCommand]
-    private void UpdateClientSecret(string clientSecret)
-    {
-        ConfigurationData = ConfigurationData with
-        {
-            ClientSecret = clientSecret
-        };
-    }
+//        try
+//        {
+//            _cancellationTokenSource = new CancellationTokenSource();
 
-    [RelayCommand(
-        CanExecute = nameof(GetAccessTokenButtonEnabled),
-        IncludeCancelCommand = true,
-        AllowConcurrentExecutions = false)]
-    private async Task GetAccessToken(CancellationToken cancellationToken)
-    {
-        var azureAdClientConfiguration = ConfigurationData.ToClientConfiguration();
+//            var customCancellationToken = _cancellationTokenSource.Token;
 
-        var azureAdClientTokenProvider = _azureAdClientTokenProviderFactory
-            .Create(azureAdClientConfiguration);
+//            SwitchToState(ActionState.Loading);
 
-        try
-        {
-            _cancellationTokenSource = new CancellationTokenSource();
+//            var clientAccessToken = await azureAdClientTokenProvider
+//                .GetAccessToken(ConfigurationData.Scope, customCancellationToken);
 
-            var customCancellationToken = _cancellationTokenSource.Token;
+//            HandleSuccess(clientAccessToken);
+//        }
+//        catch (Exception ex)
+//        {
+//            _logger.LogError(
+//                ex,
+//                "An unexpected error occurred while getting client access token");
 
-            SwitchToState(ActionState.Loading);
+//            HandleError(ex.Message);
+//        }
+//        finally
+//        {
+//            _cancellationTokenSource.Dispose();
+//        }
+//    }
 
-            var clientAccessToken = await azureAdClientTokenProvider
-                .GetAccessToken(ConfigurationData.Scope, customCancellationToken);
+//    [RelayCommand]
+//    private void CancelRequest()
+//    {
+//        SwitchToState(_previousState);
 
-            HandleSuccess(clientAccessToken);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(
-                ex,
-                "An unexpected error occurred while getting client access token");
+//        _cancellationTokenSource.Cancel();
+//        _cancellationTokenSource.Dispose();
+//    }
 
-            HandleError(ex.Message);
-        }
-        finally
-        {
-            _cancellationTokenSource.Dispose();
-        }
-    }
+//    [RelayCommand]
+//    private void ShowErrorDetailModal()
+//    {
+//        WeakReferenceMessenger.Default.Send(new ShowErrorDetailMessage
+//        {
+//            ErrorMessage = ErrorMessage
+//        });
+//    }
 
-    [RelayCommand]
-    private void CancelRequest()
-    {
-        SwitchToState(_previousState);
+//    [RelayCommand(
+//        IncludeCancelCommand = true,
+//        AllowConcurrentExecutions = false)]
+//    private async Task UpdateConfigurationName(
+//        string configurationName,
+//        CancellationToken cancellationToken)
+//    {
+//        ConfigurationIdentity = ConfigurationIdentity with
+//        {
+//            Name = configurationName
+//        };
 
-        _cancellationTokenSource.Cancel();
-        _cancellationTokenSource.Dispose();
-    }
+//        // TODO Add ChangeData method
 
-    [RelayCommand]
-    private void ShowErrorDetailModal()
-    {
-        WeakReferenceMessenger.Default.Send(new ShowErrorDetailMessage
-        {
-            ErrorMessage = ErrorMessage
-        });
-    }
+//        if (IsConfigurationSaved)
+//        {
+//            // TODO Add ChangeName method
+//            var configuration = new Configuration
+//            {
+//                Kind = ConfigurationKind.AzureAd,
+//                Identity = ConfigurationIdentity,
+//                Data = ConfigurationData
+//            };
 
-    [RelayCommand(
-        IncludeCancelCommand = true,
-        AllowConcurrentExecutions = false)]
-    private async Task UpdateConfigurationName(
-        string configurationName,
-        CancellationToken cancellationToken)
-    {
-        ConfigurationIdentity = ConfigurationIdentity with
-        {
-            Name = configurationName
-        };
+//            await _configurationService.Save(
+//                configuration,
+//                cancellationToken);
 
-        // TODO Add ChangeData method
+//            WeakReferenceMessenger.Default.Send(new ConfigurationNameChangedMessage
+//            {
+//                ConfigurationIdentity = ConfigurationIdentity,
+//                IsConfigurationSaved = IsConfigurationSaved,
+//            });
 
-        if (IsConfigurationSaved)
-        {
-            // TODO Add ChangeName method
-            var configuration = new Configuration<AzureAdConfigurationModel>
-            {
-                Identity = ConfigurationIdentity,
-                Data = ConfigurationData
-            };
+//            SaveConfigurationButtonEnabled = !ConfigurationData.IsEmpty();
+//        }
+//    }
 
-            await _configurationRepository.Save(
-                configuration,
-                cancellationToken);
+//    [RelayCommand(
+//        CanExecute = nameof(SaveConfigurationButtonEnabled),
+//        IncludeCancelCommand = true,
+//        AllowConcurrentExecutions = false)]
+//    private async Task SaveConfiguration(CancellationToken cancellationToken)
+//    {
+//        try
+//        {
+//            var configuration = new Configuration
+//            {
+//                Kind = ConfigurationKind.AzureAd,
+//                Identity = ConfigurationIdentity,
+//                Data = ConfigurationData,
+//            };
 
-            WeakReferenceMessenger.Default.Send(new ConfigurationNameChangedMessage
-            {
-                ConfigurationIdentity = ConfigurationIdentity,
-                IsConfigurationSaved = IsConfigurationSaved,
-            });
+//            await _configurationService.Save(
+//                configuration,
+//                cancellationToken);
 
-            SaveConfigurationButtonEnabled = !ConfigurationData.IsEmpty();
-        }
-    }
+//            SaveConfigurationButtonEnabled = false;
+//            IsConfigurationSaved = true;
 
-    [RelayCommand(
-        CanExecute = nameof(SaveConfigurationButtonEnabled),
-        IncludeCancelCommand = true,
-        AllowConcurrentExecutions = false)]
-    private async Task SaveConfiguration(CancellationToken cancellationToken)
-    {
-        try
-        {
-            var configuration = new Configuration<AzureAdConfigurationModel>
-            {
-                Identity = ConfigurationIdentity,
-                Data = ConfigurationData,
-            };
+//            WeakReferenceMessenger.Default.Send(new ConfigurationSavedMessage
+//            {
+//                ConfigurationIdentity = ConfigurationIdentity,
+//            });
+//        }
+//        catch
+//        {
+//            WeakReferenceMessenger.Default.Send(
+//                new ShowSavingFileFailedErrorMessage());
+//        }
+//    }
 
-            await _configurationRepository.Save(
-                configuration,
-                cancellationToken);
+//    private async Task LoadConfiguration(
+//        Guid configurationId,
+//        CancellationToken cancellationToken)
+//    {
+//        var configuration = await _configurationService
+//            .Get(
+//                configurationId,
+//                cancellationToken);
 
-            SaveConfigurationButtonEnabled = false;
-            IsConfigurationSaved = true;
+//        if (configuration is null)
+//        {
+//            // TODO ERROR
+//            return;
+//        }
 
-            WeakReferenceMessenger.Default.Send(new ConfigurationSavedMessage
-            {
-                ConfigurationIdentity = ConfigurationIdentity,
-            });
-        }
-        catch
-        {
-            WeakReferenceMessenger.Default.Send(
-                new ShowSavingFileFailedErrorMessage());
-        }
-    }
+//        ConfigurationIdentity = configuration.Identity;
+//        ConfigurationData = (AzureAdConfigurationData)configuration.Data;
+//        IsConfigurationSaved = true;
+//    }
 
-    private async Task LoadConfiguration(
-        Guid configurationId,
-        CancellationToken cancellationToken)
-    {
-        var configuration = await _configurationRepository
-            .Get<AzureAdConfigurationModel>(
-                configurationId,
-                cancellationToken);
+//    private void SwitchToState(ActionState state)
+//    {
+//        _previousState = State;
+//        State = state;
+//    }
 
-        if (configuration is null)
-        {
-            // TODO ERROR
-            return;
-        }
+//    private void SwitchToPreviousState()
+//    {
+//        SwitchToState(_previousState);
+//    }
 
-        ConfigurationIdentity = configuration.Identity;
-        ConfigurationData = configuration.Data;
-        IsConfigurationSaved = true;
-    }
+//    private void HandleError(string message)
+//    {
 
-    private void SwitchToState(ActionState state)
-    {
-        _previousState = State;
-        State = state;
-    }
+//        ErrorMessage = message;
+//        SwitchToState(ActionState.Error);
+//    }
 
-    private void SwitchToPreviousState()
-    {
-        SwitchToState(_previousState);
-    }
-
-    private void HandleError(string message)
-    {
-
-        ErrorMessage = message;
-        SwitchToState(ActionState.Error);
-    }
-
-    private void HandleSuccess(string accessToken)
-    {
-        AccessToken = accessToken;
-        SwitchToState(ActionState.Success);
-    }
-}
+//    private void HandleSuccess(string accessToken)
+//    {
+//        AccessToken = accessToken;
+//        SwitchToState(ActionState.Success);
+//    }
+//}

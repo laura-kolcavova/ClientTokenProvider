@@ -1,4 +1,5 @@
-﻿using ClientTokenProvider.Core.AzureAd.Factories;
+﻿using ClientTokenProvider.Core.AzureAd.Services;
+using ClientTokenProvider.Core.AzureAd.Services.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ClientTokenProvider.Core.AzureAd.Extensions;

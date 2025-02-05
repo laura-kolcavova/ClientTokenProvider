@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="ClientTokenProvider.Shared.Controls.ConfigurationList"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sharedConverters="clr-namespace:ClientTokenProvider.Shared.Converters"
+    x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <sharedConverters:ConfigurationNameFallbackConverter x:Key="ConfigurationNameFallbackConverter" />
+        </ResourceDictionary>
+
+        <Style Class="configurationList" TargetType="ListView">
+            <Setter Property="MinimumWidthRequest" Value="180" />
+            <Setter Property="MaximumWidthRequest" Value="180" />
+        </Style>
+
+        <Style Class="configurationListItem" TargetType="Grid">
+            <Setter Property="Padding" Value="20, 5, 20, 5" />
+        </Style>
+
+        <Style Class="configurationListItemName" TargetType="Label">
+            <Setter Property="LineBreakMode" Value="TailTruncation" />
+        </Style>
+
+        <Style Class="addNewConfigurationButton" TargetType="Button">
+            <Setter Property="Padding" Value="3, 4" />
+            <Setter Property="MinimumWidthRequest" Value="24" />
+            <Setter Property="MinimumHeightRequest" Value="24" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="ImageSource" Value="add_small_grey400.png" />
+        </Style>
+    </ContentView.Resources>
+
+    <Grid
+        BackgroundColor="{StaticResource SecondaryBackground}"
+        BindingContext="{x:Reference this}"
+        ColumnDefinitions="*, 1">
+        <Grid Grid.Column="0" RowDefinitions="auto, *">
+            <VerticalStackLayout Grid.Row="0">
+                <HorizontalStackLayout VerticalOptions="Center">
+                    <Button Clicked="AddNewConfigurationButton_Clicked" StyleClass="iconButton, addNewConfigurationButton" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+            <ListView
+                Grid.Row="1"
+                ItemSelected="ConfigurationListView_ItemSelected"
+                ItemsSource="{Binding ConfigurationListItems}"
+                SelectedItem="{Binding ActiveConfigurationListItem}"
+                StyleClass="configurationList">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid
+                                ColumnDefinitions="*"
+                                RowDefinitions="*"
+                                StyleClass="configurationListItem">
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    StyleClass="configurationListItemName"
+                                    Text="{Binding Name, Converter={StaticResource ConfigurationNameFallbackConverter}}" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
+        <BoxView
+            Grid.Column="1"
+            Margin="0,0,0,0"
+            VerticalOptions="Fill"
+            WidthRequest="1"
+            Color="{StaticResource Gray600}" />
+    </Grid>
+</ContentView>

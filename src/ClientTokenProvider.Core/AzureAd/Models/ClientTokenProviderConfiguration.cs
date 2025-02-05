@@ -1,6 +1,7 @@
 ﻿namespace ClientTokenProvider.Core.AzureAd.Models;
 
-public sealed class ClientTokenProviderConfiguration : IClientTokenProviderConfiguration
+public sealed class ClientTokenProviderConfiguration :
+    IClientTokenProviderConfiguration
 {
     public string AuthorityUri { get; set; } = string.Empty;
 
