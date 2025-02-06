@@ -68,7 +68,7 @@ public partial class ConfigurationManagerViewModel(
         if (configurationResult.IsFailure)
         {
             WeakReferenceMessenger.Default.Send(
-                new GettingConfigurationsFailedMessage());
+                new AddingConfigurationFailedMessage());
 
             return;
         }
