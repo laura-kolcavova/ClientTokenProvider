@@ -1,5 +1,5 @@
-﻿using ClientTokenProvider.Business.Persistence;
-using ClientTokenProvider.Business.Persistence.Services;
+﻿using ClientTokenProvider.Business.Persistence.Shared;
+using ClientTokenProvider.Business.Persistence.Shared.Services;
 using ClientTokenProvider.Business.Shared.Services;
 using ClientTokenProvider.Business.Shared.Services.Abstractions;
 using Microsoft.Extensions.DependencyInjection;

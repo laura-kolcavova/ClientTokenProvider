@@ -1,9 +1,9 @@
-﻿using ClientTokenProvider.Business.Persistence.EntityTypeConfigurations;
+﻿using ClientTokenProvider.Business.Persistence.Shared.EntityTypeConfigurations;
 using ClientTokenProvider.Business.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace ClientTokenProvider.Business.Persistence;
+namespace ClientTokenProvider.Business.Persistence.Shared;
 
 public sealed class ConfigurationDbContext :
     DbContext

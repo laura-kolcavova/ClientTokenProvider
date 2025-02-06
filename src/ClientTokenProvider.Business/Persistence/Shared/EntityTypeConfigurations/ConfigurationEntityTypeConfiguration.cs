@@ -1,9 +1,9 @@
-﻿using ClientTokenProvider.Business.Persistence.Extensions;
+﻿using ClientTokenProvider.Business.Persistence.Shared.Extensions;
 using ClientTokenProvider.Business.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ClientTokenProvider.Business.Persistence.EntityTypeConfigurations;
+namespace ClientTokenProvider.Business.Persistence.Shared.EntityTypeConfigurations;
 
 internal sealed class ConfigurationEntityTypeConfiguration :
     IEntityTypeConfiguration<ConfigurationModel>

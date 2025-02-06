@@ -1,4 +1,4 @@
-﻿using ClientTokenProvider.Business.Persistence;
+﻿using ClientTokenProvider.Business.Persistence.Shared;
 
 namespace ClientTokenProvider;
 

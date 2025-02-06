@@ -3,7 +3,7 @@ using ClientTokenProvider.Business.Shared.Models.Abstractions;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.Json;
 
-namespace ClientTokenProvider.Business.AzureAd.Services;
+namespace ClientTokenProvider.Business.Persistence.AzureAd.Converters;
 
 internal class ConfigurationDataConverter :
     ValueConverter<IConfigurationData, string>
@@ -18,8 +18,7 @@ internal class ConfigurationDataConverter :
 
     private static string Serialize(
         IConfigurationData configurationData,
-        JsonSerializerOptions? jsonSerializerOptions = null
-        )
+        JsonSerializerOptions? jsonSerializerOptions = null)
     {
         if (configurationData is not AzureAdConfigurationData azureAdConfigurationData)
         {
