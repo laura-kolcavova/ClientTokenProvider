@@ -35,7 +35,7 @@ internal sealed class ConfigurationEntityTypeConfiguration :
         builder
             .Property(configuration => configuration.Data)
             .HasColumnType("TEXT")
-            .HasConfigurationDataConversion()
+            .HasAzureAdConfigurationDataConversion()
             .IsRequired();
     }
 }

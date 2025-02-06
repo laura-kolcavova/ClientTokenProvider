@@ -5,7 +5,8 @@ using ClientTokenProvider.Shared.Services.Abstractions;
 
 namespace ClientTokenProvider.Shared.Services;
 
-internal sealed class ConfigurationDataMapper(IServiceProvider serviceProvider) :
+internal sealed class ConfigurationDataMapper(
+    IServiceProvider serviceProvider) :
     IConfigurationDataMapper
 {
     public IConfigurationDataBindableModel ToBindableModel(IConfigurationData source, ConfigurationKind sourceConfigurationKind)
