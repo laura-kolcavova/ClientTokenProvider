@@ -1,4 +1,5 @@
-﻿using ClientTokenProvider.Business.Persistence.Shared.Extensions;
+﻿using ClientTokenProvider.Business.Persistence.AzureAd.Extensions;
+using ClientTokenProvider.Business.Persistence.Shared.Extensions;
 using ClientTokenProvider.Business.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
