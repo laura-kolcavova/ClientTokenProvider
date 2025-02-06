@@ -197,6 +197,22 @@ public partial class ConfigurationManagerViewModel
 
         ActiveConfigurationDetail = activeConfigurationDetail;
     }
+    private void RemoveConfigurationDetail_Internal(
+       Guid configurationId)
+    {
+        var configurationDetail = ConfigurationDetails
+            .FirstOrDefault(configurationDetail => configurationDetail.Id == configurationId);
 
+        if (configurationDetail is null)
+        {
+            return;
+        }
 
+        ConfigurationDetails.Remove(configurationDetail);
+
+        if (ActiveConfigurationDetail == configurationDetail)
+        {
+            ActiveConfigurationDetail = null;
+        }
+    }
 }

@@ -15,22 +15,22 @@ public sealed record AccessTokenResult
     }
 
     public static AccessTokenResult None() =>
-       new AccessTokenResult(
+       new(
            AccessTokenResultState.None,
            null);
 
     public static AccessTokenResult Succeeded(string text) =>
-        new AccessTokenResult(
+        new(
             AccessTokenResultState.Succeeded,
             text);
 
     public static AccessTokenResult Failed(string text) =>
-        new AccessTokenResult(
+        new(
             AccessTokenResultState.Failed,
             text);
 
     public static AccessTokenResult Cancelled() =>
-        new AccessTokenResult(
+        new(
             AccessTokenResultState.Cancelled,
             null);
 }

@@ -18,4 +18,8 @@ public interface IConfigurationRepository
     public Task Update(
         ConfigurationModel configuration,
         CancellationToken cancellationToken);
+
+    public Task Delete(
+       ConfigurationModel configuration,
+       CancellationToken cancellationToken);
 }

@@ -61,7 +61,13 @@
                                     Grid.Row="0"
                                     Grid.Column="0"
                                     StyleClass="configurationListItemName"
-                                    Text="{Binding Name, Converter={StaticResource ConfigurationNameFallbackConverter}}" />
+                                    Text="{Binding Name, Converter={StaticResource ConfigurationNameFallbackConverter}}">
+                                    <FlyoutBase.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Clicked="RemoveConfigurationMenuItem_Clicked" Text="Remove" />
+                                        </MenuFlyout>
+                                    </FlyoutBase.ContextFlyout>
+                                </Label>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

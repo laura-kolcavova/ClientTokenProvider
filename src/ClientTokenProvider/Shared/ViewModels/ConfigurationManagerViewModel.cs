@@ -161,7 +161,7 @@ public partial class ConfigurationManagerViewModel(
         {
             logger.LogError(
                ex,
-               "An unexpected error occurred while renaming configuration data");
+               "An unexpected error occurred while renaming a configuration");
 
             return Result.Failure("An unexpected error occurred");
         }
@@ -237,6 +237,38 @@ public partial class ConfigurationManagerViewModel(
                "An unexpected error occurred while saving configuration data");
 
             return AccessTokenResult.Failed(ex.Message);
+        }
+    }
+
+    private async Task<Result> RemoveConfiguration_Internal(
+        Guid configurationId,
+        CancellationToken cancellationToken)
+    {
+        // Maybe it will be better to have REST ConfigurationService
+        try
+        {
+            var configuration = _configurations.FirstOrDefault(
+                configuration => configuration.Id == configurationId);
+
+            if (configuration is null)
+            {
+                return Result.Failure("Configuration not found");
+            }
+
+            await configurationRepository.Delete(
+                configuration,
+                cancellationToken);
+
+            return Result.Success();
+
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(
+               ex,
+               "An unexpected error occurred while deleting a configuration");
+
+            return Result.Failure("An unexpected error occurred");
         }
     }
 }

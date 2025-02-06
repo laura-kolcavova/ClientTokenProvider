@@ -96,6 +96,12 @@ public partial class ConfigurationDetailPresenter :
     [RelayCommand]
     private void HandleConfigurationDataChangedInternal()
     {
+        // When ConfigurationDetail is removed this event will be called with null value
+        if (ConfigurationDetail is null)
+        {
+            return;
+        }
+
         HandleConfigurationDataChangedCommand?.Execute(ConfigurationDetail);
     }
 

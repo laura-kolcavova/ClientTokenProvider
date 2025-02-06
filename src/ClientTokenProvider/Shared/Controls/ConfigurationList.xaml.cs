@@ -26,6 +26,11 @@ public partial class ConfigurationList : ContentView
         typeof(IRelayCommand<ConfigurationListItemBindableModel>),
         typeof(ConfigurationList));
 
+    public static readonly BindableProperty RemoveConfigurationListItemCommandProperty = BindableProperty.Create(
+        nameof(RemoveConfigurationListItemCommand),
+        typeof(IAsyncRelayCommand<ConfigurationListItemBindableModel>),
+        typeof(ConfigurationList));
+
     public IEnumerable<ConfigurationListItemBindableModel> ConfigurationListItems
     {
         get => (IEnumerable<ConfigurationListItemBindableModel>)GetValue(ConfigurationListItemsProperty);
@@ -50,6 +55,12 @@ public partial class ConfigurationList : ContentView
         set => SetValue(SetActiveConfigurationListItemCommandProperty, value);
     }
 
+    public IAsyncRelayCommand<ConfigurationListItemBindableModel> RemoveConfigurationListItemCommand
+    {
+        get => (IAsyncRelayCommand<ConfigurationListItemBindableModel>)GetValue(RemoveConfigurationListItemCommandProperty);
+        set => SetValue(RemoveConfigurationListItemCommandProperty, value);
+    }
+
     public ConfigurationList()
     {
         InitializeComponent();
@@ -70,5 +81,13 @@ public partial class ConfigurationList : ContentView
         }
 
         SetActiveConfigurationListItemCommand?.Execute(configurationListItem);
+    }
+
+    private void RemoveConfigurationMenuItem_Clicked(object sender, EventArgs e)
+    {
+        var menuItem = (MenuFlyoutItem)sender;
+        var selectedItem = (ConfigurationListItemBindableModel)menuItem.BindingContext;
+
+        RemoveConfigurationListItemCommand?.Execute(selectedItem);
     }
 }
