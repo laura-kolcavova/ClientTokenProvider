@@ -24,6 +24,7 @@
                 ActiveConfigurationListItem="{Binding ActiveConfigurationListItem}"
                 AddNewConfigurationCommand="{Binding AddNewConfigurationCommand}"
                 ConfigurationListItems="{Binding ConfigurationListItems}"
+                RemoveConfigurationListItemCommand="{Binding RemoveConfigurationListItemCommand}"
                 SetActiveConfigurationListItemCommand="{Binding SetActiveConfigurationListItemCommand}" />
 
             <Grid

@@ -1,8 +1,10 @@
 ﻿using ClientTokenProvider.Business.Shared.Models;
 using ClientTokenProvider.Shared.BindableModels;
 using ClientTokenProvider.Shared.Extensions;
+using ClientTokenProvider.Shared.Messages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.ObjectModel;
 
 namespace ClientTokenProvider.Shared.ViewModels;
@@ -20,6 +22,29 @@ public partial class ConfigurationManagerViewModel
     {
         SetActiveConfigurationListItem_Internal(configurationListItem);
         SetActiveConfigurationDetail_Internal(configurationListItem.Id);
+    }
+
+    [RelayCommand(
+       IncludeCancelCommand = true,
+       AllowConcurrentExecutions = false)]
+    private async Task RemoveConfigurationListItem(
+        ConfigurationListItemBindableModel configurationListItem,
+        CancellationToken cancellationToken)
+    {
+        var removeResult = await RemoveConfiguration_Internal(
+            configurationListItem.Id,
+            cancellationToken);
+
+        if (removeResult.IsFailure)
+        {
+            WeakReferenceMessenger.Default.Send(
+                new DeletingConfigurationFailedMessage());
+
+            return;
+        }
+
+        RemoveConfigurationListItem_Internal(configurationListItem);
+        RemoveConfigurationDetail_Internal(configurationListItem.Id);
     }
 
     private ConfigurationListItemBindableModel CreateAndAddConfigurationListItem_Internal(
@@ -49,5 +74,11 @@ public partial class ConfigurationManagerViewModel
         {
             configurationListItem.Name = newName;
         }
+    }
+
+    private void RemoveConfigurationListItem_Internal(
+        ConfigurationListItemBindableModel configurationListItem)
+    {
+        ConfigurationListItems.Remove(configurationListItem);
     }
 }

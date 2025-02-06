@@ -29,6 +29,13 @@ internal sealed class ConfigurationRepositoryMock :
         return Task.CompletedTask;
     }
 
+    public Task Delete(ConfigurationModel configuration, CancellationToken cancellationToken)
+    {
+        _configurations.Remove(configuration);
+
+        return Task.CompletedTask;
+    }
+
     public async Task<ConfigurationModel?> Get(
         Guid configurationId,
         CancellationToken cancellationToken)
