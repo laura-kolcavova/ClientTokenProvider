@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClientTokenProvider.Business.Persistence;
 
-internal sealed class ConfigurationDbContext :
+public sealed class ConfigurationDbContext :
     DbContext
 {
     private readonly string _connectionString;
@@ -19,6 +19,11 @@ internal sealed class ConfigurationDbContext :
     {
         _connectionString = connectionString;
         _useDevelopmentLogging = useDevelopmentLogging;
+    }
+
+    public void Init()
+    {
+        Database.EnsureCreated();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
