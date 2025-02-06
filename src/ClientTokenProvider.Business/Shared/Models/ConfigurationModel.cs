@@ -12,7 +12,18 @@ public sealed class ConfigurationModel
 
     public IConfigurationData Data { get; private set; }
 
-    public ConfigurationModel(Guid id, string name, ConfigurationKind kind, IConfigurationData data)
+    // EF Core constructor
+    private ConfigurationModel()
+    {
+        Name = null!;
+        Data = null!;
+    }
+
+    public ConfigurationModel(
+        Guid id,
+        string name,
+        ConfigurationKind kind,
+        IConfigurationData data)
     {
         Id = id;
         Name = name;
@@ -20,7 +31,10 @@ public sealed class ConfigurationModel
         Data = data;
     }
 
-    public ConfigurationModel(Guid id, ConfigurationKind kind, IConfigurationData data) :
+    public ConfigurationModel(
+        Guid id,
+        ConfigurationKind kind,
+        IConfigurationData data) :
         this(id, string.Empty, kind, data)
     {
     }

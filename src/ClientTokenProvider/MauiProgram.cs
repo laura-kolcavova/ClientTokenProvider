@@ -27,12 +27,24 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
+        var isDevelopment = false;
+
 #if DEBUG
+        isDevelopment = true;
+
         builder.Logging.AddDebug();
 #endif
 
+        var folder = Environment.SpecialFolder.LocalApplicationData;
+        var path = Environment.GetFolderPath(folder);
+        var dbPath = System.IO.Path.Join(path, "Configurations.sqlite3");
+
+        var dbConnectionString = $"Data Source={dbPath}";
+
         services
-            .AddClientTokenProviderBusinessShared()
+            .AddClientTokenProviderBusinessShared(
+                dbConnectionString,
+                isDevelopment)
             .AddClientTokenProviderShared();
 
         services

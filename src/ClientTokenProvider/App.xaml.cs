@@ -1,13 +1,17 @@
-﻿namespace ClientTokenProvider;
+﻿using ClientTokenProvider.Business.Persistence.Shared;
+
+namespace ClientTokenProvider;
 
 public partial class App : Application
 {
-    public App()
+    public App(ConfigurationDbContext configurationDbContext)
     {
         InitializeComponent();
 
         UserAppTheme = AppTheme.Dark;
         MainPage = new AppShell();
+
+        configurationDbContext.Init();
     }
 
     private void SetUpEntry()
