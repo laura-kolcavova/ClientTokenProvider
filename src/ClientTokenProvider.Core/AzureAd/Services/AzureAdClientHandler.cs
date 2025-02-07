@@ -3,7 +3,6 @@ using ClientTokenProvider.Core.AzureAd.Exceptions;
 using ClientTokenProvider.Core.AzureAd.Models;
 using ClientTokenProvider.Core.AzureAd.Services.Abstractions;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -29,70 +28,66 @@ internal sealed class AzureAdClientHandler : IAzureAdClientHandler
     {
         using (var httpClient = _httpClientFactory.CreateClient())
         {
-            using (var request = new HttpRequestMessage())
+            var requestUri = new Uri(
+                Configuration.AuthorityUri,
+                UriKind.Absolute);
+
+            var requestBody = new FormUrlEncodedContent(new[]
             {
-                request.Method = new HttpMethod("POST");
-                request.RequestUri = new Uri(Configuration.AuthorityUri, UriKind.Absolute);
+                new KeyValuePair<string, string>("grant_type", "client_credentials"),
+                new KeyValuePair<string, string>("scope", scope),
+                new KeyValuePair<string, string>("audience", Configuration.Audience),
+                new KeyValuePair<string, string>("client_id", Configuration.ClientId),
+                new KeyValuePair<string, string>("client_secret", Configuration.ClientSecret ?? string.Empty),
+            });
 
-                var bodyRequest = GetClientTokenRequest.Create(
-                    scope,
-                    Configuration.Audience,
-                    Configuration.ClientId,
-                    Configuration.ClientSecret);
+            var response = await httpClient.PostAsync(
+                requestUri,
+                requestBody,
+                cancellationToken);
 
-                var bodyRequestJson = JsonSerializer.Serialize(bodyRequest);
+            try
+            {
+                var status = (int)response.StatusCode;
 
-                request.Content = new StringContent(bodyRequestJson);
+                var headers = response.Headers.ToDictionary(
+                    keySelector => keySelector.Key,
+                    valueSelector => valueSelector.Value);
 
-                request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-
-                var response = await httpClient.SendAsync(
-                    request,
-                    HttpCompletionOption.ResponseHeadersRead,
-                    cancellationToken);
-
-                try
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var status = (int)response.StatusCode;
-
-                    var headers = response.Headers.ToDictionary(
-                        keySelector => keySelector.Key,
-                        valueSelector => valueSelector.Value);
-
-                    if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        var responseObject = await ReadAsJson<GetClientTokenResponse>(
-                            response,
-                            headers,
-                            cancellationToken)
-                            ?? throw new ClientHandlerException(
-                                "Response is null.",
-                                status,
-                                string.Empty,
-                                headers,
-                                null);
-
-                        return responseObject;
-                    }
-                    else
-                    {
-                        var text = response.Content is not null
-                            ? await response.Content.ReadAsStringAsync(cancellationToken)
-                            : null;
-
-                        throw new ClientHandlerException(
-                            $"The HTTP status code of the response was not expected {status}",
+                    var responseObject = await ReadAsJson<GetClientTokenResponse>(
+                        response,
+                        headers,
+                        cancellationToken)
+                        ?? throw new ClientHandlerException(
+                            "Response is null.",
                             status,
-                            text,
+                            string.Empty,
                             headers,
                             null);
-                    }
+
+                    return responseObject;
                 }
-                finally
+                else
                 {
-                    response.Dispose();
+                    var text = response.Content is not null
+                        ? await response.Content.ReadAsStringAsync(cancellationToken)
+                        : null;
+
+                    throw new ClientHandlerException(
+                        $"The HTTP status code of the response was not expected {status}",
+                        status,
+                        text,
+                        headers,
+                        null);
                 }
             }
+            finally
+            {
+                response.Dispose();
+            }
+
         }
     }
 

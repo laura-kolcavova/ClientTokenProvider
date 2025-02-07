@@ -163,6 +163,9 @@ public partial class ConfigurationManagerViewModel
             configuration.Name,
             configurationData);
 
+        configurationDetail.CanGetAccessToken = configurationData
+            .AreDataValid();
+
         configurationDataBackupStore.Set(
             configurationDetail.Id,
             configurationDetail.Data);
