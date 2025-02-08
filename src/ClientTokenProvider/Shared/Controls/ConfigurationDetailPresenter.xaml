@@ -148,18 +148,15 @@
                 Color="{StaticResource Gray600}" />
 
             <Grid Grid.Column="1" RowDefinitions="auto, *">
-                <VerticalStackLayout Grid.Row="0" StyleClass="container">
+                <VerticalStackLayout Grid.Row="0" Padding="20,10">
                     <Label Grid.Row="0" Padding="0,5,0,0">Access token</Label>
                 </VerticalStackLayout>
 
-                <FlexLayout
+                <Grid
                     Grid.Row="1"
-                    AlignContent="Center"
-                    AlignItems="Center"
-                    IsVisible="{Binding ConfigurationDetail.IsLoading}"
-                    JustifyContent="Center"
-                    StyleClass="flexContainer">
-                    <VerticalStackLayout StyleClass="alertWrapper">
+                    Padding="20,10"
+                    IsVisible="{Binding ConfigurationDetail.IsLoading}">
+                    <VerticalStackLayout StyleClass="alertWrapper" VerticalOptions="Center">
                         <sharedControls:CircularSpinner
                             Enabled="{Binding ConfigurationDetail.IsLoading}"
                             PrimaryColor="{StaticResource Primary}"
@@ -172,20 +169,20 @@
                             Sending request ...
                         </Label>
                     </VerticalStackLayout>
-                </FlexLayout>
+                </Grid>
 
-                <FlexLayout
+                <Grid
                     Grid.Row="1"
+                    Padding="20,10"
                     toolkit:StateContainer.CanStateChange="{Binding CanStateChange}"
                     toolkit:StateContainer.CurrentState="{Binding ConfigurationDetail.AccessTokenResult.State, Converter={StaticResource EnumToStringConverter}}"
-                    AlignContent="Center"
-                    AlignItems="Center"
-                    IsVisible="{Binding ConfigurationDetail.IsLoading, Converter={StaticResource InvertedBoolConverter}}"
-                    JustifyContent="Center"
-                    StyleClass="flexContainer">
+                    IsVisible="{Binding ConfigurationDetail.IsLoading, Converter={StaticResource InvertedBoolConverter}}">
 
                     <toolkit:StateContainer.StateViews>
-                        <VerticalStackLayout toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:AccessTokenResultState.None}, Converter={StaticResource EnumToStringConverter}}" StyleClass="alertWrapper">
+                        <VerticalStackLayout
+                            toolkit:StateView.StateKey="{Binding Source={x:Static sharedModels:AccessTokenResultState.None}, Converter={StaticResource EnumToStringConverter}}"
+                            StyleClass="alertWrapper"
+                            VerticalOptions="Center">
                             <Image Source="rocket.png" StyleClass="alertImage" />
 
                             <Label StyleClass="alertMessage">
@@ -193,16 +190,17 @@
                             </Label>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:AccessTokenResultState.Cancelled}, Converter={StaticResource EnumToStringConverter}}" StyleClass="alertWrapper" />
-
-                        <VerticalStackLayout toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:AccessTokenResultState.Failed}, Converter={StaticResource EnumToStringConverter}}" StyleClass="alertWrapper">
+                        <VerticalStackLayout
+                            toolkit:StateView.StateKey="{Binding Source={x:Static sharedModels:AccessTokenResultState.Failed}, Converter={StaticResource EnumToStringConverter}}"
+                            StyleClass="alertWrapper"
+                            VerticalOptions="Center">
                             <Image Source="repair.png" StyleClass="alertImage" />
 
                             <Label StyleClass="alertMessage">
                                 Could not send request
                             </Label>
 
-                            <Border StyleClass="errorWrapper">
+                            <Border HorizontalOptions="Center" StyleClass="errorWrapper">
                                 <FlexLayout>
                                     <Label
                                         Padding="0,0,10,0"
@@ -212,7 +210,7 @@
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Error: " />
-                                                <Span Text="{Binding ConfigurationDetail.AccessTokenResult.Text}" />
+                                                <Span Text="{Binding ConfigurationDetail.AccessTokenResult.ErrorMessage}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -232,11 +230,14 @@
                             </Border>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:AccessTokenResultState.Succeeded}, Converter={StaticResource EnumToStringConverter}}">
-                            <Label Text="{Binding ConfigurationDetail.AccessTokenResult.Text}" />
-                        </VerticalStackLayout>
+                        <Grid toolkit:StateView.StateKey="{Binding Source={x:Static sharedModels:AccessTokenResultState.Succeeded}, Converter={StaticResource EnumToStringConverter}}">
+                            <sharedControls:JwtVisualizer
+                                DecodedJwtToken="{Binding ConfigurationDetail.AccessTokenResult.DecodedToken}"
+                                JwtToken="{Binding ConfigurationDetail.AccessTokenResult.Token}"
+                                Mode="{Binding ConfigurationDetail.AccessTokenVisualizerMode}" />
+                        </Grid>
                     </toolkit:StateContainer.StateViews>
-                </FlexLayout>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>

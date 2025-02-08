@@ -25,6 +25,9 @@ public class AzureAdClientTokenProviderTests
 
         var response = new GetClientTokenResponse
         {
+            TokenType = "Bearer",
+            ExpiresIn = 3599,
+            ExtExpiresIn = 3599,
             AccessToken = "test_access_token"
         };
 
@@ -56,6 +59,9 @@ public class AzureAdClientTokenProviderTests
 
         var response = new GetClientTokenResponse
         {
+            TokenType = "Bearer",
+            ExpiresIn = 3599,
+            ExtExpiresIn = 3599,
             AccessToken = "test_access_token"
         };
 

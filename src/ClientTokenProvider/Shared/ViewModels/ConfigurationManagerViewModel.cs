@@ -1,4 +1,5 @@
-﻿using ClientTokenProvider.Business.Shared.Models;
+﻿using ClientTokenProvider.Business.Shared.Errors;
+using ClientTokenProvider.Business.Shared.Models;
 using ClientTokenProvider.Business.Shared.Models.Abstractions;
 using ClientTokenProvider.Business.Shared.Services.Abstractions;
 using ClientTokenProvider.Core.AzureAd.Exceptions;
@@ -18,6 +19,7 @@ public partial class ConfigurationManagerViewModel(
     IConfigurationDataMapper configurationDataMapper,
     IConfigurationDataBackupStore configurationDataBackupStore,
     IClientTokenProviderFactory clientTokenProviderFactory,
+    IJwtDecoder jwtDecoder,
     ILogger<ConfigurationManagerViewModel> logger) :
     ViewModelBase
 {
@@ -88,7 +90,7 @@ public partial class ConfigurationManagerViewModel(
         SetActiveConfigurationDetail_Internal(configurationDetail);
     }
 
-    private async Task<Result<IReadOnlyCollection<ConfigurationModel>>> GetAllConfigurations_Internal(
+    private async Task<Result<IReadOnlyCollection<ConfigurationModel>, Error>> GetAllConfigurations_Internal(
     CancellationToken cancellationToken)
     {
         // Maybe it will be better to have REST ConfigurationService
@@ -97,7 +99,7 @@ public partial class ConfigurationManagerViewModel(
             var configurations = await configurationRepository.GetAll(
                 cancellationToken);
 
-            return Result.Success(configurations);
+            return Result.Success<IReadOnlyCollection<ConfigurationModel>, Error>(configurations);
         }
         catch (Exception ex)
         {
@@ -105,11 +107,11 @@ public partial class ConfigurationManagerViewModel(
                ex,
                "An unexpected error occurred while getting all configurations");
 
-            return Result.Failure<IReadOnlyCollection<ConfigurationModel>>("An unexpected error occurred");
+            return GeneralErrors.General.Unexpected();
         }
     }
 
-    private async Task<Result<ConfigurationModel>> CreateConfiguration_Internal(
+    private async Task<Result<ConfigurationModel, Error>> CreateConfiguration_Internal(
         ConfigurationKind configurationKind,
         CancellationToken cancellationToken)
     {
@@ -131,11 +133,11 @@ public partial class ConfigurationManagerViewModel(
                ex,
                "An unexpected error occurred while creating a configuration");
 
-            return Result.Failure<ConfigurationModel>("An unexpected error occurred");
+            return GeneralErrors.General.Unexpected();
         }
     }
 
-    private async Task<Result> RenameConfiguration_Internal(
+    private async Task<UnitResult<Error>> RenameConfiguration_Internal(
         Guid configurationId,
         string newName,
         CancellationToken cancellationToken)
@@ -148,14 +150,14 @@ public partial class ConfigurationManagerViewModel(
 
             if (configuration is null)
             {
-                return Result.Failure("Configuration not found");
+                return ConfigurationErrors.Configuration.NotFound();
             }
 
             configuration.Rename(newName);
 
             await configurationRepository.Update(configuration, cancellationToken);
 
-            return Result.Success();
+            return UnitResult.Success<Error>();
         }
         catch (Exception ex)
         {
@@ -163,11 +165,11 @@ public partial class ConfigurationManagerViewModel(
                ex,
                "An unexpected error occurred while renaming a configuration");
 
-            return Result.Failure("An unexpected error occurred");
+            return GeneralErrors.General.Unexpected();
         }
     }
 
-    private async Task<Result> SaveConfigurationData_Internal(
+    private async Task<UnitResult<Error>> SaveConfigurationData_Internal(
         Guid configurationId,
         IConfigurationData configurationData,
         CancellationToken cancellationToken)
@@ -181,7 +183,7 @@ public partial class ConfigurationManagerViewModel(
 
             if (configuration is null)
             {
-                return Result.Failure("Configuration not found");
+                return ConfigurationErrors.Configuration.NotFound();
             }
 
             configuration.UpdateData(configurationData);
@@ -189,7 +191,7 @@ public partial class ConfigurationManagerViewModel(
             // Maybe it will be better to have REST ConfigurationService
             await configurationRepository.Update(configuration, cancellationToken);
 
-            return Result.Success();
+            return UnitResult.Success<Error>();
         }
         catch (Exception ex)
         {
@@ -197,11 +199,11 @@ public partial class ConfigurationManagerViewModel(
                ex,
                "An unexpected error occurred while saving configuration data");
 
-            return Result.Failure("An unexpected error occurred");
+            return GeneralErrors.General.Unexpected();
         }
     }
 
-    private async Task<AccessTokenResult> GetAccessToken_Internal(
+    private async Task<Result<string, Error>> GetAccessToken_Internal(
         ConfigurationKind configurationKind,
         IConfigurationData configurationData,
         CancellationToken cancellationToken)
@@ -219,16 +221,16 @@ public partial class ConfigurationManagerViewModel(
                 configurationData.Scope,
                 cancellationToken);
 
-            return AccessTokenResult.Succeeded(accessToken);
+            return accessToken;
 
         }
         catch (ClientHandlerException clientHandlerException)
         {
-            return AccessTokenResult.Failed(clientHandlerException.Message);
+            return AccessTokenErrors.AccessToken.RequestFailed(clientHandlerException.Message);
         }
         catch (OperationCanceledException)
         {
-            return AccessTokenResult.Cancelled();
+            return GeneralErrors.General.Cancelled();
         }
         catch (Exception ex)
         {
@@ -236,11 +238,11 @@ public partial class ConfigurationManagerViewModel(
                ex,
                "An unexpected error occurred while saving configuration data");
 
-            return AccessTokenResult.Failed(ex.Message);
+            return GeneralErrors.General.Unexpected();
         }
     }
 
-    private async Task<Result> RemoveConfiguration_Internal(
+    private async Task<UnitResult<Error>> RemoveConfiguration_Internal(
         Guid configurationId,
         CancellationToken cancellationToken)
     {
@@ -252,14 +254,14 @@ public partial class ConfigurationManagerViewModel(
 
             if (configuration is null)
             {
-                return Result.Failure("Configuration not found");
+                return ConfigurationErrors.Configuration.NotFound();
             }
 
             await configurationRepository.Delete(
                 configuration,
                 cancellationToken);
 
-            return Result.Success();
+            return UnitResult.Success<Error>();
 
         }
         catch (Exception ex)
@@ -268,7 +270,7 @@ public partial class ConfigurationManagerViewModel(
                ex,
                "An unexpected error occurred while deleting a configuration");
 
-            return Result.Failure("An unexpected error occurred");
+            return GeneralErrors.General.Unexpected();
         }
     }
 }

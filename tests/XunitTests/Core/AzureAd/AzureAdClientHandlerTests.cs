@@ -25,6 +25,9 @@ public sealed class AzureAdClientHandlerTests
 
         var response = new GetClientTokenResponse
         {
+            TokenType = "Bearer",
+            ExpiresIn = 3599,
+            ExtExpiresIn = 3599,
             AccessToken = "test_token"
         };
 
