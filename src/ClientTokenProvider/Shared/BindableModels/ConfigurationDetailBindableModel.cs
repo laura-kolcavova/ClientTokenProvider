@@ -1,5 +1,6 @@
 ﻿using ClientTokenProvider.Business.Shared.Models;
 using ClientTokenProvider.Shared.BindableModels.Abstractions;
+using ClientTokenProvider.Shared.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ClientTokenProvider.Shared.BindableModels;
@@ -23,10 +24,13 @@ public partial class ConfigurationDetailBindableModel :
     private bool _canGetAccessToken;
 
     [ObservableProperty]
+    private bool _isLoading;
+
+    [ObservableProperty]
     private AccessTokenResult _accessTokenResult;
 
     [ObservableProperty]
-    private bool _isLoading;
+    private JwtVisualizerMode _accessTokenVisualizerMode;
 
     public ConfigurationDetailBindableModel(
         Guid id,
@@ -38,6 +42,8 @@ public partial class ConfigurationDetailBindableModel :
         Kind = kind;
         Name = name;
         Data = data;
-        AccessTokenResult = AccessTokenResult.None();
+
+        AccessTokenResult = Models.AccessTokenResult.None();
+        AccessTokenVisualizerMode = JwtVisualizerMode.JwtDecoded;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace ClientTokenProvider.Business.Shared.Models;
+﻿namespace ClientTokenProvider.Shared.Models;
 
 public enum AccessTokenResultState
 {
@@ -7,6 +7,4 @@ public enum AccessTokenResultState
     Succeeded,
 
     Failed,
-
-    Cancelled
 }

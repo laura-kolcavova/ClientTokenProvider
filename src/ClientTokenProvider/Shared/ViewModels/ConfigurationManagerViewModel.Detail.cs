@@ -1,4 +1,5 @@
-﻿using ClientTokenProvider.Business.Shared.Models;
+﻿using ClientTokenProvider.Business.Shared.Errors;
+using ClientTokenProvider.Business.Shared.Models;
 using ClientTokenProvider.Shared.BindableModels;
 using ClientTokenProvider.Shared.Messages;
 using ClientTokenProvider.Shared.Models;
@@ -122,19 +123,32 @@ public partial class ConfigurationManagerViewModel
 
         configurationDetail.IsLoading = true;
 
-        var accessTokenResult = await GetAccessToken_Internal(
+        var result = await GetAccessToken_Internal(
             configurationDetail.Kind,
             configurationData,
             cancellationToken);
 
         configurationDetail.IsLoading = false;
 
-        if (accessTokenResult.State == AccessTokenResultState.Cancelled)
+        if (result.IsFailure && result.Error.ErrorType == ErrorType.Cancelled)
         {
             return;
         }
 
-        configurationDetail.AccessTokenResult = accessTokenResult;
+        if (result.IsFailure)
+        {
+            configurationDetail.AccessTokenResult = AccessTokenResult.Failed(
+                    result.Error.Message);
+
+            return;
+        }
+
+        var token = result.Value;
+        var decodedToken = jwtDecoder.Decode(token);
+
+        configurationDetail.AccessTokenResult = AccessTokenResult.Succeeded(
+                token,
+                decodedToken);
     }
 
     [RelayCommand]
@@ -145,7 +159,7 @@ public partial class ConfigurationManagerViewModel
         {
             WeakReferenceMessenger.Default.Send(new ShowAccessTokenErrorDetailMessage
             {
-                ErrorMessage = configurationDetail.AccessTokenResult.Text!
+                ErrorMessage = configurationDetail.AccessTokenResult.ErrorMessage!
             });
         }
     }

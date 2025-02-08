@@ -110,6 +110,9 @@
 	  <MauiXaml Update="Shared\Controls\ConfigurationList.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Shared\Controls\JwtVisualizer.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Shared\Views\ConfigurationManagerView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

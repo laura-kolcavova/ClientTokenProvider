@@ -26,7 +26,8 @@ public static class ServiceCollectionExtensions
 
         services
             .AddSingleton<IConfigurationFactory, ConfigurationFactory>()
-            .AddSingleton<IClientTokenProviderFactory, ClientTokenProviderFactory>();
+            .AddSingleton<IClientTokenProviderFactory, ClientTokenProviderFactory>()
+            .AddSingleton<IJwtDecoder, JwtDecoder>();
 
         services
             .AddScoped<IConfigurationRepository, ConfigurationRepositorySqlLite>();

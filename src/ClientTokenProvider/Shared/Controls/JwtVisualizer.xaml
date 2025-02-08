@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="ClientTokenProvider.Shared.Controls.JwtVisualizer"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sharedConverters="clr-namespace:ClientTokenProvider.Shared.Converters"
+    xmlns:sharedModels="clr-namespace:ClientTokenProvider.Shared.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <sharedConverters:EnumToStringConverter x:Key="EnumToStringConverter" />
+
+            <sharedConverters:JsonPrettyConverter x:Key="JsonPrettyConverter" />
+        </ResourceDictionary>
+
+        <Style Class="jwtEdtior" TargetType="Editor">
+            <Setter Property="AutoSize" Value="TextChanges" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="IsReadOnly" Value="True" />
+        </Style>
+    </ContentView.Resources>
+
+    <Grid BindingContext="{x:Reference this}">
+        <Grid toolkit:StateContainer.CanStateChange="{Binding CanStateChange}" toolkit:StateContainer.CurrentState="{Binding Mode, Converter={StaticResource EnumToStringConverter}}">
+            <toolkit:StateContainer.StateViews>
+                <Grid toolkit:StateView.StateKey="{Binding Source={x:Static sharedModels:JwtVisualizerMode.None}, Converter={StaticResource EnumToStringConverter}}">
+                    <ScrollView>
+                        <Editor
+                            StyleClass="jwtEdtior"
+                            Text="{Binding JwtToken, Mode=OneWay}"
+                            TextColor="{StaticResource Blue400}" />
+                    </ScrollView>
+                </Grid>
+
+                <Grid toolkit:StateView.StateKey="{Binding Source={x:Static sharedModels:JwtVisualizerMode.JwtDecoded}, Converter={StaticResource EnumToStringConverter}}" RowDefinitions="*, *, *">
+                    <Editor
+                        Grid.Row="0"
+                        Margin="0,0,0,20"
+                        StyleClass="jwtEdtior"
+                        Text="{Binding DecodedJwtToken.Header, Mode=OneWay, Converter={StaticResource JsonPrettyConverter}}"
+                        TextColor="{StaticResource Red400}" />
+
+                    <Editor
+                        Grid.Row="1"
+                        Margin="0,0,0,20"
+                        StyleClass="jwtEdtior"
+                        Text="{Binding DecodedJwtToken.Payload, Mode=OneWay, Converter={StaticResource JsonPrettyConverter}}"
+                        TextColor="{StaticResource Blue400}" />
+
+                    <Editor
+                        Grid.Row="2"
+                        StyleClass="jwtEdtior"
+                        Text="{Binding DecodedJwtToken.Signature, Mode=OneWay, Converter={StaticResource JsonPrettyConverter}}"
+                        TextColor="{StaticResource Pink400}" />
+                </Grid>
+            </toolkit:StateContainer.StateViews>
+        </Grid>
+    </Grid>
+
+</ContentView>
