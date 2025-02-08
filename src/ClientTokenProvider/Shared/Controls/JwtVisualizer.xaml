@@ -34,28 +34,29 @@
                 </Grid>
 
                 <Grid toolkit:StateView.StateKey="{Binding Source={x:Static sharedModels:JwtVisualizerMode.JwtDecoded}, Converter={StaticResource EnumToStringConverter}}" RowDefinitions="*, *, *">
-                    <Editor
-                        Grid.Row="0"
-                        Margin="0,0,0,20"
-                        StyleClass="jwtEdtior"
-                        Text="{Binding DecodedJwtToken.Header, Mode=OneWay, Converter={StaticResource JsonPrettyConverter}}"
-                        TextColor="{StaticResource Red400}" />
+                    <ScrollView Grid.Row="0" Margin="0,0,0,20">
+                        <Editor
+                            StyleClass="jwtEdtior"
+                            Text="{Binding DecodedJwtToken.Header, Mode=OneWay, Converter={StaticResource JsonPrettyConverter}}"
+                            TextColor="{StaticResource Red400}" />
+                    </ScrollView>
 
-                    <Editor
-                        Grid.Row="1"
-                        Margin="0,0,0,20"
-                        StyleClass="jwtEdtior"
-                        Text="{Binding DecodedJwtToken.Payload, Mode=OneWay, Converter={StaticResource JsonPrettyConverter}}"
-                        TextColor="{StaticResource Blue400}" />
+                    <ScrollView Grid.Row="1" Margin="0,0,0,20">
+                        <Editor
+                            StyleClass="jwtEdtior"
+                            Text="{Binding DecodedJwtToken.Payload, Mode=OneWay, Converter={StaticResource JsonPrettyConverter}}"
+                            TextColor="{StaticResource Blue400}" />
+                    </ScrollView>
 
-                    <Editor
-                        Grid.Row="2"
-                        StyleClass="jwtEdtior"
-                        Text="{Binding DecodedJwtToken.Signature, Mode=OneWay, Converter={StaticResource JsonPrettyConverter}}"
-                        TextColor="{StaticResource Pink400}" />
+                    <ScrollView Grid.Row="2">
+                        <Editor
+                            StyleClass="jwtEdtior"
+                            Text="{Binding DecodedJwtToken.Signature, Mode=OneWay, Converter={StaticResource JsonPrettyConverter}}"
+                            TextColor="{StaticResource Pink400}" />
+                    </ScrollView>
+
                 </Grid>
             </toolkit:StateContainer.StateViews>
         </Grid>
     </Grid>
-
 </ContentView>
