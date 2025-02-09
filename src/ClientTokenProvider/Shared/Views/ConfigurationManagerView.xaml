@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:baseViews="clr-namespace:ClientTokenProvider.Shared.Views.Base"
+    xmlns:bussinessModels="clr-namespace:ClientTokenProvider.Business.Shared.Models;assembly=ClientTokenProvider.Business"
     xmlns:sahredModels="clr-namespace:ClientTokenProvider.Shared.Models"
     xmlns:sharedControls="clr-namespace:ClientTokenProvider.Shared.Controls"
     xmlns:sharedConverters="clr-namespace:ClientTokenProvider.Shared.Converters"
@@ -43,9 +44,24 @@
                         SaveConfigurationDataCommand="{Binding SaveConfigurationDataCommand}"
                         ShowAccessTokenErrorDetailCommand="{Binding ShowAccessTokenErrorDetailCommand}" />
 
-                    <VerticalStackLayout toolkit:StateView.StateKey="{Binding Source={x:Static sahredModels:ConfigurationManagerState.NoContent}, Converter={StaticResource EnumToStringConverter}}">
-                        <Label Text="No content" />
-                    </VerticalStackLayout>
+                    <Grid Padding="15,10" toolkit:StateView.StateKey="{Binding Source={x:Static sahredModels:ConfigurationManagerState.NoContent}, Converter={StaticResource EnumToStringConverter}}">
+
+                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image
+                                Margin="0,0,0,5"
+                                Source="cat.png"
+                                WidthRequest="150" />
+
+                            <Label Margin="0,0,0,20" HorizontalTextAlignment="Center">Select a configuration or</Label>
+
+                            <Button
+                                Command="{Binding AddNewConfigurationCommand}"
+                                CommandParameter="{Binding Source={x:Static bussinessModels:ConfigurationKind.AzureAd}}"
+                                FontAttributes="Bold"
+                                StyleClass="button, btnPrimary"
+                                Text="Create New Configuration" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </toolkit:StateContainer.StateViews>
             </Grid>
         </Grid>
