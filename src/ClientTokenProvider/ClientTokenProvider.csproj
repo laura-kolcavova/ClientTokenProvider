@@ -89,12 +89,24 @@
 	  <Compile Update="AzureAd\Controls\ConfigurationDataForm.xaml.cs">
 	    <DependentUpon>ConfigurationDataForm.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Resources\Strings\Shared\SharedStrings.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>SharedStrings.resx</DependentUpon>
+	  </Compile>
 	  <Compile Update="Shared\Controls\CircularSpinner.xaml.cs">
 	    <DependentUpon>CircularSpinner.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Shared\Views\ConfigurationManagerView.xaml.cs">
 	    <DependentUpon>ConfigurationManagerView.xaml</DependentUpon>
 	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Resources\Strings\Shared\SharedStrings.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>SharedStrings.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>

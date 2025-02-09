@@ -79,10 +79,6 @@
             <Setter Property="TextColor" Value="{StaticResource Orange300}" />
             <Setter Property="FontAttributes" Value="Bold" />
         </Style>
-
-        <Style Class="configurationHeader" TargetType="FlexLayout">
-            <Setter Property="Padding" Value="20" />
-        </Style>
     </ContentView.Resources>
 
     <Grid BindingContext="{x:Reference this}" ColumnDefinitions="*, *">
@@ -148,13 +144,13 @@
                 Color="{StaticResource Gray600}" />
 
             <Grid Grid.Column="1" RowDefinitions="auto, *">
-                <VerticalStackLayout Grid.Row="0" Padding="20,10">
-                    <Label Grid.Row="0" Padding="0,5,0,0">Access token</Label>
+                <VerticalStackLayout Grid.Row="0" Padding="15,10">
+                    <Label Grid.Row="0">Access token</Label>
                 </VerticalStackLayout>
 
                 <Grid
                     Grid.Row="1"
-                    Padding="20,10"
+                    Padding="15,10"
                     IsVisible="{Binding ConfigurationDetail.IsLoading}">
                     <VerticalStackLayout StyleClass="alertWrapper" VerticalOptions="Center">
                         <sharedControls:CircularSpinner
@@ -173,7 +169,7 @@
 
                 <Grid
                     Grid.Row="1"
-                    Padding="20,10"
+                    Padding="15,10"
                     toolkit:StateContainer.CanStateChange="{Binding CanStateChange}"
                     toolkit:StateContainer.CurrentState="{Binding ConfigurationDetail.AccessTokenResult.State, Converter={StaticResource EnumToStringConverter}}"
                     IsVisible="{Binding ConfigurationDetail.IsLoading, Converter={StaticResource InvertedBoolConverter}}">
@@ -232,9 +228,9 @@
 
                         <Grid toolkit:StateView.StateKey="{Binding Source={x:Static sharedModels:AccessTokenResultState.Succeeded}, Converter={StaticResource EnumToStringConverter}}">
                             <sharedControls:JwtVisualizer
-                                DecodedJwtToken="{Binding ConfigurationDetail.AccessTokenResult.DecodedToken}"
-                                JwtToken="{Binding ConfigurationDetail.AccessTokenResult.Token}"
-                                Mode="{Binding ConfigurationDetail.AccessTokenVisualizerMode}" />
+                                DecodedToken="{Binding ConfigurationDetail.AccessTokenResult.DecodedToken}"
+                                Token="{Binding ConfigurationDetail.AccessTokenResult.Token}"
+                                VisualizationMode="{Binding ConfigurationDetail.AccessTokenVisualizationMode}" />
                         </Grid>
                     </toolkit:StateContainer.StateViews>
                 </Grid>

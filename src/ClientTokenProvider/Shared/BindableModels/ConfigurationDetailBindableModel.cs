@@ -30,7 +30,7 @@ public partial class ConfigurationDetailBindableModel :
     private AccessTokenResult _accessTokenResult;
 
     [ObservableProperty]
-    private JwtVisualizerMode _accessTokenVisualizerMode;
+    private JwtVisualizationMode _accessTokenVisualizationMode;
 
     public ConfigurationDetailBindableModel(
         Guid id,
@@ -44,6 +44,6 @@ public partial class ConfigurationDetailBindableModel :
         Data = data;
 
         AccessTokenResult = Models.AccessTokenResult.None();
-        AccessTokenVisualizerMode = JwtVisualizerMode.JwtDecoded;
+        AccessTokenVisualizationMode = JwtVisualizationMode.JwtDecoded;
     }
 }
