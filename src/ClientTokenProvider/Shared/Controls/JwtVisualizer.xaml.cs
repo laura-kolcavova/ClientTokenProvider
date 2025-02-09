@@ -5,38 +5,43 @@ namespace ClientTokenProvider.Shared.Controls;
 
 public partial class JwtVisualizer : ContentView
 {
-    public static readonly BindableProperty JwtTokenProperty = BindableProperty.Create(
-        nameof(JwtToken),
+    public static readonly BindableProperty TokenProperty = BindableProperty.Create(
+        nameof(Token),
         typeof(string),
         typeof(JwtVisualizer));
 
-    public static readonly BindableProperty DecodedJwtTokenProperty = BindableProperty.Create(
-        nameof(DecodedJwtToken),
+    public static readonly BindableProperty DecodedTokenProperty = BindableProperty.Create(
+        nameof(DecodedToken),
         typeof(DecodedJwt),
         typeof(JwtVisualizer));
 
-    public static readonly BindableProperty ModeProperty = BindableProperty.Create(
-       nameof(Mode),
-       typeof(JwtVisualizerMode),
+    public static readonly BindableProperty VisualizationModeProperty = BindableProperty.Create(
+       nameof(VisualizationMode),
+       typeof(JwtVisualizationMode),
        typeof(JwtVisualizer));
 
-    public string JwtToken
+    public string Token
     {
-        get => (string)GetValue(JwtTokenProperty);
-        set => SetValue(JwtTokenProperty, value);
+        get => (string)GetValue(TokenProperty);
+        set => SetValue(TokenProperty, value);
     }
 
-    public DecodedJwt DecodedJwtToken
+    public DecodedJwt DecodedToken
     {
-        get => (DecodedJwt)GetValue(DecodedJwtTokenProperty);
-        set => SetValue(DecodedJwtTokenProperty, value);
+        get => (DecodedJwt)GetValue(DecodedTokenProperty);
+        set => SetValue(DecodedTokenProperty, value);
     }
 
-    public JwtVisualizerMode Mode
+    public JwtVisualizationMode VisualizationMode
     {
-        get => (JwtVisualizerMode)GetValue(ModeProperty);
-        set => SetValue(ModeProperty, value);
+        get => (JwtVisualizationMode)GetValue(VisualizationModeProperty);
+        set => SetValue(VisualizationModeProperty, value);
     }
+
+    public List<JwtVisualizationMode> VisualizationModes { get; } = Enum
+        .GetValues(typeof(JwtVisualizationMode))
+        .Cast<JwtVisualizationMode>()
+        .ToList();
 
     public JwtVisualizer()
     {
