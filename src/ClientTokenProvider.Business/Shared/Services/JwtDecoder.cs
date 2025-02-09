@@ -26,10 +26,10 @@ internal sealed class JwtDecoder :
             payload = decodedPayload;
         }
 
-        if (jwtTokenParts.Length > 2 &&
-            TryDecodeJwtTokenPart(jwtTokenParts[2], out var decodedSignature))
+        // Signature cannot be decoded
+        if (jwtTokenParts.Length > 2)
         {
-            signature = decodedSignature;
+            signature = jwtTokenParts[2];
         }
 
         return new DecodedJwt
