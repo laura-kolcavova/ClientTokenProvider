@@ -83,11 +83,12 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\ClientTokenProvider.Business\ClientTokenProvider.Business.csproj" />
 	  <ProjectReference Include="..\ClientTokenProvider.Core\ClientTokenProvider.Core.csproj" />
+	  <ProjectReference Include="..\ClientTokenProvider.Persistence\ClientTokenProvider.Persistence.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="AzureAd\Controls\ConfigurationDataForm.xaml.cs">
-	    <DependentUpon>ConfigurationDataForm.xaml</DependentUpon>
+	  <Compile Update="AzureAd\Controls\AzureAdConfigurationDataForm.xaml.cs">
+	    <DependentUpon>AzureAdConfigurationDataForm.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Resources\Strings\Shared\SharedStrings.Designer.cs">
 	    <DesignTime>True</DesignTime>
@@ -110,7 +111,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="AzureAd\Controls\ConfigurationDataForm.xaml">
+	  <MauiXaml Update="AzureAd\Controls\AzureAdConfigurationDataForm.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Shared\Controls\CircularSpinner.xaml">

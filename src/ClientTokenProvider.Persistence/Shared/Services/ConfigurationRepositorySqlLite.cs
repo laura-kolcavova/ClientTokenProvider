@@ -2,7 +2,7 @@
 using ClientTokenProvider.Business.Shared.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-namespace ClientTokenProvider.Business.Persistence.Shared.Services;
+namespace ClientTokenProvider.Persistence.Shared.Services;
 
 internal sealed class ConfigurationRepositorySqlLite(
     ConfigurationDbContext configurationDbContext) :

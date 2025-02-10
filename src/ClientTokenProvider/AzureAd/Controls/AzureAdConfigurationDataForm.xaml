@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView
-    x:Class="ClientTokenProvider.AzureAd.Controls.ConfigurationDataForm"
+    x:Class="ClientTokenProvider.AzureAd.Controls.AzureAdConfigurationDataForm"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:sharedControls="clr-namespace:ClientTokenProvider.Shared.Controls"
@@ -12,16 +12,26 @@
     <Grid BindingContext="{x:Reference this}">
         <VerticalStackLayout StyleClass="container">
             <VerticalStackLayout StyleClass="formGroup">
-                <Label StyleClass="formLabel" Text="Authority" />
+                <Label StyleClass="formLabel" Text="Instance" />
+
                 <Entry
-                    x:Name="AuthorityEntry"
                     StyleClass="formControlEntry"
-                    Text="{Binding ConfigurationData.AuthorityUrl, Mode=TwoWay}"
+                    Text="{Binding ConfigurationData.Instance, Mode=TwoWay}"
+                    TextChanged="DataEntry_TextChanged" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout StyleClass="formGroup">
+                <Label StyleClass="formLabel" Text="Tenant Id" />
+
+                <Entry
+                    StyleClass="formControlEntry"
+                    Text="{Binding ConfigurationData.TenantId, Mode=TwoWay}"
                     TextChanged="DataEntry_TextChanged" />
             </VerticalStackLayout>
 
             <VerticalStackLayout StyleClass="formGroup">
                 <Label StyleClass="formLabel" Text="Scope" />
+
                 <Entry
                     StyleClass="formControlEntry"
                     Text="{Binding ConfigurationData.Scope, Mode=TwoWay}"
@@ -30,6 +40,7 @@
 
             <VerticalStackLayout StyleClass="formGroup">
                 <Label StyleClass="formLabel" Text="Audience" />
+
                 <Entry
                     StyleClass="formControlEntry"
                     Text="{Binding ConfigurationData.Audience, Mode=TwoWay}"
@@ -38,6 +49,7 @@
 
             <VerticalStackLayout StyleClass="formGroup">
                 <Label StyleClass="formLabel" Text="ClientId" />
+
                 <Entry
                     StyleClass="formControlEntry"
                     Text="{Binding ConfigurationData.ClientId, Mode=TwoWay}"
@@ -46,6 +58,7 @@
 
             <VerticalStackLayout StyleClass="formGroup">
                 <Label StyleClass="formLabel" Text="ClientSecret" />
+
                 <Entry
                     StyleClass="formControlEntry"
                     Text="{Binding ConfigurationData.ClientSecret, Mode=TwoWay}"

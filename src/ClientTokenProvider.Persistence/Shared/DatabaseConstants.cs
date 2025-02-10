@@ -1,4 +1,4 @@
-﻿namespace ClientTokenProvider.Business.Persistence.Shared;
+﻿namespace ClientTokenProvider.Persistence.Shared;
 
 internal static class DatabaseConstants
 {

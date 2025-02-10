@@ -1,8 +1,10 @@
 ﻿namespace ClientTokenProvider.Core.AzureAd.Models;
 
-public interface IClientTokenProviderConfiguration
+public interface IAzureAdClientTokenProviderConfiguration
 {
-    public string AuthorityUri { get; }
+    public string Instance { get; }
+
+    public string TenantId { get; }
 
     public string Audience { get; }
 

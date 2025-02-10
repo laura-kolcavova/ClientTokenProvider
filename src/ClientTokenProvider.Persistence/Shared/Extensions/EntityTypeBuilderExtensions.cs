@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace ClientTokenProvider.Business.Persistence.Shared.Extensions;
+namespace ClientTokenProvider.Persistence.Shared.Extensions;
 
 internal static class EntityTypeBuilderExtensions
 {

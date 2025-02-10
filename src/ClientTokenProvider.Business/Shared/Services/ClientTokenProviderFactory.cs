@@ -12,7 +12,7 @@ internal sealed class ClientTokenProviderFactory(
 {
     public IClientTokenProvider Create(
         ConfigurationKind configurationKind,
-        IClientTokenProviderConfiguration clientTokenProviderConfiguration)
+        IAzureAdClientTokenProviderConfiguration clientTokenProviderConfiguration)
     {
         var clientTokenProviderFactory = GetService(configurationKind);
 

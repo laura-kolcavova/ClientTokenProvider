@@ -7,7 +7,9 @@ namespace ClientTokenProvider.Business.AzureAd.Models;
 public sealed record AzureAdConfigurationData :
     IConfigurationData
 {
-    public required string AuthorityUrl { get; init; }
+    public required string Instance { get; init; }
+
+    public required string TenantId { get; init; }
 
     public required string Scope { get; init; }
 
@@ -20,14 +22,15 @@ public sealed record AzureAdConfigurationData :
     public static AzureAdConfigurationData Empty =>
         new()
         {
-            AuthorityUrl = string.Empty,
+            Instance = string.Empty,
+            TenantId = string.Empty,
             Scope = string.Empty,
             Audience = string.Empty,
             ClientId = string.Empty,
             ClientSecret = string.Empty,
         };
 
-    public IClientTokenProviderConfiguration ToClientTokenProviderConfiguration()
+    public IAzureAdClientTokenProviderConfiguration ToClientTokenProviderConfiguration()
     {
         return AzureAdConfigurationDataMapper.ToClientConfiguration(this);
     }

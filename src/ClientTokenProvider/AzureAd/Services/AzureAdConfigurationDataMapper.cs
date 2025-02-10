@@ -29,6 +29,6 @@ internal sealed class ConfigurationDataMapper :
         IConfigurationDataBindableModel source,
         ConfigurationKind sourceConfigurationKind)
     {
-        return ((ConfigurationDataBindableModel)source).ToModel();
+        return ((AzureAdConfigurationDataBindableModel)source).ToModel();
     }
 }

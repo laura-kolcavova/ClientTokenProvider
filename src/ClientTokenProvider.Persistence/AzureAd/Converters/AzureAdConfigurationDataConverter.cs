@@ -3,12 +3,12 @@ using ClientTokenProvider.Business.Shared.Models.Abstractions;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.Json;
 
-namespace ClientTokenProvider.Business.Persistence.AzureAd.Converters;
+namespace ClientTokenProvider.Persistence.AzureAd.Converters;
 
-internal class ConfigurationDataConverter :
+internal class AzureAdConfigurationDataConverter :
     ValueConverter<IConfigurationData, string>
 {
-    public ConfigurationDataConverter(
+    public AzureAdConfigurationDataConverter(
         JsonSerializerOptions? jsonSerializerOptions = null)
         : base(
             value => Serialize(value, jsonSerializerOptions),

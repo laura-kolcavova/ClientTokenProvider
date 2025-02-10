@@ -1,10 +1,10 @@
-﻿using ClientTokenProvider.Business.Persistence.AzureAd.Converters;
-using ClientTokenProvider.Business.Shared.Models.Abstractions;
+﻿using ClientTokenProvider.Business.Shared.Models.Abstractions;
 using ClientTokenProvider.Business.Shared.Serializaiton;
+using ClientTokenProvider.Persistence.AzureAd.Converters;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Text.Json;
 
-namespace ClientTokenProvider.Business.Persistence.AzureAd.Extensions;
+namespace ClientTokenProvider.Persistence.AzureAd.Extensions;
 
 internal static class EntityTypeBuilderExtensions
 {
@@ -13,7 +13,7 @@ internal static class EntityTypeBuilderExtensions
         JsonSerializerOptions? jsonSerializerOptions = null)
     {
         propertyBuilder.HasConversion(
-            new ConfigurationDataConverter(
+            new AzureAdConfigurationDataConverter(
                 jsonSerializerOptions ?? DefaultJsonSerializer.Options));
 
         return propertyBuilder;

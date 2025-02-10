@@ -3,21 +3,21 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace ClientTokenProvider.AzureAd.Controls;
 
-public partial class ConfigurationDataForm : ContentView
+public partial class AzureAdConfigurationDataForm : ContentView
 {
     public static readonly BindableProperty ConfigurationDataProperty = BindableProperty.Create(
         nameof(ConfigurationData),
-        typeof(ConfigurationDataBindableModel),
-        typeof(ConfigurationDataForm));
+        typeof(AzureAdConfigurationDataBindableModel),
+        typeof(AzureAdConfigurationDataForm));
 
     public static readonly BindableProperty HandleConfigurationDataChangedCommandProperty = BindableProperty.Create(
        nameof(HandleConfigurationDataChangedCommand),
        typeof(IRelayCommand),
-       typeof(ConfigurationDataForm));
+       typeof(AzureAdConfigurationDataForm));
 
-    public ConfigurationDataBindableModel ConfigurationData
+    public AzureAdConfigurationDataBindableModel ConfigurationData
     {
-        get => (ConfigurationDataBindableModel)GetValue(ConfigurationDataProperty);
+        get => (AzureAdConfigurationDataBindableModel)GetValue(ConfigurationDataProperty);
         set => SetValue(ConfigurationDataProperty, value);
     }
 
@@ -27,7 +27,7 @@ public partial class ConfigurationDataForm : ContentView
         set => SetValue(HandleConfigurationDataChangedCommandProperty, value);
     }
 
-    public ConfigurationDataForm()
+    public AzureAdConfigurationDataForm()
     {
         InitializeComponent();
     }

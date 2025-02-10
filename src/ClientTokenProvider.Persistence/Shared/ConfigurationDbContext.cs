@@ -1,11 +1,11 @@
-﻿using ClientTokenProvider.Business.Persistence.Shared.EntityTypeConfigurations;
-using ClientTokenProvider.Business.Shared.Models;
+﻿using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Persistence.Shared.EntityTypeConfigurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace ClientTokenProvider.Business.Persistence.Shared;
+namespace ClientTokenProvider.Persistence.Shared;
 
-public sealed class ConfigurationDbContext :
+internal sealed class ConfigurationDbContext :
     DbContext
 {
     private readonly string _connectionString;

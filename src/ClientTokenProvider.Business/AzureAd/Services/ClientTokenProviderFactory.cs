@@ -12,9 +12,9 @@ internal sealed class ClientTokenProviderFactory(
 {
     public IClientTokenProvider Create(
         ConfigurationKind configurationKind,
-        IClientTokenProviderConfiguration clientTokenProviderConfiguration)
+        IAzureAdClientTokenProviderConfiguration clientTokenProviderConfiguration)
     {
-        if (clientTokenProviderConfiguration is not ClientTokenProviderConfiguration azureAdClientTokenProviderConfiguration)
+        if (clientTokenProviderConfiguration is not AzureAdClientTokenProviderConfiguration azureAdClientTokenProviderConfiguration)
         {
             throw new ArgumentException("Invalid configuration data type.", nameof(clientTokenProviderConfiguration));
         }
