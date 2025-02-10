@@ -14,5 +14,16 @@ internal static class EntityTypeBuilderExtensions
 
         return propertyBuilder;
     }
+
+    //public static PropertyBuilder<IConfigurationData> HasConfigurationDataConversion(
+    //    this PropertyBuilder<IConfigurationData> propertyBuilder,
+    //    JsonSerializerOptions? jsonSerializerOptions = null)
+    //{
+    //    propertyBuilder.HasConversion(
+    //        new ConfigurationDataConverter(
+    //            jsonSerializerOptions ?? DefaultJsonSerializer.Options));
+
+    //    return propertyBuilder;
+    //}
 }
 
