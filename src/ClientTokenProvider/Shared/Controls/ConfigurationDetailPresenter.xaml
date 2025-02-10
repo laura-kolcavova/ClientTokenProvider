@@ -105,19 +105,19 @@
                 </FlexLayout>
             </VerticalStackLayout>
 
-            <VerticalStackLayout
-                Grid.Row="1"
-                toolkit:StateContainer.CanStateChange="{Binding CanStateChange}"
-                toolkit:StateContainer.CurrentState="{Binding ConfigurationDetail.Kind, Converter={StaticResource EnumToStringConverter}}">
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout toolkit:StateContainer.CanStateChange="{Binding CanStateChange}" toolkit:StateContainer.CurrentState="{Binding ConfigurationDetail.Kind, Converter={StaticResource EnumToStringConverter}}">
 
-                <toolkit:StateContainer.StateViews>
-                    <azureAdControls:AzureAdConfigurationDataForm
-                        toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:ConfigurationKind.AzureAd}, Converter={StaticResource EnumToStringConverter}}"
-                        ConfigurationData="{Binding ConfigurationDetail.Data}"
-                        HandleConfigurationDataChangedCommand="{Binding HandleConfigurationDataChangedInternalCommand}" />
-                </toolkit:StateContainer.StateViews>
+                    <toolkit:StateContainer.StateViews>
+                        <azureAdControls:AzureAdConfigurationDataForm
+                            toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:ConfigurationKind.AzureAd}, Converter={StaticResource EnumToStringConverter}}"
+                            ConfigurationData="{Binding ConfigurationDetail.Data}"
+                            HandleConfigurationDataChangedCommand="{Binding HandleConfigurationDataChangedInternalCommand}" />
+                    </toolkit:StateContainer.StateViews>
 
-            </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+
 
             <VerticalStackLayout Grid.Row="2" StyleClass="container">
                 <Button

@@ -2,6 +2,9 @@
 
 namespace ClientTokenProvider.Business.Shared.Models.Abstractions;
 
+//[JsonDerivedType(
+//    typeof(AzureAdConfigurationData),
+//    typeDiscriminator: nameof(AzureAdConfigurationData))]
 public interface IConfigurationData
 {
     public string Scope { get; }

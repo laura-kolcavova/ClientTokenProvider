@@ -28,8 +28,11 @@ internal sealed class AzureAdClientHandler : IAzureAdClientHandler
     {
         using (var httpClient = _httpClientFactory.CreateClient())
         {
+            var instance = Configuration.Instance.TrimEnd('/');
+            var tenantId = Configuration.TenantId.TrimEnd('/');
+
             var requestUri = new Uri(
-                $"{Configuration.Instance}/{Configuration.TenantId}/oauth2/v2.0/token",
+                $"{instance}/{tenantId}/oauth2/v2.0/token",
                 UriKind.Absolute);
 
             var requestBody = new FormUrlEncodedContent(new[]

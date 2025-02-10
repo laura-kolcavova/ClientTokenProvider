@@ -12,7 +12,7 @@ internal class AzureAdConfigurationDataConverter :
         JsonSerializerOptions? jsonSerializerOptions = null)
         : base(
             value => Serialize(value, jsonSerializerOptions),
-            value => JsonSerializer.Deserialize<AzureAdConfigurationData>(value, jsonSerializerOptions)!)
+            value => Deserialize(value, jsonSerializerOptions))
     {
     }
 
@@ -28,5 +28,14 @@ internal class AzureAdConfigurationDataConverter :
         return JsonSerializer.Serialize(
             azureAdConfigurationData,
             jsonSerializerOptions);
+    }
+
+    private static AzureAdConfigurationData Deserialize(
+        string value,
+        JsonSerializerOptions? jsonSerializerOptions = null)
+    {
+        return JsonSerializer.Deserialize<AzureAdConfigurationData>(
+            value,
+            jsonSerializerOptions)!;
     }
 }
