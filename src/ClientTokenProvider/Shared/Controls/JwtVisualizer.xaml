@@ -25,11 +25,13 @@
 
     <Grid BindingContext="{x:Reference this}" RowDefinitions="auto, *">
         <VerticalStackLayout Grid.Row="0" Margin="0,0,0,15">
+            <!--  TwoWay Binding of SelectedItem will broke UI when switching Configurations  -->
             <Picker
                 Title="Select visualization mode:"
                 FontSize="12"
                 ItemsSource="{Binding VisualizationModes}"
-                SelectedItem="{Binding VisualizationMode, Mode=TwoWay}">
+                SelectedIndexChanged="VisualizationModePicker_SelectedIndexChanged"
+                SelectedItem="{Binding VisualizationMode, Mode=OneWay}">
                 <Picker.ItemDisplayBinding>
                     <Binding Converter="{StaticResource JwtVisualizationModeLocalizationConverter}" />
                 </Picker.ItemDisplayBinding>

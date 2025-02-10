@@ -1,4 +1,5 @@
 using ClientTokenProvider.Shared.BindableModels;
+using ClientTokenProvider.Shared.Models;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Input;
 
@@ -157,5 +158,11 @@ public partial class ConfigurationDetailPresenter :
     private void AccessTokenErrorLabel_Tapped(object sender, TappedEventArgs e)
     {
         ShowAccessTokenErrorDetailCommand?.Execute(ConfigurationDetail);
+    }
+
+    [RelayCommand]
+    private void HandleVisualizationModeChanged(JwtVisualizationMode jwtVisualizationMode)
+    {
+        ConfigurationDetail.AccessTokenVisualizationMode = jwtVisualizationMode;
     }
 }

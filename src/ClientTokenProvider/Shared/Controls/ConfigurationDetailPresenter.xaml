@@ -229,6 +229,7 @@
                         <Grid toolkit:StateView.StateKey="{Binding Source={x:Static sharedModels:AccessTokenResultState.Succeeded}, Converter={StaticResource EnumToStringConverter}}">
                             <sharedControls:JwtVisualizer
                                 DecodedToken="{Binding ConfigurationDetail.AccessTokenResult.DecodedToken}"
+                                HandleVisualizationModeChangedCommand="{Binding HandleVisualizationModeChangedCommand}"
                                 Token="{Binding ConfigurationDetail.AccessTokenResult.Token}"
                                 VisualizationMode="{Binding ConfigurationDetail.AccessTokenVisualizationMode}" />
                         </Grid>

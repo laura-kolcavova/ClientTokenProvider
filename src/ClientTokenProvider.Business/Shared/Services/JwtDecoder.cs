@@ -42,26 +42,36 @@ internal sealed class JwtDecoder :
 
     private bool TryDecodeJwtTokenPart(
         string jwtTokenPart,
-        out string decodedString)
+        out string decodedJwtTokenPart)
     {
+        if (string.IsNullOrEmpty(jwtTokenPart))
+        {
+            decodedJwtTokenPart = string.Empty;
+
+            return false;
+        }
+
+        var validJwtTokenPart = jwtTokenPart
+               .Replace('_', '/')
+               .Replace('-', '+');
+
+        switch (validJwtTokenPart.Length % 4)
+        {
+            case 2: validJwtTokenPart += "=="; break;
+            case 3: validJwtTokenPart += "="; break;
+        }
+
         try
         {
-            if (string.IsNullOrEmpty(jwtTokenPart))
-            {
-                decodedString = string.Empty;
+            var bytes = Convert.FromBase64String(validJwtTokenPart);
 
-                return true;
-            }
-
-            var bytes = Convert.FromBase64String(jwtTokenPart);
-
-            decodedString = System.Text.Encoding.UTF8.GetString(bytes);
+            decodedJwtTokenPart = System.Text.Encoding.UTF8.GetString(bytes);
 
             return true;
         }
         catch
         {
-            decodedString = string.Empty;
+            decodedJwtTokenPart = string.Empty;
 
             return false;
         }
