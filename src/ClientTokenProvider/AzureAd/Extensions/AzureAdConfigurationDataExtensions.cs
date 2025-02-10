@@ -5,11 +5,12 @@ namespace ClientTokenProvider.AzureAd.Extensions;
 
 public static class ConfigurationDataExtensions
 {
-    public static ConfigurationDataBindableModel ToBindableModel(
+    public static AzureAdConfigurationDataBindableModel ToBindableModel(
         this AzureAdConfigurationData source)
     {
-        return new ConfigurationDataBindableModel(
-            authorityUrl: source.AuthorityUrl,
+        return new AzureAdConfigurationDataBindableModel(
+            instance: source.Instance,
+            tenantId: source.TenantId,
             scope: source.Scope,
             audience: source.Audience,
             clientId: source.ClientId,
@@ -17,11 +18,12 @@ public static class ConfigurationDataExtensions
     }
 
     public static AzureAdConfigurationData ToModel(
-        this ConfigurationDataBindableModel source)
+        this AzureAdConfigurationDataBindableModel source)
     {
         return new AzureAdConfigurationData
         {
-            AuthorityUrl = source.AuthorityUrl,
+            Instance = source.Instance,
+            TenantId = source.TenantId,
             Scope = source.Scope,
             Audience = source.Audience,
             ClientId = source.ClientId,

@@ -8,7 +8,7 @@ internal sealed class AzureAdClientTokenProviderFactory(
     IAzureAdClientTokenProviderFactory
 {
     public IAzureAdClientTokenProvider Create(
-        ClientTokenProviderConfiguration clientConfiguration)
+        AzureAdClientTokenProviderConfiguration clientConfiguration)
     {
         return new AzureAdClientTokenProvider(
             httpClientFactory,

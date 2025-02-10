@@ -8,5 +8,5 @@ public interface IClientTokenProviderFactory
 {
     public IClientTokenProvider Create(
         ConfigurationKind configurationKind,
-        IClientTokenProviderConfiguration clientTokenProviderConfiguration);
+        IAzureAdClientTokenProviderConfiguration clientTokenProviderConfiguration);
 }

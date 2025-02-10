@@ -2,6 +2,7 @@
 using ClientTokenProvider.Business.AzureAd.Extensions;
 using ClientTokenProvider.Business.Shared.Extensions;
 using ClientTokenProvider.Core.AzureAd.Extensions;
+using ClientTokenProvider.Persistence.Shared.Extensions;
 using ClientTokenProvider.Shared.Extensions;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
@@ -42,7 +43,8 @@ public static class MauiProgram
         var dbConnectionString = $"Data Source={dbPath}";
 
         services
-            .AddClientTokenProviderBusinessShared(
+            .AddClientTokenProviderBusinessShared()
+            .AddClientTokenProviderPersistenceShared(
                 dbConnectionString,
                 isDevelopment)
             .AddClientTokenProviderShared();

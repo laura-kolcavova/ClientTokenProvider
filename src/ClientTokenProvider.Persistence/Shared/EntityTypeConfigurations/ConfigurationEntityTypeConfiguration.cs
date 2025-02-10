@@ -1,10 +1,10 @@
-﻿using ClientTokenProvider.Business.Persistence.AzureAd.Extensions;
-using ClientTokenProvider.Business.Persistence.Shared.Extensions;
-using ClientTokenProvider.Business.Shared.Models;
+﻿using ClientTokenProvider.Business.Shared.Models;
+using ClientTokenProvider.Persistence.AzureAd.Extensions;
+using ClientTokenProvider.Persistence.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ClientTokenProvider.Business.Persistence.Shared.EntityTypeConfigurations;
+namespace ClientTokenProvider.Persistence.Shared.EntityTypeConfigurations;
 
 internal sealed class ConfigurationEntityTypeConfiguration :
     IEntityTypeConfiguration<ConfigurationModel>

@@ -5,5 +5,5 @@ namespace ClientTokenProvider.Core.AzureAd.Services.Abstractions;
 public interface IAzureAdClientTokenProviderFactory
 {
     public IAzureAdClientTokenProvider Create(
-        ClientTokenProviderConfiguration clientConfiguration);
+        AzureAdClientTokenProviderConfiguration clientConfiguration);
 }

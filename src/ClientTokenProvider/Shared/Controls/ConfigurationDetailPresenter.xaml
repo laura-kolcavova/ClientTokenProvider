@@ -111,7 +111,7 @@
                 toolkit:StateContainer.CurrentState="{Binding ConfigurationDetail.Kind, Converter={StaticResource EnumToStringConverter}}">
 
                 <toolkit:StateContainer.StateViews>
-                    <azureAdControls:ConfigurationDataForm
+                    <azureAdControls:AzureAdConfigurationDataForm
                         toolkit:StateView.StateKey="{Binding Source={x:Static bussinessModels:ConfigurationKind.AzureAd}, Converter={StaticResource EnumToStringConverter}}"
                         ConfigurationData="{Binding ConfigurationDetail.Data}"
                         HandleConfigurationDataChangedCommand="{Binding HandleConfigurationDataChangedInternalCommand}" />

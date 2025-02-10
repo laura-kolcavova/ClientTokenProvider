@@ -12,11 +12,11 @@ internal sealed class AzureAdClientHandler : IAzureAdClientHandler
 {
     private readonly IHttpClientFactory _httpClientFactory;
 
-    public IClientTokenProviderConfiguration Configuration { get; }
+    public IAzureAdClientTokenProviderConfiguration Configuration { get; }
 
     public AzureAdClientHandler(
         IHttpClientFactory httpClientFactory,
-        ClientTokenProviderConfiguration clientTokenProviderConfiguration)
+        AzureAdClientTokenProviderConfiguration clientTokenProviderConfiguration)
     {
         _httpClientFactory = httpClientFactory;
         Configuration = clientTokenProviderConfiguration;
@@ -29,7 +29,7 @@ internal sealed class AzureAdClientHandler : IAzureAdClientHandler
         using (var httpClient = _httpClientFactory.CreateClient())
         {
             var requestUri = new Uri(
-                Configuration.AuthorityUri,
+                $"{Configuration.Instance}/{Configuration.TenantId}/oauth2/v2.0/token",
                 UriKind.Absolute);
 
             var requestBody = new FormUrlEncodedContent(new[]

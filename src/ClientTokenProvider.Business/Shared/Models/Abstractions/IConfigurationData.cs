@@ -6,5 +6,5 @@ public interface IConfigurationData
 {
     public string Scope { get; }
 
-    public IClientTokenProviderConfiguration ToClientTokenProviderConfiguration();
+    public IAzureAdClientTokenProviderConfiguration ToClientTokenProviderConfiguration();
 }

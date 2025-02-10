@@ -1,17 +1,18 @@
-﻿using ClientTokenProvider.Business.Persistence.Shared;
+﻿using ClientTokenProvider.Persistence.Shared.Services.Abstractions;
 
 namespace ClientTokenProvider;
 
 public partial class App : Application
 {
-    public App(ConfigurationDbContext configurationDbContext)
+    public App(
+        IDatabaseInitializer databaseInitializer)
     {
         InitializeComponent();
 
         UserAppTheme = AppTheme.Dark;
         MainPage = new AppShell();
 
-        configurationDbContext.Init();
+        databaseInitializer.Initialize();
     }
 
     private void SetUpEntry()
