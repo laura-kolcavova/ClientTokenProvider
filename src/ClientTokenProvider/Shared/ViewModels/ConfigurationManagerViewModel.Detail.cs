@@ -23,6 +23,64 @@ public partial class ConfigurationManagerViewModel
 
     public bool CanChangeState => true;
 
+    private bool saveChangesBeforeCloseModalShowed;
+
+    public void Receive(
+        CloseAppMessage message)
+    {
+        if (saveChangesBeforeCloseModalShowed)
+        {
+            return;
+        }
+
+        if (ConfigurationDetails.Any(configurationDetail => configurationDetail.CanBeSaved))
+        {
+            saveChangesBeforeCloseModalShowed = true;
+
+            WeakReferenceMessenger
+                .Default
+                .Send(new ShowSaveChangesBeforeCloseDetailMessage());
+
+            return;
+        }
+
+        App.Current?.Quit();
+    }
+
+    public async void Receive(
+        HandlePopupResultMessage<SaveChangesBeforeClosePopupResult> message)
+    {
+        saveChangesBeforeCloseModalShowed = false;
+
+        if (message.Result == SaveChangesBeforeClosePopupResult.Close ||
+            message.Result == SaveChangesBeforeClosePopupResult.Cancel)
+        {
+            return;
+        }
+
+        if (message.Result == SaveChangesBeforeClosePopupResult.DontSave)
+        {
+            App.Current?.Quit();
+
+            return;
+        }
+
+        var request = ConfigurationDetails
+            .Select(configurationDetail => new SaveConfigurationDataRequest
+            {
+                ConfigurationId = configurationDetail.Id,
+                ConfigurationData = configurationDataMapper.ToModel(
+                    configurationDetail.Data,
+                    configurationDetail.Kind)
+            });
+
+        await SaveConfigurationManyData_Internal(
+            request,
+            CancellationToken.None);
+
+        App.Current?.Quit();
+    }
+
     partial void OnActiveConfigurationDetailChanged(
         ConfigurationDetailBindableModel? value)
     {
@@ -86,13 +144,16 @@ public partial class ConfigurationManagerViewModel
         ConfigurationDetailBindableModel configurationDetail,
         CancellationToken cancellationToken)
     {
-        var configurationData = configurationDataMapper.ToModel(
-            configurationDetail.Data,
-            configurationDetail.Kind);
+        var request = new SaveConfigurationDataRequest
+        {
+            ConfigurationId = configurationDetail.Id,
+            ConfigurationData = configurationDataMapper.ToModel(
+                    configurationDetail.Data,
+                    configurationDetail.Kind)
+        };
 
         var saveConfigurationDataResult = await SaveConfigurationData_Internal(
-            configurationDetail.Id,
-            configurationData,
+            request,
             cancellationToken);
 
         if (saveConfigurationDataResult.IsFailure)

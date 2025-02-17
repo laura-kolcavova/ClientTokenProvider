@@ -12,7 +12,7 @@
     <Color x:Key="SecondaryBackground">#262626</Color>
 
     <Color x:Key="Tertiary">#393939</Color>
-    <Color x:Key="TertiaryText">#6E6E6E</Color>
+    <Color x:Key="TertiaryText">#919191</Color>
 
     <Color x:Key="Danger">#d32f2f</Color>
     <Color x:Key="Warning">#f57c00</Color>

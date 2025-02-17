@@ -1,6 +1,9 @@
 using ClientTokenProvider.Shared.Messages;
+using ClientTokenProvider.Shared.Models;
+using ClientTokenProvider.Shared.Popups;
 using ClientTokenProvider.Shared.ViewModels;
 using ClientTokenProvider.Shared.Views.Base;
+using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace ClientTokenProvider.Shared.Views;
@@ -12,7 +15,8 @@ public partial class ConfigurationManagerPage :
     IRecipient<RenamingConfigurationFailedMessage>,
     IRecipient<SavingConfigurationDataFailedMessage>,
     IRecipient<DeletingConfigurationFailedMessage>,
-    IRecipient<ShowAccessTokenErrorDetailMessage>
+    IRecipient<ShowAccessTokenErrorDetailMessage>,
+    IRecipient<ShowSaveChangesBeforeCloseDetailMessage>
 {
     public ConfigurationManagerPage(ConfigurationManagerViewModel viewModel)
     {
@@ -86,5 +90,25 @@ public partial class ConfigurationManagerPage :
             "Error",
             message.ErrorMessage,
             "Close");
+    }
+
+    public async void Receive(ShowSaveChangesBeforeCloseDetailMessage message)
+    {
+        var popup = new SaveChangesBeforeClosePopup();
+
+        var resultObject = await this.ShowPopupAsync(
+            popup,
+            CancellationToken.None);
+
+        var result = resultObject is null
+            ? SaveChangesBeforeClosePopupResult.Close
+            : (SaveChangesBeforeClosePopupResult)resultObject;
+
+        WeakReferenceMessenger
+            .Default
+            .Send(new HandlePopupResultMessage<SaveChangesBeforeClosePopupResult>
+            {
+                Result = result
+            });
     }
 }

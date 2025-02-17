@@ -1,5 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(Configuration)'=='Release' and $([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="CSharpFunctionalExtensions" Version="3.4.3" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />

@@ -58,4 +58,9 @@ internal sealed class ConfigurationRepositoryMock :
     {
         return Task.CompletedTask;
     }
+
+    public Task UpdateMany(IEnumerable<ConfigurationModel> configurations, CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
 }

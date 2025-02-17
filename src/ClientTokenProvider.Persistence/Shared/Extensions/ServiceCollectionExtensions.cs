@@ -25,7 +25,7 @@ public static class ServiceCollectionExtensions
 
         services
             .AddScoped<IDatabaseInitializer, DatabaseInitializer>()
-            .AddScoped<IConfigurationRepository, ConfigurationRepositorySqlLite>();
+            .AddScoped<IConfigurationRepository, ConfigurationRepositorySqLite>();
 
         return services;
     }

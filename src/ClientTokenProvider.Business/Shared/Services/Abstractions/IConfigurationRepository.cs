@@ -19,6 +19,10 @@ public interface IConfigurationRepository
         ConfigurationModel configuration,
         CancellationToken cancellationToken);
 
+    public Task UpdateMany(
+       IEnumerable<ConfigurationModel> configurations,
+       CancellationToken cancellationToken);
+
     public Task Delete(
        ConfigurationModel configuration,
        CancellationToken cancellationToken);
