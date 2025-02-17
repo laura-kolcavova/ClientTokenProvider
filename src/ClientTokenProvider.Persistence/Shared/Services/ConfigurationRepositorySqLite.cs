@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClientTokenProvider.Persistence.Shared.Services;
 
-internal sealed class ConfigurationRepositorySqlLite(
+internal sealed class ConfigurationRepositorySqLite(
     ConfigurationDbContext configurationDbContext) :
     IConfigurationRepository
 {
@@ -59,6 +59,18 @@ internal sealed class ConfigurationRepositorySqlLite(
         configurationDbContext
             .Configurations
             .Update(configuration);
+
+        await configurationDbContext
+            .SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task UpdateMany(
+        IEnumerable<ConfigurationModel> configurations,
+        CancellationToken cancellationToken)
+    {
+        configurationDbContext
+            .Configurations
+            .UpdateRange(configurations);
 
         await configurationDbContext
             .SaveChangesAsync(cancellationToken);

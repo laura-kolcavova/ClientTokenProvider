@@ -4,6 +4,7 @@ using ClientTokenProvider.Business.Shared.Models.Abstractions;
 using ClientTokenProvider.Business.Shared.Services.Abstractions;
 using ClientTokenProvider.Core.AzureAd.Exceptions;
 using ClientTokenProvider.Shared.Messages;
+using ClientTokenProvider.Shared.Models;
 using ClientTokenProvider.Shared.Services.Abstractions;
 using ClientTokenProvider.Shared.ViewModels.Base;
 using CommunityToolkit.Mvvm.Input;
@@ -21,7 +22,9 @@ public partial class ConfigurationManagerViewModel(
     IClientTokenProviderFactory clientTokenProviderFactory,
     IJwtDecoder jwtDecoder,
     ILogger<ConfigurationManagerViewModel> logger) :
-    ViewModelBase
+    ViewModelBase,
+    IRecipient<CloseAppMessage>,
+    IRecipient<HandlePopupResultMessage<SaveChangesBeforeClosePopupResult>>
 {
     private List<ConfigurationModel> _configurations = [];
 
@@ -170,8 +173,7 @@ public partial class ConfigurationManagerViewModel(
     }
 
     private async Task<UnitResult<Error>> SaveConfigurationData_Internal(
-        Guid configurationId,
-        IConfigurationData configurationData,
+        SaveConfigurationDataRequest request,
         CancellationToken cancellationToken)
     {
         // Maybe it will be better to have REST ConfigurationService
@@ -179,17 +181,20 @@ public partial class ConfigurationManagerViewModel(
         try
         {
             var configuration = _configurations
-               .FirstOrDefault(configuration => configuration.Id == configurationId);
+               .FirstOrDefault(configuration => configuration.Id == request.ConfigurationId);
 
             if (configuration is null)
             {
                 return ConfigurationErrors.Configuration.NotFound();
             }
 
-            configuration.UpdateData(configurationData);
+            configuration.UpdateData(
+                request.ConfigurationData);
 
             // Maybe it will be better to have REST ConfigurationService
-            await configurationRepository.Update(configuration, cancellationToken);
+            await configurationRepository.Update(
+                configuration,
+                cancellationToken);
 
             return UnitResult.Success<Error>();
         }
@@ -198,6 +203,46 @@ public partial class ConfigurationManagerViewModel(
             logger.LogError(
                ex,
                "An unexpected error occurred while saving configuration data");
+
+            return GeneralErrors.General.Unexpected();
+        }
+    }
+
+    private async Task<UnitResult<Error>> SaveConfigurationManyData_Internal(
+        IEnumerable<SaveConfigurationDataRequest> request,
+        CancellationToken cancellationToken)
+    {
+        // Maybe it will be better to have REST ConfigurationService
+        try
+        {
+            var configurationsToUpdate = new List<ConfigurationModel>();
+
+            foreach (var requestItem in request)
+            {
+                var configuration = _configurations
+                    .FirstOrDefault(configuration => configuration.Id == requestItem.ConfigurationId);
+
+                if (configuration is null)
+                {
+                    continue;
+                }
+
+                configuration.UpdateData(
+                    requestItem.ConfigurationData);
+
+                configurationsToUpdate.Add(configuration);
+            }
+
+            // Maybe it will be better to have REST ConfigurationService
+            await configurationRepository.UpdateMany(configurationsToUpdate, cancellationToken);
+
+            return UnitResult.Success<Error>();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(
+               ex,
+               "An unexpected error occurred while saving many configuration data");
 
             return GeneralErrors.General.Unexpected();
         }

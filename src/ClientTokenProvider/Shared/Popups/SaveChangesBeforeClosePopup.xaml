@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    x:Class="ClientTokenProvider.Shared.Popups.SaveChangesBeforeClosePopup"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sharedPopups="clr-namespace:ClientTokenProvider.Shared.Popups"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+
+    <toolkit:Popup.Resources>
+        <Style TargetType="{x:Type sharedPopups:SaveChangesBeforeClosePopup}">
+
+            <Setter Property="CanBeDismissedByTappingOutsideOfPopup" Value="False" />
+        </Style>
+    </toolkit:Popup.Resources>
+
+
+    <Grid HeightRequest="225" WidthRequest="450">
+        <Grid
+            BackgroundColor="{StaticResource SecondaryBackground}"
+            HorizontalOptions="Fill"
+            RowDefinitions="auto, *, auto">
+            <VerticalStackLayout Grid.Row="0" Padding="10,10">
+                <Label Text="DO YOU WANT TO SAVE?" TextColor="{StaticResource TertiaryText}" />
+            </VerticalStackLayout>
+
+            <Grid Grid.Row="1" Padding="20,10">
+                <VerticalStackLayout VerticalOptions="Center">
+                    <Label
+                        FontAttributes="Bold"
+                        Text="There are unsaved changes which will be lost if you choose close it. Do you want to save these changes?"
+                        TextColor="{StaticResource SecondaryText}" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid
+                Grid.Row="2"
+                Padding="20,20"
+                ColumnDefinitions="auto, *, auto">
+                <Button
+                    Grid.Column="0"
+                    Clicked="DontSaveButton_Clicked"
+                    StyleClass="button, btnTertiary"
+                    Text="Don`t save" />
+
+                <HorizontalStackLayout Grid.Column="2" Spacing="8">
+                    <Button
+                        Clicked="CancelButton_Clicked"
+                        StyleClass="button, btnTertiary"
+                        Text="Cancel" />
+
+                    <Button
+                        Clicked="SaveChangesButton_Clicked"
+                        StyleClass="button, btnSecondary"
+                        Text="Save changes" />
+                </HorizontalStackLayout>
+            </Grid>
+        </Grid>
+    </Grid>
+
+
+
+</toolkit:Popup>

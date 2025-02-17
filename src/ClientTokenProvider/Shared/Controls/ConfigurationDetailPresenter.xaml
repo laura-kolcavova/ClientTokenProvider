@@ -23,7 +23,10 @@
 
         <Style Class="requestButton" TargetType="Button">
             <Setter Property="FontSize" Value="14" />
-            <Setter Property="FontAttributes" Value="Bold" />
+        </Style>
+
+        <Style Class="cancelRequestButton" TargetType="Button">
+            <Setter Property="FontSize" Value="14" />
         </Style>
 
         <Style Class="configurationNameEntry" TargetType="Entry">
@@ -130,7 +133,7 @@
                 <Button
                     Clicked="GetAccessTokenCancelButton_Clicked"
                     IsVisible="{Binding ConfigurationDetail.IsLoading}"
-                    StyleClass="button, btnSecondary, requestButton"
+                    StyleClass="button, btnSecondary, cancelRequestButton"
                     Text="Cancel" />
             </VerticalStackLayout>
         </Grid>
