@@ -3,6 +3,7 @@ using ClientTokenProvider.Shared.Services.Abstractions;
 using ClientTokenProvider.Shared.ViewModels;
 using ClientTokenProvider.Shared.Views;
 using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
 
 namespace ClientTokenProvider.Shared.Extensions;
 
@@ -16,7 +17,11 @@ internal static class ServiceCollectionExtensions
 
         services
             .AddSingleton<IConfigurationDataMapper, ConfigurationDataMapper>()
-            .AddSingleton<IConfigurationDataBackupStore, ConfigurationDataBackupStore>();
+            .AddSingleton<IConfigurationDataBackupStore, ConfigurationDataBackupStore>()
+            .AddSingleton<IConfigurationExporter, ConfigurationExporter>();
+
+        services
+            .AddSingleton<IFileSaver>(FileSaver.Default);
 
         return services;
     }

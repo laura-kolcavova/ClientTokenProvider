@@ -37,6 +37,7 @@
                     <sharedControls:ConfigurationDetailPresenter
                         toolkit:StateView.StateKey="{Binding Source={x:Static sahredModels:ConfigurationManagerState.ShowConfigurationPresenter}, Converter={StaticResource EnumToStringConverter}}"
                         ConfigurationDetail="{Binding ActiveConfigurationDetail}"
+                        ExportConfigurationCommand="{Binding ExportConfigurationCommand}"
                         GetAccessTokenCancelCommand="{Binding GetAccessTokenCancelCommand}"
                         GetAccessTokenCommand="{Binding GetAccessTokenCommand}"
                         HandleConfigurationDataChangedCommand="{Binding HandleConfigurationDataChangedCommand}"

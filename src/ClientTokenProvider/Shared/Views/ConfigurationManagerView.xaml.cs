@@ -14,6 +14,7 @@ public partial class ConfigurationManagerPage :
     IRecipient<AddingConfigurationFailedMessage>,
     IRecipient<RenamingConfigurationFailedMessage>,
     IRecipient<SavingConfigurationDataFailedMessage>,
+    IRecipient<ExportingConfigurationFailedMessage>,
     IRecipient<DeletingConfigurationFailedMessage>,
     IRecipient<ShowAccessTokenErrorDetailMessage>,
     IRecipient<ShowSaveChangesBeforeCloseDetailMessage>
@@ -72,6 +73,14 @@ public partial class ConfigurationManagerPage :
         await DisplayAlert(
             "Saving configuration data failed",
             "Configuration data could not be saved",
+            "Close");
+    }
+
+    public async void Receive(ExportingConfigurationFailedMessage message)
+    {
+        await DisplayAlert(
+            "Exporting configuration failed",
+            "Configuration could not be exported",
             "Close");
     }
 
