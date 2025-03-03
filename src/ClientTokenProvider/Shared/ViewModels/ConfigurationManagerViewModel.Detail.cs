@@ -240,7 +240,8 @@ public partial class ConfigurationManagerViewModel
             configurationDetail.Id,
             cancellationToken);
 
-        if (exportConfigurationResult.IsFailure)
+        if (exportConfigurationResult.IsFailure &&
+            exportConfigurationResult.Error.ErrorType != ErrorType.Cancelled)
         {
             WeakReferenceMessenger.Default.Send(
                new ExportingConfigurationFailedMessage());

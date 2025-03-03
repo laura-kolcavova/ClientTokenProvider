@@ -1,4 +1,5 @@
-﻿using ClientTokenProvider.Shared.Services;
+﻿using ClientTokenProvider.Business.Shared.Services.Abstractions;
+using ClientTokenProvider.Shared.Services;
 using ClientTokenProvider.Shared.Services.Abstractions;
 using ClientTokenProvider.Shared.ViewModels;
 using ClientTokenProvider.Shared.Views;
@@ -17,11 +18,11 @@ internal static class ServiceCollectionExtensions
 
         services
             .AddSingleton<IConfigurationDataMapper, ConfigurationDataMapper>()
-            .AddSingleton<IConfigurationDataBackupStore, ConfigurationDataBackupStore>()
-            .AddSingleton<IConfigurationExporter, ConfigurationExporter>();
+            .AddSingleton<IConfigurationDataBackupStore, ConfigurationDataBackupStore>();
 
         services
-            .AddSingleton<IFileSaver>(FileSaver.Default);
+            .AddSingleton<IFileSaver>(FileSaver.Default)
+            .AddSingleton<IFileSaveHandler, FileSaveHandler>();
 
         return services;
     }

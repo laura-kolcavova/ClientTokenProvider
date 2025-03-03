@@ -1,19 +1,20 @@
-﻿using ClientTokenProvider.Business.Shared.Models;
+﻿using ClientTokenProvider.Business.Shared.Errors;
+using ClientTokenProvider.Business.Shared.Models;
 using ClientTokenProvider.Business.Shared.Serializaiton;
-using ClientTokenProvider.Shared.Services.Abstractions;
-using CommunityToolkit.Maui.Storage;
+using ClientTokenProvider.Business.Shared.Services.Abstractions;
+using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Text.Json;
 
-namespace ClientTokenProvider.Shared.Services;
+namespace ClientTokenProvider.Business.Shared.Services;
 
 internal sealed class ConfigurationExporter(
-    ILogger<ConfigurationExporter> logger,
-    IFileSaver fileSaver) :
+    IFileSaveHandler fileSaveHandler,
+    ILogger<ConfigurationExporter> logger) :
     IConfigurationExporter
 {
-    public async Task Export(
+    public async Task<UnitResult<Error>> Export(
         ConfigurationModel configuration,
         CancellationToken cancellationToken)
     {
@@ -25,18 +26,20 @@ internal sealed class ConfigurationExporter(
 
             var bytes = Encoding.UTF8.GetBytes(json);
 
-            var fileName = $"{configuration.Name}.json";
+            var fileName = !string.IsNullOrEmpty(configuration.Name)
+                ? configuration.Name
+                : "New Configuration";
+
+            var fileNameWithExtension = $"{fileName}.json";
 
             using var stream = new MemoryStream(bytes);
 
-#pragma warning disable CA1416 // Validate platform compatibility
-            var fileSaverResult = await fileSaver.SaveAsync(
-                fileName,
+            var result = await fileSaveHandler.SaveFile(
+                fileNameWithExtension,
                 stream,
                 cancellationToken);
-#pragma warning restore CA1416 // Validate platform compatibility
 
-            fileSaverResult.EnsureSuccess();
+            return result;
         }
         catch (Exception ex)
         {

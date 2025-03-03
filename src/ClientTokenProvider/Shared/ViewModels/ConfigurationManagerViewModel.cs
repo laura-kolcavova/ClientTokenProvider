@@ -263,11 +263,15 @@ public partial class ConfigurationManagerViewModel(
                 return ConfigurationErrors.Configuration.NotFound();
             }
 
-            await configurationExporter.Export(
+            var result = await configurationExporter.Export(
                 configuration,
                 cancellationToken);
 
-            return UnitResult.Success<Error>();
+            return result;
+        }
+        catch (OperationCanceledException)
+        {
+            return GeneralErrors.General.Cancelled();
         }
         catch (Exception ex)
         {

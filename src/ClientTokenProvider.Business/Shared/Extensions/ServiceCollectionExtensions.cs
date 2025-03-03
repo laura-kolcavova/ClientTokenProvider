@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddSingleton<IConfigurationFactory, ConfigurationFactory>()
+            .AddSingleton<IConfigurationExporter, ConfigurationExporter>()
             .AddSingleton<IClientTokenProviderFactory, ClientTokenProviderFactory>()
             .AddSingleton<IJwtDecoder, JwtDecoder>();
 
