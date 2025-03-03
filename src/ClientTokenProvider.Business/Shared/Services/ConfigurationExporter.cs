@@ -22,7 +22,7 @@ internal sealed class ConfigurationExporter(
         {
             var json = JsonSerializer.Serialize(
                 configuration,
-                DefaultJsonSerializer.Options);
+                ConfigurationFileJsonSerializer.Options);
 
             var bytes = Encoding.UTF8.GetBytes(json);
 
