@@ -1,28 +1,30 @@
 ﻿using ClientTokenProvider.Business.Shared.JsonConverters;
+using ClientTokenProvider.Business.Shared.Services.Abstractions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace ClientTokenProvider.Business.Shared.Serializaiton;
 
-public static class ConfigurationFileJsonSerializer
+public sealed class ConfigurationFileJsonSerializer(
+    IConfigurationDataTypeProvider configurationDataTypeProvider)
 {
-    public static readonly JsonSerializerOptions Options = new()
+    public JsonSerializerOptions Options { get; } = new()
     {
         Converters =
         {
             new JsonStringEnumConverter(),
-            new ConfigurationFileJsonConverter()
+            new ConfigurationFileJsonConverter(configurationDataTypeProvider)
         },
 
         WriteIndented = true
     };
 
-    public static string Serialize<TValue>(TValue value)
+    public string Serialize<TValue>(TValue value)
     {
         return JsonSerializer.Serialize(value, Options);
     }
 
-    public static TValue? Deserialize<TValue>(string json)
+    public TValue? Deserialize<TValue>(string json)
     {
         return JsonSerializer.Deserialize<TValue>(json, Options);
     }

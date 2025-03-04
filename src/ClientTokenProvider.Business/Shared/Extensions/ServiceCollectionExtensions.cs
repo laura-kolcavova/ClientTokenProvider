@@ -1,4 +1,5 @@
-﻿using ClientTokenProvider.Business.Shared.Services;
+﻿using ClientTokenProvider.Business.Shared.Serializaiton;
+using ClientTokenProvider.Business.Shared.Services;
 using ClientTokenProvider.Business.Shared.Services.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,8 +11,14 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services)
     {
         services
+            .AddSingleton<ConfigurationFileJsonSerializer>();
+
+        services
             .AddSingleton<IConfigurationFactory, ConfigurationFactory>()
-            .AddSingleton<IConfigurationExporter, ConfigurationExporter>()
+            .AddSingleton<IConfigurationDataTypeProvider, ConfigurationDataTypeProvider>()
+            .AddSingleton<IConfigurationExporter, ConfigurationExporter>();
+
+        services
             .AddSingleton<IClientTokenProviderFactory, ClientTokenProviderFactory>()
             .AddSingleton<IJwtDecoder, JwtDecoder>();
 

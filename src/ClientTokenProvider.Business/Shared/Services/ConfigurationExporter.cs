@@ -11,6 +11,7 @@ namespace ClientTokenProvider.Business.Shared.Services;
 
 internal sealed class ConfigurationExporter(
     IFileSaveHandler fileSaveHandler,
+    ConfigurationFileJsonSerializer configurationFileJsonSerializer,
     ILogger<ConfigurationExporter> logger) :
     IConfigurationExporter
 {
@@ -22,7 +23,7 @@ internal sealed class ConfigurationExporter(
         {
             var json = JsonSerializer.Serialize(
                 configuration,
-                ConfigurationFileJsonSerializer.Options);
+                configurationFileJsonSerializer.Options);
 
             var bytes = Encoding.UTF8.GetBytes(json);
 

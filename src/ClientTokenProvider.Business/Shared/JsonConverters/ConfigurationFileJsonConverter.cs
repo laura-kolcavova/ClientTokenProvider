@@ -1,11 +1,13 @@
 ﻿using ClientTokenProvider.Business.Shared.Models;
 using ClientTokenProvider.Business.Shared.Models.Abstractions;
+using ClientTokenProvider.Business.Shared.Services.Abstractions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace ClientTokenProvider.Business.Shared.JsonConverters;
 
-internal sealed class ConfigurationFileJsonConverter :
+internal sealed class ConfigurationFileJsonConverter(
+    IConfigurationDataTypeProvider configurationDataTypeProvider) :
     JsonConverter<ConfigurationModel>
 {
     public override ConfigurationModel? Read(
@@ -42,11 +44,18 @@ internal sealed class ConfigurationFileJsonConverter :
 
                         break;
                     case nameof(ConfigurationModel.Data):
-                        data = JsonSerializer.Deserialize<IConfigurationData>(
-                            ref reader,
-                            options);
+                        {
+                            var configurationDataType = configurationDataTypeProvider.Get(
+                                kind
+                                    ?? throw new JsonException("Failed to deserialize Kind property"));
 
-                        break;
+                            data = JsonSerializer.Deserialize(
+                                ref reader,
+                                configurationDataType,
+                                options) as IConfigurationData;
+
+                            break;
+                        }
                 }
             }
         }
@@ -81,9 +90,13 @@ internal sealed class ConfigurationFileJsonConverter :
         writer.WritePropertyName(
             nameof(ConfigurationModel.Data));
 
+        var configurationDataType = configurationDataTypeProvider.Get(
+            value.Kind);
+
         JsonSerializer.Serialize(
             writer,
             value.Data,
+            configurationDataType,
             options);
 
         writer.WriteEndObject();

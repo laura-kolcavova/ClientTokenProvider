@@ -21,7 +21,8 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IAzureAdConfigurationFactory, AzureAdConfigurationFactory>();
 
         services
-            .AddKeyedSingleton<IClientTokenProviderFactory, ClientTokenProviderFactory>(azureAdConfigurationKindName);
+            .AddKeyedSingleton<IClientTokenProviderFactory, ClientTokenProviderFactory>(azureAdConfigurationKindName)
+            .AddKeyedSingleton<IConfigurationDataTypeProvider, ConfigurationDataTypeProvider>(azureAdConfigurationKindName);
 
         return services;
     }
