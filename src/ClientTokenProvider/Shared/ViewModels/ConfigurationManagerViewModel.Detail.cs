@@ -134,6 +134,10 @@ public partial class ConfigurationManagerViewModel
                 .AreDataValid();
         }
 
+        configurationDetail.CanBeExported = !configurationDetail
+                .Data
+                .AreDataEmpty();
+
         configurationDetail.CanBeSaved = anyChanges;
     }
 
@@ -225,6 +229,27 @@ public partial class ConfigurationManagerViewModel
         }
     }
 
+    [RelayCommand(
+        IncludeCancelCommand = true,
+        AllowConcurrentExecutions = false)]
+    private async Task ExportConfiguration(
+        ConfigurationDetailBindableModel configurationDetail,
+        CancellationToken cancellationToken)
+    {
+        var exportConfigurationResult = await ExportConfiguration_Internal(
+            configurationDetail.Id,
+            cancellationToken);
+
+        if (exportConfigurationResult.IsFailure &&
+            exportConfigurationResult.Error.ErrorType != ErrorType.Cancelled)
+        {
+            WeakReferenceMessenger.Default.Send(
+               new ExportingConfigurationFailedMessage());
+
+            return;
+        }
+    }
+
     private ConfigurationDetailBindableModel CreateAndAddConfigurationDetail_Internal(
         ConfigurationModel configuration)
     {
@@ -240,6 +265,9 @@ public partial class ConfigurationManagerViewModel
 
         configurationDetail.CanGetAccessToken = configurationData
             .AreDataValid();
+
+        configurationDetail.CanBeExported = !configurationData
+            .AreDataEmpty();
 
         configurationDataBackupStore.Set(
             configurationDetail.Id,

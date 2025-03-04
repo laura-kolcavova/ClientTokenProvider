@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace ClientTokenProvider.Persistence.AzureAd.Converters;
 
-internal class AzureAdConfigurationDataConverter :
+internal sealed class AzureAdConfigurationDataConverter :
     ValueConverter<IConfigurationData, string>
 {
     public AzureAdConfigurationDataConverter(

@@ -51,6 +51,23 @@
             </Setter>
         </Style>
 
+        <Style Class="exportButton" TargetType="Button">
+            <Setter Property="ImageSource" Value="export_small_grey400.png" />
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <Setter Property="ImageSource" Value="export_small_grey500.png" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="PointerOver" />
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+
         <Style Class="alertWrapper" TargetType="VerticalStackLayout">
             <Setter Property="Spacing" Value="20" />
         </Style>
@@ -99,6 +116,12 @@
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout VerticalOptions="Center">
+                        <Button
+                            Clicked="ExportButton_Clicked"
+                            IsEnabled="{Binding ConfigurationDetail.CanBeExported}"
+                            StyleClass="textIconButton, exportButton"
+                            Text="Export" />
+
                         <Button
                             Clicked="SaveConfigurationButton_Clicked"
                             IsEnabled="{Binding ConfigurationDetail.CanBeSaved}"

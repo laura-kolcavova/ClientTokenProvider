@@ -382,6 +382,7 @@
 
     <Style Class="textIconButton" TargetType="Button">
         <Setter Property="Padding" Value="3, 4" />
+        <Setter Property="FontSize" Value="12" />
         <Setter Property="MinimumWidthRequest" Value="44" />
         <Setter Property="MinimumHeightRequest" Value="0" />
         <Setter Property="BorderWidth" Value="0" />

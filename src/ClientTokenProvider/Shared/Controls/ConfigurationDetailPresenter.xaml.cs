@@ -23,6 +23,11 @@ public partial class ConfigurationDetailPresenter :
         typeof(IAsyncRelayCommand<ConfigurationDetailBindableModel>),
         typeof(ConfigurationDetailPresenter));
 
+    public static readonly BindableProperty ExportConfigurationCommandProperty = BindableProperty.Create(
+       nameof(ExportConfigurationCommand),
+       typeof(IAsyncRelayCommand<ConfigurationDetailBindableModel>),
+       typeof(ConfigurationDetailPresenter));
+
     public static readonly BindableProperty HandleConfigurationDataChangedCommandProperty = BindableProperty.Create(
         nameof(HandleConfigurationDataChangedCommand),
         typeof(IRelayCommand<ConfigurationDetailBindableModel>),
@@ -61,6 +66,12 @@ public partial class ConfigurationDetailPresenter :
     {
         get => (IAsyncRelayCommand<ConfigurationDetailBindableModel>)GetValue(SaveConfigurationDataCommandProperty);
         set => SetValue(SaveConfigurationDataCommandProperty, value);
+    }
+
+    public IAsyncRelayCommand<ConfigurationDetailBindableModel> ExportConfigurationCommand
+    {
+        get => (IAsyncRelayCommand<ConfigurationDetailBindableModel>)GetValue(ExportConfigurationCommandProperty);
+        set => SetValue(ExportConfigurationCommandProperty, value);
     }
 
     public IRelayCommand<ConfigurationDetailBindableModel> HandleConfigurationDataChangedCommand
@@ -138,6 +149,11 @@ public partial class ConfigurationDetailPresenter :
             RenameConfigurationCommand?.Execute(ConfigurationDetail);
             _canRenameConfiguration = false;
         }
+    }
+
+    private void ExportButton_Clicked(object sender, EventArgs e)
+    {
+        ExportConfigurationCommand?.Execute(ConfigurationDetail);
     }
 
     private void SaveConfigurationButton_Clicked(object sender, EventArgs e)

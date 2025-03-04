@@ -6,5 +6,7 @@ public interface IConfigurationDataBindableModel
 
     public IConfigurationDataBindableModel Copy();
 
+    public bool AreDataEmpty();
+
     public bool AreDataValid();
 }

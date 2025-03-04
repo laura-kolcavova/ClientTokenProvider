@@ -21,6 +21,9 @@ public partial class ConfigurationDetailBindableModel :
     private bool _canBeSaved;
 
     [ObservableProperty]
+    private bool _canBeExported;
+
+    [ObservableProperty]
     private bool _canGetAccessToken;
 
     [ObservableProperty]

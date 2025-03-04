@@ -20,6 +20,7 @@ public partial class ConfigurationManagerViewModel(
     IConfigurationDataMapper configurationDataMapper,
     IConfigurationDataBackupStore configurationDataBackupStore,
     IClientTokenProviderFactory clientTokenProviderFactory,
+    IConfigurationExporter configurationExporter,
     IJwtDecoder jwtDecoder,
     ILogger<ConfigurationManagerViewModel> logger) :
     ViewModelBase,
@@ -177,7 +178,6 @@ public partial class ConfigurationManagerViewModel(
         CancellationToken cancellationToken)
     {
         // Maybe it will be better to have REST ConfigurationService
-
         try
         {
             var configuration = _configurations
@@ -243,6 +243,41 @@ public partial class ConfigurationManagerViewModel(
             logger.LogError(
                ex,
                "An unexpected error occurred while saving many configuration data");
+
+            return GeneralErrors.General.Unexpected();
+        }
+    }
+
+    private async Task<UnitResult<Error>> ExportConfiguration_Internal(
+        Guid configurationId,
+        CancellationToken cancellationToken)
+    {
+        // Maybe it will be better to have REST ConfigurationService
+        try
+        {
+            var configuration = _configurations
+               .FirstOrDefault(configuration => configuration.Id == configurationId);
+
+            if (configuration is null)
+            {
+                return ConfigurationErrors.Configuration.NotFound();
+            }
+
+            var result = await configurationExporter.Export(
+                configuration,
+                cancellationToken);
+
+            return result;
+        }
+        catch (OperationCanceledException)
+        {
+            return GeneralErrors.General.Cancelled();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(
+               ex,
+               "An unexpected error occurred while exporting a configuration");
 
             return GeneralErrors.General.Unexpected();
         }

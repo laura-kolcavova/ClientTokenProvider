@@ -41,6 +41,17 @@ public partial class AzureAdConfigurationDataBindableModel :
         ClientSecret = clientSecret;
     }
 
+    public bool AreDataEmpty()
+    {
+        return
+            string.IsNullOrEmpty(Instance) &&
+            string.IsNullOrEmpty(TenantId) &&
+            string.IsNullOrEmpty(Scope) &&
+            string.IsNullOrEmpty(Audience) &&
+            string.IsNullOrEmpty(ClientId) &&
+            string.IsNullOrEmpty(ClientSecret);
+    }
+
     public bool AreDataValid()
     {
         return
