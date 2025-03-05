@@ -16,7 +16,8 @@ public static class ServiceCollectionExtensions
         services
             .AddSingleton<IConfigurationFactory, ConfigurationFactory>()
             .AddSingleton<IConfigurationDataTypeProvider, ConfigurationDataTypeProvider>()
-            .AddSingleton<IConfigurationExporter, ConfigurationExporter>();
+            .AddSingleton<IConfigurationExporter, ConfigurationExporter>()
+            .AddSingleton<IConfigurationImporter, ConfigurationImporter>();
 
         services
             .AddSingleton<IClientTokenProviderFactory, ClientTokenProviderFactory>()

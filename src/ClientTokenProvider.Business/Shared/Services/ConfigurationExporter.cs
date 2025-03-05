@@ -17,6 +17,7 @@ internal sealed class ConfigurationExporter(
 {
     public async Task<UnitResult<Error>> Export(
         ConfigurationModel configuration,
+        string defaultName,
         CancellationToken cancellationToken)
     {
         try
@@ -29,7 +30,7 @@ internal sealed class ConfigurationExporter(
 
             var fileName = !string.IsNullOrEmpty(configuration.Name)
                 ? configuration.Name
-                : "New Configuration";
+                : defaultName;
 
             var fileNameWithExtension = $"{fileName}.json";
 

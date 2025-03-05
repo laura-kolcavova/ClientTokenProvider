@@ -8,5 +8,15 @@ public static class FileErrors
             $"{nameof(File)}.{nameof(SavingFailed)}",
             "Saving file failed",
             ErrorType.Failure);
+
+        public static Error InvalidExtension() => new(
+          $"{nameof(File)}.{nameof(InvalidExtension)}",
+          "File extension is invalid",
+          ErrorType.Failure);
+
+        public static Error InvalidFormat() => new(
+            $"{nameof(File)}.{nameof(InvalidFormat)}",
+            "File format is invalid",
+            ErrorType.Failure);
     }
 }

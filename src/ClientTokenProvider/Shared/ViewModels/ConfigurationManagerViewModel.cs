@@ -25,7 +25,7 @@ public partial class ConfigurationManagerViewModel(
     ILogger<ConfigurationManagerViewModel> logger) :
     ViewModelBase,
     IRecipient<CloseAppMessage>,
-    IRecipient<HandlePopupResultMessage<SaveChangesBeforeClosePopupResult>>
+    IRecipient<HandlePopupResultMessage<SaveChangesBeforeExitPopupResult>>
 {
     private List<ConfigurationModel> _configurations = [];
 
@@ -265,6 +265,7 @@ public partial class ConfigurationManagerViewModel(
 
             var result = await configurationExporter.Export(
                 configuration,
+                "New Configuration",
                 cancellationToken);
 
             return result;

@@ -48,17 +48,17 @@ public partial class ConfigurationManagerViewModel
     }
 
     public async void Receive(
-        HandlePopupResultMessage<SaveChangesBeforeClosePopupResult> message)
+        HandlePopupResultMessage<SaveChangesBeforeExitPopupResult> message)
     {
         saveChangesBeforeCloseModalShowed = false;
 
-        if (message.Result == SaveChangesBeforeClosePopupResult.Close ||
-            message.Result == SaveChangesBeforeClosePopupResult.Cancel)
+        if (message.Result == SaveChangesBeforeExitPopupResult.Close ||
+            message.Result == SaveChangesBeforeExitPopupResult.Cancel)
         {
             return;
         }
 
-        if (message.Result == SaveChangesBeforeClosePopupResult.DontSave)
+        if (message.Result == SaveChangesBeforeExitPopupResult.ExitWithoutSave)
         {
             App.Current?.Quit();
 
@@ -133,10 +133,6 @@ public partial class ConfigurationManagerViewModel
                 .Data
                 .AreDataValid();
         }
-
-        configurationDetail.CanBeExported = !configurationDetail
-                .Data
-                .AreDataEmpty();
 
         configurationDetail.CanBeSaved = anyChanges;
     }
@@ -229,27 +225,6 @@ public partial class ConfigurationManagerViewModel
         }
     }
 
-    [RelayCommand(
-        IncludeCancelCommand = true,
-        AllowConcurrentExecutions = false)]
-    private async Task ExportConfiguration(
-        ConfigurationDetailBindableModel configurationDetail,
-        CancellationToken cancellationToken)
-    {
-        var exportConfigurationResult = await ExportConfiguration_Internal(
-            configurationDetail.Id,
-            cancellationToken);
-
-        if (exportConfigurationResult.IsFailure &&
-            exportConfigurationResult.Error.ErrorType != ErrorType.Cancelled)
-        {
-            WeakReferenceMessenger.Default.Send(
-               new ExportingConfigurationFailedMessage());
-
-            return;
-        }
-    }
-
     private ConfigurationDetailBindableModel CreateAndAddConfigurationDetail_Internal(
         ConfigurationModel configuration)
     {
@@ -265,9 +240,6 @@ public partial class ConfigurationManagerViewModel
 
         configurationDetail.CanGetAccessToken = configurationData
             .AreDataValid();
-
-        configurationDetail.CanBeExported = !configurationData
-            .AreDataEmpty();
 
         configurationDataBackupStore.Set(
             configurationDetail.Id,
