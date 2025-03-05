@@ -13,22 +13,22 @@ public partial class SaveChangesBeforeClosePopup : Popup
     private async void DontSaveButton_Clicked(object sender, EventArgs e)
     {
         await Close(
-            SaveChangesBeforeClosePopupResult.DontSave);
+            SaveChangesBeforeExitPopupResult.ExitWithoutSave);
     }
 
     private async void CancelButton_Clicked(object sender, EventArgs e)
     {
         await Close(
-            SaveChangesBeforeClosePopupResult.Cancel);
+            SaveChangesBeforeExitPopupResult.Cancel);
     }
 
     private async void SaveChangesButton_Clicked(object sender, EventArgs e)
     {
         await Close(
-            SaveChangesBeforeClosePopupResult.SaveChanges);
+            SaveChangesBeforeExitPopupResult.SaveAndExit);
     }
 
-    private async Task Close(SaveChangesBeforeClosePopupResult result)
+    private async Task Close(SaveChangesBeforeExitPopupResult result)
     {
         using var cancellationTokenSource = new CancellationTokenSource(
             TimeSpan.FromSeconds(5));

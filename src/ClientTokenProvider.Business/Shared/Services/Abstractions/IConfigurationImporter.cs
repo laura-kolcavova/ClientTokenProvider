@@ -4,10 +4,8 @@ using CSharpFunctionalExtensions;
 
 namespace ClientTokenProvider.Business.Shared.Services.Abstractions;
 
-public interface IConfigurationExporter
+public interface IConfigurationImporter
 {
-    public Task<UnitResult<Error>> Export(
-        ConfigurationModel configuration,
-        string defaultName,
+    public Task<Result<ConfigurationModel, Error>> Import(
         CancellationToken cancellationToken);
 }
