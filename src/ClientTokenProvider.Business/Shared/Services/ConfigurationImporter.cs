@@ -19,7 +19,14 @@ internal sealed class ConfigurationImporter(
     {
         try
         {
-            var result = await filePickHandler.PickFile(cancellationToken);
+            var filePickOptions = new FilePickOptions
+            {
+                FileExtensions = [".json"]
+            };
+
+            var result = await filePickHandler.PickFile(
+                filePickOptions,
+                cancellationToken);
 
             if (result.IsFailure)
             {
