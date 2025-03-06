@@ -172,6 +172,27 @@ public partial class ConfigurationManagerViewModel
     }
 
     [RelayCommand(
+        IncludeCancelCommand = true,
+        AllowConcurrentExecutions = false)]
+    private async Task ExportConfiguration(
+        ConfigurationDetailBindableModel configurationDetail,
+        CancellationToken cancellationToken)
+    {
+        var exportConfigurationResult = await ExportConfiguration_Internal(
+            configurationDetail.Id,
+            cancellationToken);
+
+        if (exportConfigurationResult.IsFailure &&
+            exportConfigurationResult.Error.ErrorType != ErrorType.Cancelled)
+        {
+            WeakReferenceMessenger.Default.Send(
+               new ExportingConfigurationFailedMessage());
+
+            return;
+        }
+    }
+
+    [RelayCommand(
        IncludeCancelCommand = true,
        AllowConcurrentExecutions = false)]
     private async Task GetAccessToken(
