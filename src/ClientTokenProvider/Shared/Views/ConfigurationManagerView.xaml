@@ -25,6 +25,7 @@
                 ActiveConfigurationListItem="{Binding ActiveConfigurationListItem}"
                 AddNewConfigurationCommand="{Binding AddNewConfigurationCommand}"
                 ConfigurationListItems="{Binding ConfigurationListItems}"
+                ImportConfigurationCommand="{Binding ImportConfigurationCommand}"
                 RemoveConfigurationListItemCommand="{Binding RemoveConfigurationListItemCommand}"
                 SetActiveConfigurationListItemCommand="{Binding SetActiveConfigurationListItemCommand}" />
 

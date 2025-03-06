@@ -41,6 +41,11 @@
             <VerticalStackLayout Grid.Row="0">
                 <HorizontalStackLayout VerticalOptions="Center">
                     <Button Clicked="AddNewConfigurationButton_Clicked" StyleClass="iconButton, addNewConfigurationButton" />
+
+                    <Button
+                        Clicked="ImportConfigurationButton_Clicked"
+                        StyleClass="button, btnTertiary"
+                        Text="Import" />
                 </HorizontalStackLayout>
             </VerticalStackLayout>
 

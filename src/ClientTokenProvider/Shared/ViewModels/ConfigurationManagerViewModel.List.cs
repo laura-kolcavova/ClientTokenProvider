@@ -47,6 +47,24 @@ public partial class ConfigurationManagerViewModel
         RemoveConfigurationDetail_Internal(configurationListItem.Id);
     }
 
+    [RelayCommand(
+       IncludeCancelCommand = true,
+       AllowConcurrentExecutions = false)]
+    private async Task ImportConfiguration(
+        CancellationToken cancellationToken)
+    {
+        var importResult = await ImportConfiguration_Internal(
+            cancellationToken);
+
+        if (importResult.IsFailure)
+        {
+            // TODO Message
+            return;
+        }
+
+        CreateAndAddConfigurationListItem_Internal(importResult.Value);
+    }
+
     private ConfigurationListItemBindableModel CreateAndAddConfigurationListItem_Internal(
        ConfigurationModel configuration)
     {

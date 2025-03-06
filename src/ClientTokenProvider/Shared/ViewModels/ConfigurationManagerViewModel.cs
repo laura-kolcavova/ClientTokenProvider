@@ -21,6 +21,7 @@ public partial class ConfigurationManagerViewModel(
     IConfigurationDataBackupStore configurationDataBackupStore,
     IClientTokenProviderFactory clientTokenProviderFactory,
     IConfigurationExporter configurationExporter,
+    IConfigurationImporter configurationImporter,
     IJwtDecoder jwtDecoder,
     ILogger<ConfigurationManagerViewModel> logger) :
     ViewModelBase,
@@ -344,6 +345,38 @@ public partial class ConfigurationManagerViewModel(
 
             return UnitResult.Success<Error>();
 
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(
+               ex,
+               "An unexpected error occurred while deleting a configuration");
+
+            return GeneralErrors.General.Unexpected();
+        }
+    }
+
+    private async Task<Result<ConfigurationModel, Error>> ImportConfiguration_Internal(
+        CancellationToken cancellationToken)
+    {
+        // Maybe it will be better to have REST ConfigurationService
+        try
+        {
+            var result = await configurationImporter.Import(
+                cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return result.Error;
+            }
+
+            _configurations.Add(result.Value);
+
+            return result;
+        }
+        catch (OperationCanceledException)
+        {
+            return GeneralErrors.General.Cancelled();
         }
         catch (Exception ex)
         {

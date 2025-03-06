@@ -36,7 +36,7 @@ internal sealed class FilePickHandler(
         }
 
         var fileNameParts = result.FileName.Split('.');
-        var fileExtension = fileNameParts[fileNameParts.Length - 1];
+        var fileExtension = '.' + fileNameParts[fileNameParts.Length - 1];
 
         var anyFileExtensionMatch = targetFileExtensions
             .Any(targetFileExtension =>
