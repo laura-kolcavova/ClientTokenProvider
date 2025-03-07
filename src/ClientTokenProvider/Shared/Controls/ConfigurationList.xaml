@@ -31,6 +31,13 @@
             <Setter Property="BackgroundColor" Value="Transparent" />
             <Setter Property="ImageSource" Value="add_small_grey400.png" />
         </Style>
+
+        <Style Class="importConfigurationButton" TargetType="Button">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="MinimumWidthRequest" Value="0" />
+            <Setter Property="MinimumHeightRequest" Value="0" />
+            <Setter Property="Padding" Value="5, 4" />
+        </Style>
     </ContentView.Resources>
 
     <Grid
@@ -38,11 +45,24 @@
         BindingContext="{x:Reference this}"
         ColumnDefinitions="*, 1">
         <Grid Grid.Column="0" RowDefinitions="auto, *">
-            <VerticalStackLayout Grid.Row="0">
-                <HorizontalStackLayout VerticalOptions="Center">
+            <Grid
+                Grid.Row="0"
+                Padding="7,6"
+                ColumnDefinitions="auto, *, auto">
+                <HorizontalStackLayout Grid.Column="0">
                     <Button Clicked="AddNewConfigurationButton_Clicked" StyleClass="iconButton, addNewConfigurationButton" />
                 </HorizontalStackLayout>
-            </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="2">
+
+                    <Button
+                        Clicked="ImportConfigurationButton_Clicked"
+                        StyleClass="button, btnTertiary, importConfigurationButton"
+                        Text="Import" />
+                </HorizontalStackLayout>
+
+
+            </Grid>
 
             <ListView
                 Grid.Row="1"

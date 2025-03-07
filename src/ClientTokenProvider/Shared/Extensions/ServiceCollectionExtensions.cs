@@ -22,7 +22,9 @@ internal static class ServiceCollectionExtensions
 
         services
             .AddSingleton<IFileSaver>(FileSaver.Default)
-            .AddSingleton<IFileSaveHandler, FileSaveHandler>();
+            .AddSingleton<IFilePicker>(FilePicker.Default)
+            .AddSingleton<IFileSaveHandler, FileSaveHandler>()
+            .AddSingleton<IFilePickHandler, FilePickHandler>();
 
         return services;
     }

@@ -15,6 +15,7 @@ public partial class ConfigurationManagerPage :
     IRecipient<RenamingConfigurationFailedMessage>,
     IRecipient<SavingConfigurationDataFailedMessage>,
     IRecipient<ExportingConfigurationFailedMessage>,
+    IRecipient<ImportingConfigurationFailedMessage>,
     IRecipient<DeletingConfigurationFailedMessage>,
     IRecipient<ShowAccessTokenErrorDetailMessage>,
     IRecipient<ShowSaveChangesBeforeCloseDetailMessage>
@@ -84,6 +85,14 @@ public partial class ConfigurationManagerPage :
             "Close");
     }
 
+    public async void Receive(ImportingConfigurationFailedMessage message)
+    {
+        await DisplayAlert(
+            "Importing configuration failed",
+            "Configuration could not be imported",
+            "Close");
+    }
+
     public async void Receive(DeletingConfigurationFailedMessage message)
     {
         // TODO Localization
@@ -110,12 +119,12 @@ public partial class ConfigurationManagerPage :
             CancellationToken.None);
 
         var result = resultObject is null
-            ? SaveChangesBeforeClosePopupResult.Close
-            : (SaveChangesBeforeClosePopupResult)resultObject;
+            ? SaveChangesBeforeExitPopupResult.Close
+            : (SaveChangesBeforeExitPopupResult)resultObject;
 
         WeakReferenceMessenger
             .Default
-            .Send(new HandlePopupResultMessage<SaveChangesBeforeClosePopupResult>
+            .Send(new HandlePopupResultMessage<SaveChangesBeforeExitPopupResult>
             {
                 Result = result
             });

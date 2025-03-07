@@ -1,4 +1,5 @@
-﻿using ClientTokenProvider.Business.Shared.Models;
+﻿using ClientTokenProvider.Business.Shared.Errors;
+using ClientTokenProvider.Business.Shared.Models;
 using ClientTokenProvider.Shared.BindableModels;
 using ClientTokenProvider.Shared.Extensions;
 using ClientTokenProvider.Shared.Messages;
@@ -45,6 +46,29 @@ public partial class ConfigurationManagerViewModel
 
         RemoveConfigurationListItem_Internal(configurationListItem);
         RemoveConfigurationDetail_Internal(configurationListItem.Id);
+    }
+
+    [RelayCommand(
+       IncludeCancelCommand = true,
+       AllowConcurrentExecutions = false)]
+    private async Task ImportConfiguration(
+        CancellationToken cancellationToken)
+    {
+        var importResult = await ImportConfiguration_Internal(
+            cancellationToken);
+
+        if (importResult.IsFailure)
+        {
+            if (importResult.Error.ErrorType != ErrorType.Cancelled)
+            {
+                WeakReferenceMessenger.Default.Send(
+                    new ImportingConfigurationFailedMessage());
+            }
+
+            return;
+        }
+
+        CreateAndAddConfigurationListItem_Internal(importResult.Value);
     }
 
     private ConfigurationListItemBindableModel CreateAndAddConfigurationListItem_Internal(

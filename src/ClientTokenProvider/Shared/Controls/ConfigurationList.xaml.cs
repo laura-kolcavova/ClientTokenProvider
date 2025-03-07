@@ -31,6 +31,11 @@ public partial class ConfigurationList : ContentView
         typeof(IAsyncRelayCommand<ConfigurationListItemBindableModel>),
         typeof(ConfigurationList));
 
+    public static readonly BindableProperty ImportConfigurationCommandProperty = BindableProperty.Create(
+        nameof(RemoveConfigurationListItemCommand),
+        typeof(IAsyncRelayCommand),
+        typeof(ConfigurationList));
+
     public IEnumerable<ConfigurationListItemBindableModel> ConfigurationListItems
     {
         get => (IEnumerable<ConfigurationListItemBindableModel>)GetValue(ConfigurationListItemsProperty);
@@ -61,6 +66,12 @@ public partial class ConfigurationList : ContentView
         set => SetValue(RemoveConfigurationListItemCommandProperty, value);
     }
 
+    public IAsyncRelayCommand ImportConfigurationCommand
+    {
+        get => (IAsyncRelayCommand)GetValue(ImportConfigurationCommandProperty);
+        set => SetValue(ImportConfigurationCommandProperty, value);
+    }
+
     public ConfigurationList()
     {
         InitializeComponent();
@@ -89,5 +100,10 @@ public partial class ConfigurationList : ContentView
         var selectedItem = (ConfigurationListItemBindableModel)menuItem.BindingContext;
 
         RemoveConfigurationListItemCommand?.Execute(selectedItem);
+    }
+
+    private void ImportConfigurationButton_Clicked(object sender, EventArgs e)
+    {
+        ImportConfigurationCommand?.Execute(null);
     }
 }
