@@ -134,6 +134,10 @@ public partial class ConfigurationManagerViewModel
                 .AreDataValid();
         }
 
+        configurationDetail.CanBeExported = !configurationDetail
+                .Data
+                .AreDataEmpty();
+
         configurationDetail.CanBeSaved = anyChanges;
     }
 
@@ -259,6 +263,9 @@ public partial class ConfigurationManagerViewModel
 
         configurationDetail.CanGetAccessToken = configurationData
             .AreDataValid();
+
+        configurationDetail.CanBeExported = !configurationData
+            .AreDataEmpty();
 
         configurationDataBackupStore.Set(
             configurationDetail.Id,

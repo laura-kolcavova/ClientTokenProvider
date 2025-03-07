@@ -370,6 +370,10 @@ public partial class ConfigurationManagerViewModel(
                 return result.Error;
             }
 
+            await configurationRepository.Add(
+                result.Value,
+                cancellationToken);
+
             _configurations.Add(result.Value);
 
             return result;
