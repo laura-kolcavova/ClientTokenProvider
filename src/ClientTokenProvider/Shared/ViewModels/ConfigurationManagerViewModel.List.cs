@@ -1,4 +1,5 @@
-﻿using ClientTokenProvider.Business.Shared.Models;
+﻿using ClientTokenProvider.Business.Shared.Errors;
+using ClientTokenProvider.Business.Shared.Models;
 using ClientTokenProvider.Shared.BindableModels;
 using ClientTokenProvider.Shared.Extensions;
 using ClientTokenProvider.Shared.Messages;
@@ -58,7 +59,12 @@ public partial class ConfigurationManagerViewModel
 
         if (importResult.IsFailure)
         {
-            // TODO Message
+            if (importResult.Error.ErrorType != ErrorType.Cancelled)
+            {
+                WeakReferenceMessenger.Default.Send(
+                    new ImportingConfigurationFailedMessage());
+            }
+
             return;
         }
 

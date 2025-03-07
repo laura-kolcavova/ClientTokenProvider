@@ -187,8 +187,6 @@ public partial class ConfigurationManagerViewModel
         {
             WeakReferenceMessenger.Default.Send(
                new ExportingConfigurationFailedMessage());
-
-            return;
         }
     }
 
