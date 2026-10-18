@@ -1,5 +1,5 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="KittyToken.Application/KittyToken.Application.csproj" Id="1a01b6bf-bd7d-4c94-b26b-bd595f029ec3" />
+    <Project Path="src/KittyToken.Application/KittyToken.Application.csproj" />
   </Folder>
 </Solution>
