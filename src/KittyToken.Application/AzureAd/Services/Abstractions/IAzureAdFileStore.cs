@@ -15,7 +15,7 @@ public interface IAzureAdFileStore
         AzureAdFile azureAdFile,
         CancellationToken cancellationToken);
 
-    public Task Remove(
+    public void Remove(
         AzureAdFile azureAdFile,
         CancellationToken cancellationToken);
 

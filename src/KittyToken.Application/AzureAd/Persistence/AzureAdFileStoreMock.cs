@@ -1,7 +1,7 @@
 ﻿using KittyToken.Application.AzureAd.Models;
 using KittyToken.Application.AzureAd.Services.Abstractions;
 
-namespace KittyToken.Application.AzureAd.Services;
+namespace KittyToken.Application.AzureAd.Persistence;
 
 internal sealed class AzureAdFileStoreMock :
     IAzureAdFileStore
@@ -30,7 +30,7 @@ internal sealed class AzureAdFileStoreMock :
         CancellationToken cancellationToken)
     {
         var azureAdFile = _files
-            .FirstOrDefault(configuration => configuration.Id == id);
+            .FirstOrDefault(azureAdFile => azureAdFile.Id == id);
 
         return Task.FromResult(azureAdFile);
     }
@@ -52,13 +52,11 @@ internal sealed class AzureAdFileStoreMock :
         return Task.CompletedTask;
     }
 
-    public Task Remove(
+    public void Remove(
         AzureAdFile azureAdFile,
         CancellationToken cancellationToken)
     {
         _files.Remove(azureAdFile);
-
-        return Task.CompletedTask;
     }
 
     public Task SaveChanges(

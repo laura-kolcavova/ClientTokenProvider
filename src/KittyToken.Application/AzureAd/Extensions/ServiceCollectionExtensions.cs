@@ -1,4 +1,5 @@
-﻿using KittyToken.Application.AzureAd.Services;
+﻿using KittyToken.Application.AzureAd.Persistence;
+using KittyToken.Application.AzureAd.Services;
 using KittyToken.Application.AzureAd.Services.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,10 +11,19 @@ internal static class ServiceCollectionExtensions
         this IServiceCollection services)
     {
         services
-            .AddSingleton<IAzureAdFileFactory, AzureAdFileFactory>();
+            .AddScoped(serviceProvider =>
+            {
+                return new AzureAdFileDbContext(
+                    connectionString: "",
+                    useDevelopmentLogging: false);
+            });
 
         services
-            .AddSingleton<IAzureAdFileStore, AzureAdFileStoreMock>();
+            .AddScoped<IAzureAdFileStore, AzureAdFileStoreSqLite>()
+            .AddKeyedSingleton<IAzureAdFileStore, AzureAdFileStoreMock>("Mock");
+
+        services
+         .AddSingleton<IAzureAdFileFactory, AzureAdFileFactory>();
 
         services
             .AddHttpClient<IAzureAdClient, AzureAdClient>();
