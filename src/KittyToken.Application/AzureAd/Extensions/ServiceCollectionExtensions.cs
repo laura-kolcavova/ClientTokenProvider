@@ -19,14 +19,14 @@ internal static class ServiceCollectionExtensions
             });
 
         services
+            .AddHttpClient<IAzureAdClient, AzureAdClient>();
+
+        services
             .AddScoped<IAzureAdFileStore, AzureAdFileStoreSqLite>()
             .AddKeyedSingleton<IAzureAdFileStore, AzureAdFileStoreMock>("Mock");
 
         services
          .AddSingleton<IAzureAdFileFactory, AzureAdFileFactory>();
-
-        services
-            .AddHttpClient<IAzureAdClient, AzureAdClient>();
 
         return services;
     }
