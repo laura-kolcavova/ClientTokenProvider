@@ -1,8 +1,7 @@
 ﻿using KittyToken.Application.AzureAd.Dto;
+using KittyToken.Application.AzureAd.Exceptions;
 using KittyToken.Application.AzureAd.Services.Abstractions;
-using System.Net;
 using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace KittyToken.Application.AzureAd.Services;
 
@@ -21,95 +20,34 @@ internal sealed class AzureAdClient(
             $"{instance}/{tenantId}/oauth2/v2.0/token",
             UriKind.Absolute);
 
-        var clientId = request.ClientId;
-        var clientSecret = request.ClientSecret;
-        var scope = request.Scope;
-
-        var requestBody = new FormUrlEncodedContent(new[]
+        using var requestBody = new FormUrlEncodedContent(new Dictionary<string, string>
         {
-                new KeyValuePair<string, string>("grant_type", "client_credentials"),
-                new KeyValuePair<string, string>("client_id", clientId),
-                new KeyValuePair<string, string>("client_secret", clientSecret),
-                new KeyValuePair<string, string>("scope", scope),
-            });
+            ["grant_type"] = "client_credentials",
+            ["client_id"] = request.ClientId,
+            ["client_secret"] = request.ClientSecret,
+            ["scope"] = request.Scope,
+        });
 
-        var response = await httpClient.PostAsync(
+        using var response = await httpClient.PostAsync(
             requestUri,
             requestBody,
             cancellationToken);
 
-        try
-        {
-            var status = (int)response.StatusCode;
-
-            var headers = response.Headers.ToDictionary(
-                keySelector => keySelector.Key,
-                valueSelector => valueSelector.Value);
-
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var responseObject = await ReadAsJson<GetClientTokenResponseDto>(
-                    response,
-                    headers,
-                    cancellationToken)
-                    ?? throw new ClientHandlerException(
-                        "Response is null.",
-                        status,
-                        string.Empty,
-                        headers,
-                        null);
-
-                return responseObject;
-            }
-            else
-            {
-                var text = response.Content is not null
-                    ? await response.Content.ReadAsStringAsync(cancellationToken)
-                    : null;
-
-                throw new ClientHandlerException(
-                    $"The HTTP status code of the response was not expected {status}",
-                    status,
-                    text,
-                    headers,
-                    null);
-            }
-        }
-        finally
-        {
-            response.Dispose();
-        }
-    }
-
-    private static async Task<TResponseObject?> ReadAsJson<TResponseObject>(
-        HttpResponseMessage response,
-        IReadOnlyDictionary<string, IEnumerable<string>> headers,
-        CancellationToken cancellationToken)
-    {
-        if (response is null || response.Content is null)
-        {
-            return default;
-        }
-
-        try
-        {
-            var responseObject = await response
-                .Content
-                .ReadFromJsonAsync<TResponseObject>(cancellationToken);
-
-            return responseObject;
-        }
-        catch (JsonException ex)
+        if (!response.IsSuccessStatusCode)
         {
             var text = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            throw new ClientHandlerException(
-                $"Could not deserialize the response body string as {typeof(TResponseObject).FullName}.",
+            throw new AzureAdClientException(
                 (int)response.StatusCode,
-                text,
-                headers,
-                ex);
+                text);
         }
+
+        var responseDto = await response.Content.ReadFromJsonAsync<GetClientTokenResponseDto>(cancellationToken)
+            ?? throw new AzureAdClientException(
+                (int)response.StatusCode,
+                "Response is null.");
+
+        return responseDto;
     }
 }
 
