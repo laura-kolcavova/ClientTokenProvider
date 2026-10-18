@@ -3,7 +3,7 @@ namespace KittyToken.Application.AzureAd.Exceptions;
 public sealed class AzureAdClientException(
     int statusCode,
     string response)
-    : Exception($"Azure AD token request failed ({statusCode}): {response}")
+    : Exception($"Azure AD http request failed ({statusCode}): {response}")
 {
     public int StatusCode { get; } = statusCode;
 

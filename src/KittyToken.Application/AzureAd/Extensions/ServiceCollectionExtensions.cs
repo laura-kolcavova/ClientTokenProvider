@@ -10,6 +10,12 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services)
     {
         services
+            .AddSingleton<IAzureAdFileFactory, AzureAdFileFactory>();
+
+        services
+            .AddSingleton<IAzureAdFileStore, AzureAdFileStoreMock>();
+
+        services
             .AddHttpClient<IAzureAdClient, AzureAdClient>();
 
         return services;
