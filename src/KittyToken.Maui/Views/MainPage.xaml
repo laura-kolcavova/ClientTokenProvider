@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="KittyToken.Maui.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:KittyToken.Maui.Controls"
+    xmlns:models="clr-namespace:KittyToken.Maui.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:views="clr-namespace:KittyToken.Maui.Views"
+    Title=""
+    x:DataType="views:MainPage">
+
+    <ContentPage.Resources>
+        <toolkit:IsEqualConverter x:Key="IsEqualConverter" />
+
+        <toolkit:IsNotEqualConverter x:Key="IsNotEqualConverter" />
+
+        <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+
+        <toolkit:IsNullConverter x:Key="IsNullConverter" />
+
+        <toolkit:IsNotNullConverter x:Key="IsNotNullConverter" />
+    </ContentPage.Resources>
+
+    <Grid ColumnDefinitions="250,*,*">
+        <Grid
+            Grid.Column="0"
+            Padding="20"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},
+                                              Dark={StaticResource Gray900}}"
+            RowDefinitions="Auto,*"
+            RowSpacing="12">
+            <Grid
+                Grid.Row="0"
+                ColumnDefinitions="*,Auto"
+                ColumnSpacing="12">
+                <Label
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    Text="Configurations"
+                    VerticalOptions="Center" />
+
+                <ImageButton
+                    Grid.Column="1"
+                    Clicked="AddConfigurationImageButton_Clicked"
+                    Source="add.png">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray200}}" />
+                    </ImageButton.Behaviors>
+                </ImageButton>
+            </Grid>
+
+            <CollectionView
+                Grid.Row="1"
+                ItemsSource="{Binding ConfigurationList}"
+                SelectedItem="{Binding ActiveConfiguration, Mode=TwoWay}"
+                SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:AzureAdConfigurationModel">
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Padding="20,5,20,5"
+                            LineBreakMode="TailTruncation"
+                            Text="{Binding Name}">
+                            <FlyoutBase.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Clicked="DeleteMenuFlyoutItem_Clicked" Text="Delete" />
+                                </MenuFlyout>
+                            </FlyoutBase.ContextFlyout>
+                        </Label>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <VerticalStackLayout
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            HorizontalOptions="Center"
+            IsVisible="{Binding ActiveConfiguration, Converter={StaticResource IsNullConverter}}"
+            Spacing="20"
+            VerticalOptions="Center">
+            <Image Source="cat.png" WidthRequest="140" />
+
+            <Label HorizontalTextAlignment="Center" Text="Select a configuration or" />
+
+            <Button
+                Clicked="AddConfigurationButton_Clicked"
+                FontAttributes="Bold"
+                Text="Create New Configuration" />
+        </VerticalStackLayout>
+
+        <Grid
+            Grid.Column="1"
+            IsVisible="{Binding ActiveConfiguration, Converter={StaticResource IsNotNullConverter}}"
+            RowDefinitions="*,Auto">
+            <ScrollView Grid.Row="0">
+                <VerticalStackLayout Padding="20" Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <Label
+                            Grid.Column="0"
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            IsVisible="{Binding IsEditingName, Converter={StaticResource InvertedBoolConverter}}"
+                            LineBreakMode="TailTruncation"
+                            Text="{Binding ActiveConfiguration.Name}"
+                            VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="NameLabel_Tapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                        <Entry
+                            x:Name="NameEntry"
+                            Grid.Column="0"
+                            Completed="NameEntry_Completed"
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            IsVisible="{Binding IsEditingName}"
+                            Text="{Binding ActiveConfiguration.Name, Mode=TwoWay}"
+                            Unfocused="NameEntry_Unfocused"
+                            VerticalOptions="Center" />
+
+                        <controls:IconButton
+                            Grid.Column="1"
+                            Clicked="SaveButton_Clicked"
+                            ImageSource="save.png"
+                            Text="Save" />
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Instance" />
+                        <Entry Text="{Binding ActiveConfiguration.Instance, Mode=TwoWay}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Tenant Id" />
+                        <Entry Text="{Binding ActiveConfiguration.TenantId, Mode=TwoWay}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Client Id" />
+                        <Entry Text="{Binding ActiveConfiguration.ClientId, Mode=TwoWay}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Client Secret" />
+                        <Entry Text="{Binding ActiveConfiguration.ClientSecret, Mode=TwoWay}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Scope" />
+                        <Entry Text="{Binding ActiveConfiguration.Scope, Mode=TwoWay}" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <Grid Grid.Row="1" Margin="20">
+                <Button
+                    Clicked="GetAccessTokenButton_Clicked"
+                    IsEnabled="{Binding ActiveConfiguration.CanGetAccessToken}"
+                    IsVisible="{Binding ActiveConfiguration.VisualizationState, Converter={StaticResource IsNotEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
+                    Text="Run" />
+
+                <Button
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Secondary},
+                                                      Dark={StaticResource Gray600}}"
+                    Clicked="CancelButton_Clicked"
+                    IsVisible="{Binding ActiveConfiguration.VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
+                    Text="Cancel"
+                    TextColor="{AppThemeBinding Light={StaticResource Primary},
+                                                Dark={StaticResource White}}" />
+            </Grid>
+        </Grid>
+
+        <Grid
+            Grid.Column="2"
+            Padding="20"
+            IsVisible="{Binding ActiveConfiguration, Converter={StaticResource IsNotNullConverter}}">
+            <VerticalStackLayout
+                HorizontalOptions="Center"
+                IsVisible="{Binding ActiveConfiguration.VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Idle}}"
+                Spacing="20"
+                VerticalOptions="Center">
+                <Image Source="cat.png" WidthRequest="100" />
+
+                <Label HorizontalTextAlignment="Center" Text="Enter Azure AD configuration and click Run to get an access token" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout
+                HorizontalOptions="Center"
+                IsVisible="{Binding ActiveConfiguration.VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
+                Spacing="20"
+                VerticalOptions="Center">
+                <controls:Spinner
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding ActiveConfiguration.VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
+                    PrimaryColor="{StaticResource Primary}"
+                    SecondaryColor="{StaticResource Secondary}"
+                    Size="60" />
+
+                <Label HorizontalTextAlignment="Center" Text="Sending request ..." />
+            </VerticalStackLayout>
+
+            <controls:JwtVisualizer
+                DecodedToken="{Binding ActiveConfiguration.DecodedAccessToken}"
+                IsVisible="{Binding ActiveConfiguration.VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.ShowToken}}"
+                Token="{Binding ActiveConfiguration.AccessToken}" />
+        </Grid>
+    </Grid>
+
+</ContentPage>

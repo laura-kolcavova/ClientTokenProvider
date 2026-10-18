@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/KittyToken.Application/KittyToken.Application.csproj" />
+    <Project Path="src/KittyToken.Maui/KittyToken.Maui.csproj" Id="5e664135-160d-48ca-b6fb-4486120262b4">
+      <Deploy Solution="Debug|*" />
+    </Project>
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/KittyToken.Application.Tests/KittyToken.Application.Tests.csproj" Id="7433f5be-ea1b-44c0-b989-00499398c968" />
+  </Folder>
+</Solution>
