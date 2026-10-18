@@ -19,5 +19,6 @@ public interface IAzureAdFileStore
         AzureAdFile azureAdFile,
         CancellationToken cancellationToken);
 
-    public Task SaveChanges(CancellationToken cancellationToken);
+    public Task SaveChanges(
+        CancellationToken cancellationToken);
 }

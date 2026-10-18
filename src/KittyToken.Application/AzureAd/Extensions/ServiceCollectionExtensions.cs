@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace KittyToken.Application.AzureAd.Extensions;
 
-public static class ServiceCollectionExtensions
+internal static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAzureAd(
         this IServiceCollection services)

@@ -2,4 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/KittyToken.Application/KittyToken.Application.csproj" />
   </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/KittyToken.Application.Tests/KittyToken.Application.Tests.csproj" Id="7433f5be-ea1b-44c0-b989-00499398c968" />
+  </Folder>
 </Solution>

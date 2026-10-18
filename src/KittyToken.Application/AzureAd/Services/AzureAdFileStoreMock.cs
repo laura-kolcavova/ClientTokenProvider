@@ -43,21 +43,26 @@ internal sealed class AzureAdFileStoreMock :
         return Task.FromResult<IReadOnlyCollection<AzureAdFile>>(azureAdFiles);
     }
 
-    public Task Add(AzureAdFile azureAdFile, CancellationToken cancellationToken)
+    public Task Add(
+        AzureAdFile azureAdFile,
+        CancellationToken cancellationToken)
     {
         _files.Add(azureAdFile);
 
         return Task.CompletedTask;
     }
 
-    public Task Remove(AzureAdFile azureAdFile, CancellationToken cancellationToken)
+    public Task Remove(
+        AzureAdFile azureAdFile,
+        CancellationToken cancellationToken)
     {
         _files.Remove(azureAdFile);
 
         return Task.CompletedTask;
     }
 
-    public Task SaveChanges(CancellationToken cancellationToken)
+    public Task SaveChanges(
+        CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
