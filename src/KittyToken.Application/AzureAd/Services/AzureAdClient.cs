@@ -9,7 +9,7 @@ internal sealed class AzureAdClient(
     HttpClient httpClient) :
     IAzureAdClient
 {
-    public async Task<GetClientTokenResponseDto> GetClientToken(
+    public async Task<string> GetAcessToken(
         GetClientTokenRequestDto request,
         CancellationToken cancellationToken)
     {
@@ -47,7 +47,6 @@ internal sealed class AzureAdClient(
                 (int)response.StatusCode,
                 "Response is null.");
 
-        return responseDto;
+        return responseDto.AccessToken;
     }
 }
-

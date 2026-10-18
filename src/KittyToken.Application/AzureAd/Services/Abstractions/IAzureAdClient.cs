@@ -4,7 +4,7 @@ namespace KittyToken.Application.AzureAd.Services.Abstractions;
 
 public interface IAzureAdClient
 {
-    public Task<GetClientTokenResponseDto> GetClientToken(
+    public Task<string> GetAcessToken(
         GetClientTokenRequestDto request,
         CancellationToken cancellationToken);
 }
