@@ -10,10 +10,10 @@
             <drawables:SpinnerDrawable
                 x:Name="SpinnerDrawableLocal"
                 BindingContext="{Binding Source={x:Reference SpinnerControl}}"
-                EndAngle="90"
                 PrimaryColor="{Binding PrimaryColor}"
                 SecondaryColor="{Binding SecondaryColor}"
                 Size="{Binding Size}"
+                EndAngle="90"
                 StartAngle="90"
                 Thickness="{Binding Thickness}" />
         </GraphicsView.Drawable>

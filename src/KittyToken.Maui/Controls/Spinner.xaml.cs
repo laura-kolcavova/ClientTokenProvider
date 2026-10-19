@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace KittyToken.Maui.Controls;
 
 public partial class Spinner :
@@ -7,36 +9,45 @@ public partial class Spinner :
        nameof(Size),
        typeof(int),
        typeof(Spinner),
+       defaultValue: 40,
        propertyChanged: OnSizePropertyChanged);
 
     public static readonly BindableProperty ThicknessProperty = BindableProperty.Create(
         nameof(Thickness),
         typeof(int),
-        typeof(Spinner));
+        typeof(Spinner),
+        defaultValue: 4,
+        propertyChanged: OnDrawablePropertyChanged);
 
     public static readonly BindableProperty PrimaryColorProperty = BindableProperty.Create(
         nameof(PrimaryColor),
         typeof(Color),
-        typeof(Spinner));
+        typeof(Spinner),
+        defaultValue: Colors.Black,
+        propertyChanged: OnDrawablePropertyChanged);
 
     public static readonly BindableProperty SecondaryColorProperty = BindableProperty.Create(
         nameof(SecondaryColor),
         typeof(Color),
-        typeof(Spinner));
+        typeof(Spinner),
+        defaultValue: Colors.LightGray,
+        propertyChanged: OnDrawablePropertyChanged);
 
     public static readonly BindableProperty SpeedProperty = BindableProperty.Create(
-       nameof(SpeedProperty),
+       nameof(Speed),
        typeof(int),
        typeof(Spinner),
+       defaultValue: 360,
        propertyChanged: OnSpeedPropertyChanged);
 
-    public static readonly BindableProperty EnabledProperty = BindableProperty.Create(
-       nameof(EnabledProperty),
+    public static readonly BindableProperty IsRunningProperty = BindableProperty.Create(
+       nameof(IsRunning),
        typeof(bool),
        typeof(Spinner),
-       propertyChanged: OnEnabledPropertyChanged);
+       propertyChanged: OnIsRunningPropertyChanged);
 
     private readonly IDispatcherTimer _timer;
+    private readonly Stopwatch _stopwatch = new();
 
     public int Size
     {
@@ -63,7 +74,10 @@ public partial class Spinner :
     }
 
     /// <summary>
-    ///  Gets or sets a speed (count) of angles per each millisecond
+    ///  Gets or sets a speed of degrees per second.
+    ///  - Speed = 90: one full turn every 4 seconds.
+    ///  - Speed = 360: one turn per second.
+    ///  - Speed = 720: two turns per second.
     /// </summary>
     public int Speed
     {
@@ -71,10 +85,10 @@ public partial class Spinner :
         set => SetValue(SpeedProperty, value);
     }
 
-    public bool Enabled
+    public bool IsRunning
     {
-        get => (bool)GetValue(EnabledProperty);
-        set => SetValue(EnabledProperty, value);
+        get => (bool)GetValue(IsRunningProperty);
+        set => SetValue(IsRunningProperty, value);
     }
 
 
@@ -82,10 +96,15 @@ public partial class Spinner :
     {
         InitializeComponent();
 
-        _timer = Application.Current!.Dispatcher.CreateTimer();
+        UpdateBounds();
+
+        _timer = Dispatcher.CreateTimer();
         _timer.IsRepeating = true;
-        _timer.Interval = TimeSpan.FromMilliseconds(1);
+        _timer.Interval = TimeSpan.FromMilliseconds(16);
         _timer.Tick += OnTick;
+
+        Loaded += OnLoaded;
+        Unloaded += OnUnloaded;
     }
 
     private void Redraw()
@@ -105,6 +124,7 @@ public partial class Spinner :
         {
             SpinnerDrawableLocal.EndAngle = SpinnerDrawableLocal.StartAngle;
 
+            _stopwatch.Restart();
             _timer.Start();
         }
     }
@@ -119,7 +139,7 @@ public partial class Spinner :
 
     private void StartOrStop()
     {
-        if (Enabled && Speed > 0)
+        if (IsRunning && Speed > 0)
         {
             Start();
         }
@@ -131,16 +151,31 @@ public partial class Spinner :
 
     private void OnTick(object? sender, EventArgs e)
     {
-        var newEndAngle = SpinnerDrawableLocal.EndAngle - Speed;
+        var deltaTime = (float)_stopwatch.Elapsed.TotalSeconds;
 
-        if (newEndAngle < -360 + SpinnerDrawableLocal.StartAngle)
-        {
-            newEndAngle = SpinnerDrawableLocal.StartAngle;
-        }
+        _stopwatch.Restart();
+
+        var fullCircleEndAngle = -360 + SpinnerDrawableLocal.StartAngle;
+
+        var speed = Speed * deltaTime;
+
+        var newEndAngle = SpinnerDrawableLocal.EndAngle == fullCircleEndAngle
+            ? SpinnerDrawableLocal.StartAngle
+            : Math.Max(SpinnerDrawableLocal.EndAngle - speed, fullCircleEndAngle);
 
         SpinnerDrawableLocal.EndAngle = newEndAngle;
 
         Redraw();
+    }
+
+    private void OnLoaded(object? sender, EventArgs e)
+    {
+        StartOrStop();
+    }
+
+    private void OnUnloaded(object? sender, EventArgs e)
+    {
+        Stop();
     }
 
     private static void OnSizePropertyChanged(
@@ -149,7 +184,19 @@ public partial class Spinner :
         object newValue)
     {
         var self = (Spinner)bindable;
+
         self.UpdateBounds();
+        self.Redraw();
+    }
+
+    private static void OnDrawablePropertyChanged(
+        BindableObject bindable,
+        object oldValue,
+        object newValue)
+    {
+        var self = (Spinner)bindable;
+
+        self.Redraw();
     }
 
     private static void OnSpeedPropertyChanged(
@@ -158,15 +205,17 @@ public partial class Spinner :
         object newValue)
     {
         var self = (Spinner)bindable;
+
         self.StartOrStop();
     }
 
-    private static void OnEnabledPropertyChanged(
+    private static void OnIsRunningPropertyChanged(
         BindableObject bindable,
         object oldValue,
         object newValue)
     {
         var self = (Spinner)bindable;
+
         self.StartOrStop();
     }
 }
