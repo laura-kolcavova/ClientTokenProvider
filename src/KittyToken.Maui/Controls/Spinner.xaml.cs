@@ -34,19 +34,20 @@ public partial class Spinner :
         propertyChanged: OnDrawablePropertyChanged);
 
     public static readonly BindableProperty SpeedProperty = BindableProperty.Create(
-       nameof(Speed),
-       typeof(int),
-       typeof(Spinner),
-       defaultValue: 360,
-       propertyChanged: OnSpeedPropertyChanged);
+        nameof(Speed),
+        typeof(int),
+        typeof(Spinner),
+        defaultValue: 360,
+        propertyChanged: OnSpeedPropertyChanged);
 
     public static readonly BindableProperty IsRunningProperty = BindableProperty.Create(
-       nameof(IsRunning),
-       typeof(bool),
-       typeof(Spinner),
-       propertyChanged: OnIsRunningPropertyChanged);
+        nameof(IsRunning),
+        typeof(bool),
+        typeof(Spinner),
+        propertyChanged: OnIsRunningPropertyChanged);
 
     private readonly IDispatcherTimer _timer;
+
     private readonly Stopwatch _stopwatch = new();
 
     public int Size
@@ -75,9 +76,9 @@ public partial class Spinner :
 
     /// <summary>
     ///  Gets or sets a speed of degrees per second.
-    ///  - Speed = 90: one full turn every 4 seconds.
-    ///  - Speed = 360: one turn per second.
-    ///  - Speed = 720: two turns per second.
+    ///  Speed = 90: one full turn every 4 seconds.
+    ///  Speed = 360: one turn per second.
+    ///  Speed = 720: two turns per second.
     /// </summary>
     public int Speed
     {
