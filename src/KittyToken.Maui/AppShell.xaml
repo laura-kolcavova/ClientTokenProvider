@@ -6,9 +6,6 @@
     xmlns:views="clr-namespace:KittyToken.Maui.Views"
     Title="KittyToken.Maui">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:MainPage}"
-        Route="MainPage" />
+    <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage" />
 
 </Shell>
