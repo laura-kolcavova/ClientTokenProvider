@@ -3,8 +3,13 @@
     x:Class="KittyToken.Maui.Views.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:views="clr-namespace:KittyToken.Maui.Views"
     x:DataType="views:MainPage">
+
+    <ContentPage.Resources>
+        <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="*,Auto">
         <ScrollView Grid.Row="0">
@@ -40,23 +45,25 @@
             <Button
                 Clicked="GetAccessTokenButton_Clicked"
                 IsEnabled="{Binding GetAccessTokenButtonIsEnabled}"
-                Text="Get Access Token">
-                <Button.Triggers>
-                    <DataTrigger
-                        Binding="{Binding IsLoading}"
-                        TargetType="Button"
-                        Value="True">
-                        <Setter Property="IsVisible" Value="False" />
-                    </DataTrigger>
-                </Button.Triggers>
-            </Button>
+                IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                Text="Get Access Token" />
+            <!--<Button.Triggers>
+                   <DataTrigger
+                       Binding="{Binding IsLoading}"
+                       TargetType="Button"
+                       Value="True">
+                       <Setter Property="IsVisible" Value="False" />
+                   </DataTrigger>
+               </Button.Triggers>-->
 
             <Button
-                BackgroundColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource Gray600}}"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Secondary},
+                                                  Dark={StaticResource Gray600}}"
                 Clicked="CancelButton_Clicked"
                 IsVisible="{Binding IsLoading}"
                 Text="Cancel"
-                TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
+                TextColor="{AppThemeBinding Light={StaticResource Primary},
+                                            Dark={StaticResource White}}" />
         </Grid>
     </Grid>
 

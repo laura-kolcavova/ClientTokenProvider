@@ -1,4 +1,5 @@
-﻿using KittyToken.Application.Shared.Extensions;
+﻿using CommunityToolkit.Maui;
+using KittyToken.Application.Shared.Extensions;
 using KittyToken.Maui.Views;
 using Microsoft.Extensions.Logging;
 
@@ -9,8 +10,10 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -24,7 +27,7 @@ public static class MauiProgram
             .AddTransient<MainPage>();
 
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
         return builder.Build();
