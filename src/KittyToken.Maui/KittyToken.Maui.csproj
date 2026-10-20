@@ -71,6 +71,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\KittyToken.Application\KittyToken.Application.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Controls\Spinner.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

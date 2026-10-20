@@ -3,7 +3,7 @@ using Android.Runtime;
 
 namespace KittyToken.Maui;
 
-[Application]
+[Android.App.Application]
 public class MainApplication : MauiApplication
 {
     public MainApplication(IntPtr handle, JniHandleOwnership ownership)

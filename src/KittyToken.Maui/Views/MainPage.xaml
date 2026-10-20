@@ -6,33 +6,58 @@
     xmlns:views="clr-namespace:KittyToken.Maui.Views"
     x:DataType="views:MainPage">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="12">
-            <VerticalStackLayout Spacing="4">
-                <Label Text="Instance" />
-                <Entry Text="{Binding Configuration.Instance, Mode=TwoWay}" />
-            </VerticalStackLayout>
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="20" Spacing="12">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Instance" />
+                    <Entry Text="{Binding Configuration.Instance, Mode=TwoWay}" />
+                </VerticalStackLayout>
 
-            <VerticalStackLayout Spacing="4">
-                <Label Text="Tenant Id" />
-                <Entry Text="{Binding Configuration.TenantId, Mode=TwoWay}" />
-            </VerticalStackLayout>
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Tenant Id" />
+                    <Entry Text="{Binding Configuration.TenantId, Mode=TwoWay}" />
+                </VerticalStackLayout>
 
-            <VerticalStackLayout Spacing="4">
-                <Label Text="Client Id" />
-                <Entry Text="{Binding Configuration.ClientId, Mode=TwoWay}" />
-            </VerticalStackLayout>
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Client Id" />
+                    <Entry Text="{Binding Configuration.ClientId, Mode=TwoWay}" />
+                </VerticalStackLayout>
 
-            <VerticalStackLayout Spacing="4">
-                <Label Text="Client Secret" />
-                <Entry Text="{Binding Configuration.ClientSecret, Mode=TwoWay}" />
-            </VerticalStackLayout>
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Client Secret" />
+                    <Entry Text="{Binding Configuration.ClientSecret, Mode=TwoWay}" />
+                </VerticalStackLayout>
 
-            <VerticalStackLayout Spacing="4">
-                <Label Text="Scope" />
-                <Entry Text="{Binding Configuration.Scope, Mode=TwoWay}" />
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Scope" />
+                    <Entry Text="{Binding Configuration.Scope, Mode=TwoWay}" />
+                </VerticalStackLayout>
             </VerticalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+
+        <Grid Grid.Row="1" Margin="20">
+            <Button
+                Clicked="GetAccessTokenButton_Clicked"
+                IsEnabled="{Binding GetAccessTokenButtonIsEnabled}"
+                Text="Get Access Token">
+                <Button.Triggers>
+                    <DataTrigger
+                        Binding="{Binding IsLoading}"
+                        TargetType="Button"
+                        Value="True">
+                        <Setter Property="IsVisible" Value="False" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+
+            <Button
+                BackgroundColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource Gray600}}"
+                Clicked="CancelButton_Clicked"
+                IsVisible="{Binding IsLoading}"
+                Text="Cancel"
+                TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
+        </Grid>
+    </Grid>
 
 </ContentPage>

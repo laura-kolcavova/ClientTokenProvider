@@ -48,6 +48,16 @@ public sealed partial class AzureAdConfigurationModel :
         set => SetProperty(ref _scope, value);
     }
 
+    public bool IsValid()
+    {
+        return
+            !string.IsNullOrEmpty(Instance) &&
+            !string.IsNullOrEmpty(TenantId) &&
+            !string.IsNullOrEmpty(ClientId) &&
+            !string.IsNullOrEmpty(ClientSecret) &&
+            !string.IsNullOrEmpty(Scope);
+    }
+
     private void SetProperty(
         ref string field,
         string value,

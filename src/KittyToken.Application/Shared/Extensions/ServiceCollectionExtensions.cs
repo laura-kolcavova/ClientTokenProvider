@@ -5,10 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace KittyToken.Application.Shared.Extensions;
 
-internal static class ServiceCollectionExtensions
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplication(
-        IServiceCollection services)
+        this IServiceCollection services)
     {
         services
             .AddSingleton<IJwtDecoder, JwtDecoder>();

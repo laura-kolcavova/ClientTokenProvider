@@ -35,14 +35,16 @@ internal sealed class AzureAdClient(
 
         if (!response.IsSuccessStatusCode)
         {
-            var text = await response.Content.ReadAsStringAsync(cancellationToken);
+            var text = await response.Content.ReadAsStringAsync(
+                cancellationToken);
 
             throw new AzureAdClientException(
                 (int)response.StatusCode,
                 text);
         }
 
-        var responseDto = await response.Content.ReadFromJsonAsync<GetClientTokenResponseDto>(cancellationToken)
+        var responseDto = await response.Content.ReadFromJsonAsync<GetClientTokenResponseDto>(
+            cancellationToken)
             ?? throw new AzureAdClientException(
                 (int)response.StatusCode,
                 "Response is null.");
