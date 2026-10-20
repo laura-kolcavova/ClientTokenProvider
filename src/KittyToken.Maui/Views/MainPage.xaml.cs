@@ -116,7 +116,6 @@ public sealed partial class MainPage : ContentPage
 
     private async Task GetAccessToken(CancellationToken cancellationToken)
     {
-
         var request = new GetClientTokenRequestDto
         {
             Instance = Configuration.Instance,
@@ -129,8 +128,6 @@ public sealed partial class MainPage : ContentPage
         AccessToken = await _azureAdClient.GetAcessToken(
             request,
             cancellationToken);
-
-
     }
 
     private void CheckGetAccessTokenButtonIsEnabled()
