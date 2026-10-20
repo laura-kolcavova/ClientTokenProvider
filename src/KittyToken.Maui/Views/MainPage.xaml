@@ -2,6 +2,37 @@
 <ContentPage
     x:Class="KittyToken.Maui.Views.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:KittyToken.Maui.Views"
+    x:DataType="views:MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Instance" />
+                <Entry Text="{Binding Configuration.Instance, Mode=TwoWay}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Tenant Id" />
+                <Entry Text="{Binding Configuration.TenantId, Mode=TwoWay}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Client Id" />
+                <Entry Text="{Binding Configuration.ClientId, Mode=TwoWay}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Client Secret" />
+                <Entry Text="{Binding Configuration.ClientSecret, Mode=TwoWay}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Scope" />
+                <Entry Text="{Binding Configuration.Scope, Mode=TwoWay}" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>

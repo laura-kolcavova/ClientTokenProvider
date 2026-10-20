@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace KittyToken.Maui.Controls;
 
-public partial class Spinner :
+public sealed partial class Spinner :
     ContentView
 {
     public static readonly BindableProperty SizeProperty = BindableProperty.Create(

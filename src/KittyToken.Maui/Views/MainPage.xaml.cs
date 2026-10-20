@@ -1,9 +1,15 @@
-﻿namespace KittyToken.Maui.Views;
+﻿using KittyToken.Maui.Models;
 
-public partial class MainPage : ContentPage
+namespace KittyToken.Maui.Views;
+
+public sealed partial class MainPage : ContentPage
 {
+    public AzureAdConfigurationModel Configuration { get; } = new();
+
     public MainPage()
     {
         InitializeComponent();
+
+        BindingContext = this;
     }
 }
