@@ -5,13 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:KittyToken.Maui.Controls"
     xmlns:converters="clr-namespace:KittyToken.Maui.Converters"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Name="JwtVisualizerControl"
     x:DataType="controls:JwtVisualizer">
     <ContentView.Resources>
         <converters:JsonPrettyConverter x:Key="JsonPrettyConverter" />
-
-        <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
 
         <Style x:Key="SectionTitle" TargetType="Label">
             <Setter Property="FontAttributes" Value="Bold" />
@@ -26,75 +23,74 @@
         </Style>
     </ContentView.Resources>
 
-    <Grid
-        BindingContext="{Binding Source={x:Reference JwtVisualizerControl}}"
-        RowDefinitions="Auto,*"
-        RowSpacing="15">
-        <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,*,Auto">
-            <RadioButton
-                Grid.Column="0"
-                Content="Encoded"
-                GroupName="JwtVisualizerMode"
-                IsChecked="{Binding ShowDecoded, Converter={StaticResource InvertedBoolConverter}}" />
-
-            <RadioButton
-                Grid.Column="1"
-                Content="Decoded"
-                GroupName="JwtVisualizerMode"
-                IsChecked="{Binding ShowDecoded}" />
-
-            <Button
-                Grid.Column="3"
-                Clicked="CopyButton_Clicked"
-                Text="Copy" />
-        </Grid>
-
-        <ScrollView Grid.Row="1">
-            <Grid>
+    <ScrollView BindingContext="{Binding Source={x:Reference JwtVisualizerControl}}">
+        <VerticalStackLayout Spacing="10">
+            <Grid ColumnDefinitions="*,Auto">
                 <Label
-                    FontSize="12"
-                    IsVisible="{Binding ShowDecoded, Converter={StaticResource InvertedBoolConverter}}"
-                    LineBreakMode="CharacterWrap">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="{Binding EncodedHeader}" TextColor="{StaticResource Red400}" />
-                            <Span Text="." />
-                            <Span Text="{Binding EncodedPayload}" TextColor="{StaticResource Blue400}" />
-                            <Span Text="." />
-                            <Span Text="{Binding EncodedSignature}" TextColor="{StaticResource Pink400}" />
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
+                    Grid.Column="0"
+                    Style="{StaticResource SectionTitle}"
+                    Text="ENCODED"
+                    VerticalOptions="Center" />
 
-                <VerticalStackLayout IsVisible="{Binding ShowDecoded}" Spacing="8">
-                    <Label Style="{StaticResource SectionTitle}" Text="HEADER" />
-
-                    <Editor
-                        Style="{StaticResource TokenEditor}"
-                        Text="{Binding DecodedToken.Header, Converter={StaticResource JsonPrettyConverter}}"
-                        TextColor="{StaticResource Red400}" />
-
-                    <Label
-                        Margin="0,7,0,0"
-                        Style="{StaticResource SectionTitle}"
-                        Text="PAYLOAD" />
-
-                    <Editor
-                        Style="{StaticResource TokenEditor}"
-                        Text="{Binding DecodedToken.Payload, Converter={StaticResource JsonPrettyConverter}}"
-                        TextColor="{StaticResource Blue400}" />
-
-                    <Label
-                        Margin="0,7,0,0"
-                        Style="{StaticResource SectionTitle}"
-                        Text="SIGNATURE" />
-
-                    <Editor
-                        Style="{StaticResource TokenEditor}"
-                        Text="{Binding DecodedToken.Signature}"
-                        TextColor="{StaticResource Pink400}" />
-                </VerticalStackLayout>
+                <controls:CopyButton Grid.Column="1" Text="{Binding Token}" />
             </Grid>
-        </ScrollView>
-    </Grid>
+
+            <Label FontSize="12" LineBreakMode="CharacterWrap">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding EncodedHeader}" TextColor="{StaticResource Red400}" />
+                        <Span Text="." />
+                        <Span Text="{Binding EncodedPayload}" TextColor="{StaticResource Blue400}" />
+                        <Span Text="." />
+                        <Span Text="{Binding EncodedSignature}" TextColor="{StaticResource Pink400}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+
+            <Grid Margin="0,7,0,0" ColumnDefinitions="*,Auto">
+                <Label
+                    Grid.Column="0"
+                    Style="{StaticResource SectionTitle}"
+                    Text="HEADER"
+                    VerticalOptions="Center" />
+
+                <controls:CopyButton Grid.Column="1" Text="{Binding DecodedToken.Header, Converter={StaticResource JsonPrettyConverter}}" />
+            </Grid>
+
+            <Editor
+                Style="{StaticResource TokenEditor}"
+                Text="{Binding DecodedToken.Header, Converter={StaticResource JsonPrettyConverter}}"
+                TextColor="{StaticResource Red400}" />
+
+            <Grid Margin="0,7,0,0" ColumnDefinitions="*,Auto">
+                <Label
+                    Grid.Column="0"
+                    Style="{StaticResource SectionTitle}"
+                    Text="PAYLOAD"
+                    VerticalOptions="Center" />
+
+                <controls:CopyButton Grid.Column="1" Text="{Binding DecodedToken.Payload, Converter={StaticResource JsonPrettyConverter}}" />
+            </Grid>
+
+            <Editor
+                Style="{StaticResource TokenEditor}"
+                Text="{Binding DecodedToken.Payload, Converter={StaticResource JsonPrettyConverter}}"
+                TextColor="{StaticResource Blue400}" />
+
+            <Grid Margin="0,7,0,0" ColumnDefinitions="*,Auto">
+                <Label
+                    Grid.Column="0"
+                    Style="{StaticResource SectionTitle}"
+                    Text="SIGNATURE"
+                    VerticalOptions="Center" />
+
+                <controls:CopyButton Grid.Column="1" Text="{Binding DecodedToken.Signature}" />
+            </Grid>
+
+            <Editor
+                Style="{StaticResource TokenEditor}"
+                Text="{Binding DecodedToken.Signature}"
+                TextColor="{StaticResource Pink400}" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentView>

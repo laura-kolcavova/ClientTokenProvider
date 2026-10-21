@@ -17,8 +17,6 @@ public sealed partial class JwtVisualizer :
         typeof(DecodedJwt),
         typeof(JwtVisualizer));
 
-    private bool _showDecoded = false;
-
     private string _encodedHeader = string.Empty;
 
     private string _encodedPayload = string.Empty;
@@ -35,16 +33,6 @@ public sealed partial class JwtVisualizer :
     {
         get => (DecodedJwt?)GetValue(DecodedTokenProperty);
         set => SetValue(DecodedTokenProperty, value);
-    }
-
-    public bool ShowDecoded
-    {
-        get => _showDecoded;
-        set
-        {
-            _showDecoded = value;
-            OnPropertyChanged();
-        }
     }
 
     public string EncodedHeader
@@ -80,13 +68,6 @@ public sealed partial class JwtVisualizer :
     public JwtVisualizer()
     {
         InitializeComponent();
-    }
-
-    private async void CopyButton_Clicked(
-        object? sender,
-        EventArgs e)
-    {
-        await Clipboard.Default.SetTextAsync(Token);
     }
 
     private static void OnTokenPropertyChanged(
