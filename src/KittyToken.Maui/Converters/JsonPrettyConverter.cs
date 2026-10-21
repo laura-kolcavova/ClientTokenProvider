@@ -7,7 +7,7 @@ namespace KittyToken.Maui.Converters;
 internal sealed partial class JsonPrettyConverter :
      BaseConverterOneWay<string, string>
 {
-    private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
+    private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
         WriteIndented = true,
     };

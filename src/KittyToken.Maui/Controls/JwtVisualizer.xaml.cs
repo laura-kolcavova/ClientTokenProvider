@@ -1,5 +1,4 @@
 using KittyToken.Application.Shared.JwtDecoding;
-using KittyToken.Maui.Models;
 
 namespace KittyToken.Maui.Controls;
 
@@ -10,19 +9,21 @@ public sealed partial class JwtVisualizer :
         nameof(Token),
         typeof(string),
         typeof(JwtVisualizer),
-        defaultValue: string.Empty);
+        defaultValue: string.Empty,
+        propertyChanged: OnTokenPropertyChanged);
 
     public static readonly BindableProperty DecodedTokenProperty = BindableProperty.Create(
         nameof(DecodedToken),
         typeof(DecodedJwt),
         typeof(JwtVisualizer));
 
-    public static readonly BindableProperty VisualizationModeProperty = BindableProperty.Create(
-        nameof(VisualizationMode),
-        typeof(JwtVisualizationMode),
-        typeof(JwtVisualizer),
-        defaultValue: JwtVisualizationMode.None,
-        defaultBindingMode: BindingMode.TwoWay);
+    private bool _showDecoded = false;
+
+    private string _encodedHeader = string.Empty;
+
+    private string _encodedPayload = string.Empty;
+
+    private string _encodedSignature = string.Empty;
 
     public string Token
     {
@@ -36,16 +37,69 @@ public sealed partial class JwtVisualizer :
         set => SetValue(DecodedTokenProperty, value);
     }
 
-    public JwtVisualizationMode VisualizationMode
+    public bool ShowDecoded
     {
-        get => (JwtVisualizationMode)GetValue(VisualizationModeProperty);
-        set => SetValue(VisualizationModeProperty, value);
+        get => _showDecoded;
+        set
+        {
+            _showDecoded = value;
+            OnPropertyChanged();
+        }
     }
 
-    public IReadOnlyList<JwtVisualizationMode> VisualizationModes { get; } = Enum.GetValues<JwtVisualizationMode>();
+    public string EncodedHeader
+    {
+        get => _encodedHeader;
+        private set
+        {
+            _encodedHeader = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string EncodedPayload
+    {
+        get => _encodedPayload;
+        private set
+        {
+            _encodedPayload = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string EncodedSignature
+    {
+        get => _encodedSignature;
+        private set
+        {
+            _encodedSignature = value;
+            OnPropertyChanged();
+        }
+    }
 
     public JwtVisualizer()
     {
         InitializeComponent();
+    }
+
+    private async void CopyButton_Clicked(
+        object? sender,
+        EventArgs e)
+    {
+        await Clipboard.Default.SetTextAsync(Token);
+    }
+
+    private static void OnTokenPropertyChanged(
+        BindableObject bindable,
+        object oldValue,
+        object newValue)
+    {
+        var self = (JwtVisualizer)bindable;
+
+        var parts = ((string)newValue).Split('.');
+
+        self.EncodedHeader = parts.ElementAtOrDefault(0) ?? string.Empty;
+        self.EncodedPayload = parts.ElementAtOrDefault(1) ?? string.Empty;
+        self.EncodedSignature = parts.ElementAtOrDefault(2) ?? string.Empty;
     }
 }
