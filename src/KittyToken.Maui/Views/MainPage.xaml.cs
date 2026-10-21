@@ -19,7 +19,7 @@ public sealed partial class MainPage : ContentPage
 
     private bool _getAccessTokenButtonIsEnabled = false;
 
-    private bool _isLoading = false;
+    private MainPageVisualizationState _visualizationState = MainPageVisualizationState.Idle;
 
     private CancellationTokenSource? _getAccessTokenCancellationTokenSource;
 
@@ -42,7 +42,6 @@ public sealed partial class MainPage : ContentPage
         {
             _decodedAccessToken = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(IsIdle));
         }
     }
 
@@ -56,18 +55,15 @@ public sealed partial class MainPage : ContentPage
         }
     }
 
-    public bool IsLoading
+    public MainPageVisualizationState VisualizationState
     {
-        get => _isLoading;
+        get => _visualizationState;
         private set
         {
-            _isLoading = value;
+            _visualizationState = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(IsIdle));
         }
     }
-
-    public bool IsIdle => !IsLoading && DecodedAccessToken is null;
 
     public MainPage(
         IAzureAdClient azureAdClient,
@@ -105,21 +101,21 @@ public sealed partial class MainPage : ContentPage
         AccessToken = string.Empty;
         DecodedAccessToken = null;
 
-        IsLoading = true;
+        VisualizationState = MainPageVisualizationState.Loading;
 
         try
         {
             await GetAccessToken(cancellationToken);
 
-            IsLoading = false;
+            VisualizationState = MainPageVisualizationState.ShowToken;
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            IsLoading = false;
+            VisualizationState = MainPageVisualizationState.Idle;
         }
         catch (Exception ex)
         {
-            IsLoading = false;
+            VisualizationState = MainPageVisualizationState.Idle;
 
             await DisplayAlertAsync(
                 "Failed to get access token",

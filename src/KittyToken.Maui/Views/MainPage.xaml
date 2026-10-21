@@ -4,14 +4,15 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:KittyToken.Maui.Controls"
+    xmlns:models="clr-namespace:KittyToken.Maui.Models"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:views="clr-namespace:KittyToken.Maui.Views"
     x:DataType="views:MainPage">
 
     <ContentPage.Resources>
-        <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        <toolkit:IsEqualConverter x:Key="IsEqualConverter" />
 
-        <toolkit:IsNotNullConverter x:Key="IsNotNullConverter" />
+        <toolkit:IsNotEqualConverter x:Key="IsNotEqualConverter" />
     </ContentPage.Resources>
 
     <Grid ColumnDefinitions="*,*">
@@ -49,7 +50,7 @@
                 <Button
                     Clicked="GetAccessTokenButton_Clicked"
                     IsEnabled="{Binding GetAccessTokenButtonIsEnabled}"
-                    IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                    IsVisible="{Binding VisualizationState, Converter={StaticResource IsNotEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
                     Text="Run" />
                 <!--<Button.Triggers>
                        <DataTrigger
@@ -64,7 +65,7 @@
                     BackgroundColor="{AppThemeBinding Light={StaticResource Secondary},
                                                       Dark={StaticResource Gray600}}"
                     Clicked="CancelButton_Clicked"
-                    IsVisible="{Binding IsLoading}"
+                    IsVisible="{Binding VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
                     Text="Cancel"
                     TextColor="{AppThemeBinding Light={StaticResource Primary},
                                                 Dark={StaticResource White}}" />
@@ -74,7 +75,7 @@
         <Grid Grid.Column="1" Padding="20">
             <VerticalStackLayout
                 HorizontalOptions="Center"
-                IsVisible="{Binding IsIdle}"
+                IsVisible="{Binding VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Idle}}"
                 Spacing="20"
                 VerticalOptions="Center">
                 <Image Source="cat.png" WidthRequest="100" />
@@ -84,12 +85,12 @@
 
             <VerticalStackLayout
                 HorizontalOptions="Center"
-                IsVisible="{Binding IsLoading}"
+                IsVisible="{Binding VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
                 Spacing="20"
                 VerticalOptions="Center">
                 <controls:Spinner
                     HorizontalOptions="Center"
-                    IsRunning="{Binding IsLoading}"
+                    IsRunning="{Binding VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
                     PrimaryColor="{StaticResource Primary}"
                     SecondaryColor="{StaticResource Secondary}"
                     Size="60" />
@@ -99,7 +100,7 @@
 
             <controls:JwtVisualizer
                 DecodedToken="{Binding DecodedAccessToken}"
-                IsVisible="{Binding DecodedAccessToken, Converter={StaticResource IsNotNullConverter}}"
+                IsVisible="{Binding VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.ShowToken}}"
                 Token="{Binding AccessToken}" />
         </Grid>
     </Grid>
