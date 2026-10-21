@@ -10,6 +10,8 @@
 
     <ContentPage.Resources>
         <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+
+        <toolkit:IsNotNullConverter x:Key="IsNotNullConverter" />
     </ContentPage.Resources>
 
     <Grid ColumnDefinitions="*,*">
@@ -72,7 +74,7 @@
         <Grid Grid.Column="1" Padding="20">
             <VerticalStackLayout
                 HorizontalOptions="Center"
-                IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                IsVisible="{Binding IsIdle}"
                 Spacing="20"
                 VerticalOptions="Center">
                 <Image Source="cat.png" WidthRequest="100" />
@@ -94,6 +96,11 @@
 
                 <Label HorizontalTextAlignment="Center" Text="Sending request ..." />
             </VerticalStackLayout>
+
+            <controls:JwtVisualizer
+                DecodedToken="{Binding DecodedAccessToken}"
+                IsVisible="{Binding DecodedAccessToken, Converter={StaticResource IsNotNullConverter}}"
+                Token="{Binding AccessToken}" />
         </Grid>
     </Grid>
 

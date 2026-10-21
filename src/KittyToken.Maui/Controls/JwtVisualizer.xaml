@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="KittyToken.Maui.Controls.JwtVisualizer"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:KittyToken.Maui.Controls"
+    xmlns:converters="clr-namespace:KittyToken.Maui.Converters"
+    xmlns:models="clr-namespace:KittyToken.Maui.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Name="JwtVisualizerControl"
+    x:DataType="controls:JwtVisualizer">
+    <ContentView.Resources>
+        <converters:JsonPrettyConverter x:Key="JsonPrettyConverter" />
+
+        <converters:JwtVisualizationModeToStringConverter x:Key="JwtVisualizationModeToStringConverter" />
+
+        <toolkit:IsEqualConverter x:Key="IsEqualConverter" />
+
+        <Style Class="jwtEditor" TargetType="Editor">
+            <Setter Property="AutoSize" Value="TextChanges" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="IsReadOnly" Value="True" />
+        </Style>
+    </ContentView.Resources>
+
+    <Grid BindingContext="{Binding Source={x:Reference JwtVisualizerControl}}" RowDefinitions="Auto,*">
+        <Picker
+            Title="Select visualization mode:"
+            Grid.Row="0"
+            Margin="0,0,0,15"
+            FontSize="12"
+            ItemDisplayBinding="{Binding ., x:DataType=models:JwtVisualizationMode, Converter={StaticResource JwtVisualizationModeToStringConverter}}"
+            ItemsSource="{Binding VisualizationModes}"
+            SelectedItem="{Binding VisualizationMode, Mode=TwoWay}" />
+
+        <ScrollView Grid.Row="1" IsVisible="{Binding VisualizationMode, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:JwtVisualizationMode.None}}">
+            <Editor
+                StyleClass="jwtEditor"
+                Text="{Binding Token}"
+                TextColor="{StaticResource Blue400}" />
+        </ScrollView>
+
+        <Grid
+            Grid.Row="1"
+            IsVisible="{Binding VisualizationMode, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:JwtVisualizationMode.JwtDecoded}}"
+            RowDefinitions="*,*,*">
+            <ScrollView Grid.Row="0" Margin="0,0,0,15">
+                <Editor
+                    StyleClass="jwtEditor"
+                    Text="{Binding DecodedToken.Header, Converter={StaticResource JsonPrettyConverter}}"
+                    TextColor="{StaticResource Red400}" />
+            </ScrollView>
+
+            <ScrollView Grid.Row="1" Margin="0,0,0,15">
+                <Editor
+                    StyleClass="jwtEditor"
+                    Text="{Binding DecodedToken.Payload, Converter={StaticResource JsonPrettyConverter}}"
+                    TextColor="{StaticResource Blue400}" />
+            </ScrollView>
+
+            <ScrollView Grid.Row="2">
+                <Editor
+                    StyleClass="jwtEditor"
+                    Text="{Binding DecodedToken.Signature}"
+                    TextColor="{StaticResource Pink400}" />
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentView>

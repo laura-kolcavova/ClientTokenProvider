@@ -1,5 +1,7 @@
 ﻿using KittyToken.Application.AzureAd.Dto;
 using KittyToken.Application.AzureAd.Services.Abstractions;
+using KittyToken.Application.Shared.JwtDecoding;
+using KittyToken.Application.Shared.JwtDecoding.Abstractions;
 using KittyToken.Maui.Models;
 using System.ComponentModel;
 
@@ -9,7 +11,11 @@ public sealed partial class MainPage : ContentPage
 {
     private readonly IAzureAdClient _azureAdClient;
 
+    private readonly IJwtDecoder _jwtDecoder;
+
     private string _accessToken = string.Empty;
+
+    private DecodedJwt? _decodedAccessToken;
 
     private bool _getAccessTokenButtonIsEnabled = false;
 
@@ -26,6 +32,17 @@ public sealed partial class MainPage : ContentPage
         {
             _accessToken = value;
             OnPropertyChanged();
+        }
+    }
+
+    public DecodedJwt? DecodedAccessToken
+    {
+        get => _decodedAccessToken;
+        private set
+        {
+            _decodedAccessToken = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(IsIdle));
         }
     }
 
@@ -46,13 +63,18 @@ public sealed partial class MainPage : ContentPage
         {
             _isLoading = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(IsIdle));
         }
     }
 
+    public bool IsIdle => !IsLoading && DecodedAccessToken is null;
+
     public MainPage(
-        IAzureAdClient azureAdClient)
+        IAzureAdClient azureAdClient,
+        IJwtDecoder jwtDecoder)
     {
         _azureAdClient = azureAdClient;
+        _jwtDecoder = jwtDecoder;
 
         Configuration.PropertyChanged += Configuration_PropertyChanged;
 
@@ -79,6 +101,9 @@ public sealed partial class MainPage : ContentPage
         _getAccessTokenCancellationTokenSource = cancellationTokenSource;
 
         var cancellationToken = cancellationTokenSource.Token;
+
+        AccessToken = string.Empty;
+        DecodedAccessToken = null;
 
         IsLoading = true;
 
@@ -128,6 +153,8 @@ public sealed partial class MainPage : ContentPage
         AccessToken = await _azureAdClient.GetAcessToken(
             request,
             cancellationToken);
+
+        DecodedAccessToken = _jwtDecoder.Decode(AccessToken);
     }
 
     private void CheckGetAccessTokenButtonIsEnabled()

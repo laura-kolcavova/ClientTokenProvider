@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace KittyToken.Maui;
+﻿namespace KittyToken.Maui;
 
 public partial class App : Microsoft.Maui.Controls.Application
 {
@@ -11,6 +9,10 @@ public partial class App : Microsoft.Maui.Controls.Application
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(new AppShell());
+        return new Window(new AppShell())
+        {
+            MinimumWidth = 800,
+            MinimumHeight = 240
+        };
     }
 }
