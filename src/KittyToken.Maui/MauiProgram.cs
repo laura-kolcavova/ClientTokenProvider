@@ -28,6 +28,9 @@ public static class MauiProgram
 
 #if DEBUG
         builder.Logging.AddDebug();
+
+        builder.Services
+            .AddTransient<JwtVisualizerTestPage>();
 #endif
 
         return builder.Build();

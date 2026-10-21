@@ -21,31 +21,51 @@ public sealed partial class AzureAdConfigurationModel :
     public string Instance
     {
         get => _instance;
-        set => SetProperty(ref _instance, value);
+        set
+        {
+            _instance = value;
+            OnPropertyChanged();
+        }
     }
 
     public string TenantId
     {
         get => _tenantId;
-        set => SetProperty(ref _tenantId, value);
+        set
+        {
+            _tenantId = value;
+            OnPropertyChanged();
+        }
     }
 
     public string ClientId
     {
         get => _clientId;
-        set => SetProperty(ref _clientId, value);
+        set
+        {
+            _clientId = value;
+            OnPropertyChanged();
+        }
     }
 
     public string ClientSecret
     {
         get => _clientSecret;
-        set => SetProperty(ref _clientSecret, value);
+        set
+        {
+            _clientSecret = value;
+            OnPropertyChanged();
+        }
     }
 
     public string Scope
     {
         get => _scope;
-        set => SetProperty(ref _scope, value);
+        set
+        {
+            _scope = value;
+            OnPropertyChanged();
+        }
     }
 
     public bool IsValid()
@@ -58,18 +78,8 @@ public sealed partial class AzureAdConfigurationModel :
             !string.IsNullOrEmpty(Scope);
     }
 
-    private void SetProperty(
-        ref string field,
-        string value,
-        [CallerMemberName] string? propertyName = null)
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
-        if (field == value)
-        {
-            return;
-        }
-
-        field = value;
-
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
