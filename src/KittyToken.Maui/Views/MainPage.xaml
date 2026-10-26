@@ -7,6 +7,7 @@
     xmlns:models="clr-namespace:KittyToken.Maui.Models"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:views="clr-namespace:KittyToken.Maui.Views"
+    Title=""
     x:DataType="views:MainPage">
 
     <ContentPage.Resources>

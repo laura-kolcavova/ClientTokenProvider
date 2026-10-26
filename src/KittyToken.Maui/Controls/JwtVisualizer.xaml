@@ -47,14 +47,12 @@
                 </Label.FormattedText>
             </Label>
 
-            <Grid Margin="0,7,0,0" ColumnDefinitions="*,Auto">
+            <Grid Margin="0,7,0,0">
                 <Label
                     Grid.Column="0"
                     Style="{StaticResource SectionTitle}"
                     Text="HEADER"
                     VerticalOptions="Center" />
-
-                <controls:CopyButton Grid.Column="1" Text="{Binding DecodedToken.Header, Converter={StaticResource JsonPrettyConverter}}" />
             </Grid>
 
             <Editor
@@ -62,14 +60,12 @@
                 Text="{Binding DecodedToken.Header, Converter={StaticResource JsonPrettyConverter}}"
                 TextColor="{StaticResource Red400}" />
 
-            <Grid Margin="0,7,0,0" ColumnDefinitions="*,Auto">
+            <Grid Margin="0,7,0,0">
                 <Label
                     Grid.Column="0"
                     Style="{StaticResource SectionTitle}"
                     Text="PAYLOAD"
                     VerticalOptions="Center" />
-
-                <controls:CopyButton Grid.Column="1" Text="{Binding DecodedToken.Payload, Converter={StaticResource JsonPrettyConverter}}" />
             </Grid>
 
             <Editor
@@ -77,14 +73,12 @@
                 Text="{Binding DecodedToken.Payload, Converter={StaticResource JsonPrettyConverter}}"
                 TextColor="{StaticResource Blue400}" />
 
-            <Grid Margin="0,7,0,0" ColumnDefinitions="*,Auto">
+            <Grid Margin="0,7,0,0">
                 <Label
                     Grid.Column="0"
                     Style="{StaticResource SectionTitle}"
                     Text="SIGNATURE"
                     VerticalOptions="Center" />
-
-                <controls:CopyButton Grid.Column="1" Text="{Binding DecodedToken.Signature}" />
             </Grid>
 
             <Editor
