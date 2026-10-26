@@ -7,7 +7,7 @@ namespace KittyToken.Application.AzureAd.Persistence;
 internal sealed class AzureAdFileEntityConfiguration :
     IEntityTypeConfiguration<AzureAdFile>
 {
-    public const string TableName = "Files";
+    public const string TableName = "AzureAdFiles";
 
     public const string SchemaName = "dbo";
 

@@ -8,14 +8,16 @@ namespace KittyToken.Application.AzureAd.Extensions;
 internal static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAzureAd(
-        this IServiceCollection services)
+        this IServiceCollection services,
+        string dbConnectionString,
+        bool isDevelopment)
     {
         services
             .AddScoped(serviceProvider =>
             {
                 return new AzureAdFileDbContext(
-                    connectionString: "",
-                    useDevelopmentLogging: false);
+                    connectionString: dbConnectionString,
+                    useDevelopmentLogging: isDevelopment);
             });
 
         services

@@ -8,13 +8,15 @@ namespace KittyToken.Application.Shared.Extensions;
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplication(
-        this IServiceCollection services)
+        this IServiceCollection services,
+        string dbConnectionString,
+        bool isDevelopment)
     {
         services
             .AddSingleton<IJwtDecoder, JwtDecoder>();
 
         services
-            .AddAzureAd();
+            .AddAzureAd(dbConnectionString, isDevelopment);
 
         return services;
     }

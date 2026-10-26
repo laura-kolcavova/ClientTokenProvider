@@ -13,7 +13,7 @@ internal sealed class AzureAdFileStoreSqLite(
         CancellationToken cancellationToken)
     {
         var azureAdFile = await dbContext
-            .Files
+            .AzureAdFiles
             .Where(azureAdFile => azureAdFile.Id == id)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -24,7 +24,7 @@ internal sealed class AzureAdFileStoreSqLite(
         CancellationToken cancellationToken)
     {
         var azureAdFiles = await dbContext
-            .Files
+            .AzureAdFiles
             .ToListAsync(cancellationToken);
 
         return azureAdFiles;
@@ -35,7 +35,7 @@ internal sealed class AzureAdFileStoreSqLite(
         CancellationToken cancellationToken)
     {
         await dbContext
-            .Files
+            .AzureAdFiles
             .AddAsync(
                 azureAdFile,
                 cancellationToken);
@@ -46,7 +46,7 @@ internal sealed class AzureAdFileStoreSqLite(
         CancellationToken cancellationToken)
     {
         dbContext
-            .Files
+            .AzureAdFiles
             .Remove(azureAdFile);
     }
 

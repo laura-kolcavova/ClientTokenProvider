@@ -1,17 +1,22 @@
 ﻿using KittyToken.Application.AzureAd.Dto;
+using KittyToken.Application.AzureAd.Models;
 using KittyToken.Application.AzureAd.Services.Abstractions;
 using KittyToken.Application.Shared.JwtDecoding;
 using KittyToken.Application.Shared.JwtDecoding.Abstractions;
 using KittyToken.Maui.Models;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace KittyToken.Maui.Views;
 
 public sealed partial class MainPage : ContentPage
 {
+    private readonly IAzureAdFileStore _azureAdFileStore;
+
     private readonly IAzureAdClient _azureAdClient;
 
     private readonly IJwtDecoder _jwtDecoder;
+
 
     private string _accessToken = string.Empty;
 
@@ -23,7 +28,10 @@ public sealed partial class MainPage : ContentPage
 
     private CancellationTokenSource? _getAccessTokenCancellationTokenSource;
 
+
     public AzureAdConfigurationModel Configuration { get; } = new();
+
+    public ObservableCollection<AzureAdFile> AzureAdFiles { get; } = [];
 
     public string AccessToken
     {
@@ -66,9 +74,11 @@ public sealed partial class MainPage : ContentPage
     }
 
     public MainPage(
+        IAzureAdFileStore azureAdFileStore,
         IAzureAdClient azureAdClient,
         IJwtDecoder jwtDecoder)
     {
+        _azureAdFileStore = azureAdFileStore;
         _azureAdClient = azureAdClient;
         _jwtDecoder = jwtDecoder;
 
@@ -79,6 +89,23 @@ public sealed partial class MainPage : ContentPage
         BindingContext = this;
 
         CheckGetAccessTokenButtonIsEnabled();
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        try
+        {
+            await LoadAzureAdFiles(CancellationToken.None);
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync(
+                "Failed to load Azure AD files",
+                ex.Message,
+                "OK");
+        }
     }
 
     private void Configuration_PropertyChanged(
@@ -151,6 +178,18 @@ public sealed partial class MainPage : ContentPage
             cancellationToken);
 
         DecodedAccessToken = _jwtDecoder.Decode(AccessToken);
+    }
+
+    private async Task LoadAzureAdFiles(CancellationToken cancellationToken)
+    {
+        var azureAdFiles = await _azureAdFileStore.GetAll(cancellationToken);
+
+        AzureAdFiles.Clear();
+
+        foreach (var azureAdFile in azureAdFiles)
+        {
+            AzureAdFiles.Add(azureAdFile);
+        }
     }
 
     private void CheckGetAccessTokenButtonIsEnabled()

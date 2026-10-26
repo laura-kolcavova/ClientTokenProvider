@@ -11,6 +11,14 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
 
+        var isDevelopment = false;
+
+#if DEBUG
+        isDevelopment = true;
+#endif
+
+        var dbConnectionString = GetDbConnectionString();
+
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
@@ -21,18 +29,26 @@ public static class MauiProgram
             });
 
         builder.Services
-            .AddApplication();
+            .AddApplication(dbConnectionString, isDevelopment);
 
         builder.Services
-            .AddTransient<MainPage>();
-
-#if DEBUG
-        builder.Logging.AddDebug();
-
-        builder.Services
+            .AddTransient<MainPage>()
             .AddTransient<JwtVisualizerTestPage>();
-#endif
 
+        if (isDevelopment)
+        {
+            builder.Logging.AddDebug();
+        }
         return builder.Build();
+    }
+
+    private static string GetDbConnectionString()
+    {
+
+        var appDataFolder = Environment.SpecialFolder.LocalApplicationData;
+        var appDataPath = Environment.GetFolderPath(appDataFolder);
+        var dbFilePath = Path.Join(appDataPath, "KittyToken.sqlite3");
+
+        return $"Data Source={dbFilePath}";
     }
 }

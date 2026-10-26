@@ -3,6 +3,7 @@
     x:Class="KittyToken.Maui.Views.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:azureAdModels="clr-namespace:KittyToken.Application.AzureAd.Models;assembly=KittyToken.Application"
     xmlns:controls="clr-namespace:KittyToken.Maui.Controls"
     xmlns:models="clr-namespace:KittyToken.Maui.Models"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
@@ -16,8 +17,29 @@
         <toolkit:IsNotEqualConverter x:Key="IsNotEqualConverter" />
     </ContentPage.Resources>
 
-    <Grid ColumnDefinitions="*,*">
-        <Grid Grid.Column="0" RowDefinitions="*,Auto">
+    <Grid ColumnDefinitions="250,*,*">
+        <Grid
+            Grid.Column="0"
+            Padding="20"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Gray100},
+                                              Dark={StaticResource Gray900}}"
+            RowDefinitions="Auto,*"
+            RowSpacing="12">
+            <Label
+                Grid.Row="0"
+                FontAttributes="Bold"
+                Text="Files" />
+
+            <CollectionView Grid.Row="1" ItemsSource="{Binding AzureAdFiles}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="azureAdModels:AzureAdFile">
+                        <Label Padding="0,8" Text="{Binding Name}" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <Grid Grid.Column="1" RowDefinitions="*,Auto">
             <ScrollView Grid.Row="0">
                 <VerticalStackLayout Padding="20" Spacing="12">
                     <VerticalStackLayout Spacing="4">
@@ -73,7 +95,7 @@
             </Grid>
         </Grid>
 
-        <Grid Grid.Column="1" Padding="20">
+        <Grid Grid.Column="2" Padding="20">
             <VerticalStackLayout
                 HorizontalOptions="Center"
                 IsVisible="{Binding VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Idle}}"

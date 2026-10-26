@@ -9,7 +9,7 @@ internal sealed class AzureAdFileDbContext(
     bool useDevelopmentLogging) :
     DbContext
 {
-    public DbSet<AzureAdFile> Files => Set<AzureAdFile>();
+    public DbSet<AzureAdFile> AzureAdFiles => Set<AzureAdFile>();
 
     public void Init()
     {
