@@ -24,7 +24,7 @@ public sealed class AzureAdFile
         Name = name;
     }
 
-    public void UpdateData(
+    public void UpdateConfiguration(
        AzureAdConfiguration configuration)
     {
         Configuration = configuration;

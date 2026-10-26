@@ -30,7 +30,11 @@
                 FontAttributes="Bold"
                 Text="Files" />
 
-            <CollectionView Grid.Row="1" ItemsSource="{Binding AzureAdFiles}">
+            <CollectionView
+                Grid.Row="1"
+                ItemsSource="{Binding AzureAdFiles}"
+                SelectedItem="{Binding ActiveAzureAdFile, Mode=TwoWay}"
+                SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="azureAdModels:AzureAdFile">
                         <Label Padding="0,8" Text="{Binding Name}" />
@@ -42,29 +46,34 @@
         <Grid Grid.Column="1" RowDefinitions="*,Auto">
             <ScrollView Grid.Row="0">
                 <VerticalStackLayout Padding="20" Spacing="12">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="20"
+                        Text="{Binding FileName}" />
+
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Instance" />
-                        <Entry Text="{Binding Configuration.Instance, Mode=TwoWay}" />
+                        <Entry Text="{Binding FileConfiguration.Instance, Mode=TwoWay}" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Tenant Id" />
-                        <Entry Text="{Binding Configuration.TenantId, Mode=TwoWay}" />
+                        <Entry Text="{Binding FileConfiguration.TenantId, Mode=TwoWay}" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Client Id" />
-                        <Entry Text="{Binding Configuration.ClientId, Mode=TwoWay}" />
+                        <Entry Text="{Binding FileConfiguration.ClientId, Mode=TwoWay}" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Client Secret" />
-                        <Entry Text="{Binding Configuration.ClientSecret, Mode=TwoWay}" />
+                        <Entry Text="{Binding FileConfiguration.ClientSecret, Mode=TwoWay}" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Scope" />
-                        <Entry Text="{Binding Configuration.Scope, Mode=TwoWay}" />
+                        <Entry Text="{Binding FileConfiguration.Scope, Mode=TwoWay}" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </ScrollView>

@@ -18,6 +18,8 @@ public sealed partial class MainPage : ContentPage
     private readonly IJwtDecoder _jwtDecoder;
 
 
+    private string _fileName = "New Configuration";
+
     private string _accessToken = string.Empty;
 
     private DecodedJwt? _decodedAccessToken;
@@ -28,10 +30,38 @@ public sealed partial class MainPage : ContentPage
 
     private CancellationTokenSource? _getAccessTokenCancellationTokenSource;
 
-
-    public AzureAdConfigurationModel Configuration { get; } = new();
+    private AzureAdFile? _activeAzureAdFile;
 
     public ObservableCollection<AzureAdFile> AzureAdFiles { get; } = [];
+
+    public AzureAdFile? ActiveAzureAdFile
+    {
+        get => _activeAzureAdFile;
+        set
+        {
+            _activeAzureAdFile = value;
+            OnPropertyChanged();
+
+            if (value is not null)
+            {
+                SetFileName(value.Name);
+                SetFileConfiguration(value.Configuration);
+            }
+        }
+    }
+
+
+    public string FileName
+    {
+        get => _fileName;
+        private set
+        {
+            _fileName = value;
+            OnParentChanged();
+        }
+    }
+
+    public AzureAdConfigurationModel FileConfiguration { get; } = new();
 
     public string AccessToken
     {
@@ -82,7 +112,7 @@ public sealed partial class MainPage : ContentPage
         _azureAdClient = azureAdClient;
         _jwtDecoder = jwtDecoder;
 
-        Configuration.PropertyChanged += Configuration_PropertyChanged;
+        FileConfiguration.PropertyChanged += FileConfiguration_PropertyChanged;
 
         InitializeComponent();
 
@@ -108,7 +138,7 @@ public sealed partial class MainPage : ContentPage
         }
     }
 
-    private void Configuration_PropertyChanged(
+    private void FileConfiguration_PropertyChanged(
         object? sender,
         PropertyChangedEventArgs e)
     {
@@ -166,11 +196,11 @@ public sealed partial class MainPage : ContentPage
     {
         var request = new GetClientTokenRequestDto
         {
-            Instance = Configuration.Instance,
-            TenantId = Configuration.TenantId,
-            ClientId = Configuration.ClientId,
-            ClientSecret = Configuration.ClientSecret,
-            Scope = Configuration.Scope,
+            Instance = FileConfiguration.Instance,
+            TenantId = FileConfiguration.TenantId,
+            ClientId = FileConfiguration.ClientId,
+            ClientSecret = FileConfiguration.ClientSecret,
+            Scope = FileConfiguration.Scope,
         };
 
         AccessToken = await _azureAdClient.GetAcessToken(
@@ -192,9 +222,23 @@ public sealed partial class MainPage : ContentPage
         }
     }
 
+    private void SetFileName(string fileName)
+    {
+        FileName = fileName;
+    }
+
+    private void SetFileConfiguration(AzureAdConfiguration configuration)
+    {
+        FileConfiguration.Instance = configuration.Instance;
+        FileConfiguration.TenantId = configuration.TenantId;
+        FileConfiguration.ClientId = configuration.ClientId;
+        FileConfiguration.ClientSecret = configuration.ClientSecret;
+        FileConfiguration.Scope = configuration.Scope;
+    }
+
     private void CheckGetAccessTokenButtonIsEnabled()
     {
-        var isEnabled = Configuration.IsValid();
+        var isEnabled = FileConfiguration.IsValid();
 
         if (GetAccessTokenButtonIsEnabled != isEnabled)
         {
