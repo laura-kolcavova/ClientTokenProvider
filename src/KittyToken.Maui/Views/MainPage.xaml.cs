@@ -174,6 +174,23 @@ public sealed partial class MainPage : ContentPage
         }
     }
 
+    private async void AddNewButton_Clicked(
+        object? sender,
+        EventArgs e)
+    {
+        try
+        {
+            await AddNewAzureAdFile(CancellationToken.None);
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync(
+                "Failed to add new Azure AD file",
+                ex.Message,
+                "OK");
+        }
+    }
+
     private async void DeleteMenuFlyoutItem_Clicked(
         object? sender,
         EventArgs e)
@@ -224,6 +241,21 @@ public sealed partial class MainPage : ContentPage
         {
             AzureAdFiles.Add(azureAdFile);
         }
+    }
+
+    private async Task AddNewAzureAdFile(CancellationToken cancellationToken)
+    {
+        var configuration = AzureAdConfiguration.Empty();
+
+        var azureAdFile = _azureAdFileFactory.Create(DefaultAzureAdFileName, configuration);
+
+        await _azureAdFileStore.Add(azureAdFile, cancellationToken);
+
+        await _azureAdFileStore.SaveChanges(cancellationToken);
+
+        AzureAdFiles.Add(azureAdFile);
+
+        ActiveAzureAdFile = azureAdFile;
     }
 
     private async Task SaveAzureAdFile(CancellationToken cancellationToken)

@@ -25,10 +25,21 @@
                                               Dark={StaticResource Gray900}}"
             RowDefinitions="Auto,*"
             RowSpacing="12">
-            <Label
+            <Grid
                 Grid.Row="0"
-                FontAttributes="Bold"
-                Text="Configurations" />
+                ColumnDefinitions="*,Auto"
+                ColumnSpacing="12">
+                <Label
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    Text="Configurations"
+                    VerticalOptions="Center" />
+
+                <Button
+                    Grid.Column="1"
+                    Clicked="AddNewButton_Clicked"
+                    Text="Add" />
+            </Grid>
 
             <CollectionView
                 Grid.Row="1"
