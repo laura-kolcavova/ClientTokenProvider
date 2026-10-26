@@ -28,7 +28,7 @@
             <Label
                 Grid.Row="0"
                 FontAttributes="Bold"
-                Text="Files" />
+                Text="Configurations" />
 
             <CollectionView
                 Grid.Row="1"
@@ -46,34 +46,43 @@
         <Grid Grid.Column="1" RowDefinitions="*,Auto">
             <ScrollView Grid.Row="0">
                 <VerticalStackLayout Padding="20" Spacing="12">
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="20"
-                        Text="{Binding FileName}" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <Label
+                            Grid.Column="0"
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            Text="{Binding FormData.Name}"
+                            VerticalOptions="Center" />
+
+                        <Button
+                            Grid.Column="1"
+                            Clicked="SaveButton_Clicked"
+                            Text="Save" />
+                    </Grid>
 
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Instance" />
-                        <Entry Text="{Binding FileConfiguration.Instance, Mode=TwoWay}" />
+                        <Entry Text="{Binding FormData.Instance, Mode=TwoWay}" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Tenant Id" />
-                        <Entry Text="{Binding FileConfiguration.TenantId, Mode=TwoWay}" />
+                        <Entry Text="{Binding FormData.TenantId, Mode=TwoWay}" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Client Id" />
-                        <Entry Text="{Binding FileConfiguration.ClientId, Mode=TwoWay}" />
+                        <Entry Text="{Binding FormData.ClientId, Mode=TwoWay}" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Client Secret" />
-                        <Entry Text="{Binding FileConfiguration.ClientSecret, Mode=TwoWay}" />
+                        <Entry Text="{Binding FormData.ClientSecret, Mode=TwoWay}" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
                         <Label Text="Scope" />
-                        <Entry Text="{Binding FileConfiguration.Scope, Mode=TwoWay}" />
+                        <Entry Text="{Binding FormData.Scope, Mode=TwoWay}" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </ScrollView>

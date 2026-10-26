@@ -11,14 +11,16 @@ namespace KittyToken.Maui.Views;
 
 public sealed partial class MainPage : ContentPage
 {
+    private const string DefaultAzureAdFileName = "New Configuration";
+
     private readonly IAzureAdFileStore _azureAdFileStore;
+
+    private readonly IAzureAdFileFactory _azureAdFileFactory;
 
     private readonly IAzureAdClient _azureAdClient;
 
     private readonly IJwtDecoder _jwtDecoder;
 
-
-    private string _fileName = "New Configuration";
 
     private string _accessToken = string.Empty;
 
@@ -32,6 +34,7 @@ public sealed partial class MainPage : ContentPage
 
     private AzureAdFile? _activeAzureAdFile;
 
+
     public ObservableCollection<AzureAdFile> AzureAdFiles { get; } = [];
 
     public AzureAdFile? ActiveAzureAdFile
@@ -44,24 +47,15 @@ public sealed partial class MainPage : ContentPage
 
             if (value is not null)
             {
-                SetFileName(value.Name);
-                SetFileConfiguration(value.Configuration);
+                SetFormData(value);
             }
         }
     }
 
-
-    public string FileName
+    public AzureAdFormDataModel FormData { get; } = new()
     {
-        get => _fileName;
-        private set
-        {
-            _fileName = value;
-            OnParentChanged();
-        }
-    }
-
-    public AzureAdConfigurationModel FileConfiguration { get; } = new();
+        Name = DefaultAzureAdFileName,
+    };
 
     public string AccessToken
     {
@@ -105,14 +99,16 @@ public sealed partial class MainPage : ContentPage
 
     public MainPage(
         IAzureAdFileStore azureAdFileStore,
+        IAzureAdFileFactory azureAdFileFactory,
         IAzureAdClient azureAdClient,
         IJwtDecoder jwtDecoder)
     {
         _azureAdFileStore = azureAdFileStore;
+        _azureAdFileFactory = azureAdFileFactory;
         _azureAdClient = azureAdClient;
         _jwtDecoder = jwtDecoder;
 
-        FileConfiguration.PropertyChanged += FileConfiguration_PropertyChanged;
+        FormData.PropertyChanged += FormData_PropertyChanged;
 
         InitializeComponent();
 
@@ -138,7 +134,7 @@ public sealed partial class MainPage : ContentPage
         }
     }
 
-    private void FileConfiguration_PropertyChanged(
+    private void FormData_PropertyChanged(
         object? sender,
         PropertyChangedEventArgs e)
     {
@@ -185,6 +181,23 @@ public sealed partial class MainPage : ContentPage
         }
     }
 
+    private async void SaveButton_Clicked(
+        object? sender,
+        EventArgs e)
+    {
+        try
+        {
+            await SaveAzureAdFile(CancellationToken.None);
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync(
+                "Failed to save Azure AD file",
+                ex.Message,
+                "OK");
+        }
+    }
+
     private void CancelButton_Clicked(
         object? sender,
         EventArgs e)
@@ -196,11 +209,11 @@ public sealed partial class MainPage : ContentPage
     {
         var request = new GetClientTokenRequestDto
         {
-            Instance = FileConfiguration.Instance,
-            TenantId = FileConfiguration.TenantId,
-            ClientId = FileConfiguration.ClientId,
-            ClientSecret = FileConfiguration.ClientSecret,
-            Scope = FileConfiguration.Scope,
+            Instance = FormData.Instance,
+            TenantId = FormData.TenantId,
+            ClientId = FormData.ClientId,
+            ClientSecret = FormData.ClientSecret,
+            Scope = FormData.Scope,
         };
 
         AccessToken = await _azureAdClient.GetAcessToken(
@@ -222,23 +235,55 @@ public sealed partial class MainPage : ContentPage
         }
     }
 
-    private void SetFileName(string fileName)
+    private async Task SaveAzureAdFile(CancellationToken cancellationToken)
     {
-        FileName = fileName;
+        var configuration = new AzureAdConfiguration
+        {
+            Instance = FormData.Instance,
+            TenantId = FormData.TenantId,
+            ClientId = FormData.ClientId,
+            ClientSecret = FormData.ClientSecret,
+            Scope = FormData.Scope,
+        };
+
+        if (ActiveAzureAdFile is null)
+        {
+            var azureAdFile = _azureAdFileFactory.Create(
+                FormData.Name,
+                configuration);
+
+            await _azureAdFileStore.Add(
+                azureAdFile,
+                cancellationToken);
+
+            await _azureAdFileStore.SaveChanges(cancellationToken);
+
+            AzureAdFiles.Add(azureAdFile);
+
+            ActiveAzureAdFile = azureAdFile;
+        }
+        else
+        {
+            ActiveAzureAdFile.UpdateName(FormData.Name);
+            ActiveAzureAdFile.UpdateConfiguration(configuration);
+
+            await _azureAdFileStore.SaveChanges(cancellationToken);
+        }
     }
 
-    private void SetFileConfiguration(AzureAdConfiguration configuration)
+    private void SetFormData(AzureAdFile azureAdFile)
     {
-        FileConfiguration.Instance = configuration.Instance;
-        FileConfiguration.TenantId = configuration.TenantId;
-        FileConfiguration.ClientId = configuration.ClientId;
-        FileConfiguration.ClientSecret = configuration.ClientSecret;
-        FileConfiguration.Scope = configuration.Scope;
+        FormData.Name = azureAdFile.Name;
+        FormData.Instance = azureAdFile.Configuration.Instance;
+        FormData.TenantId = azureAdFile.Configuration.TenantId;
+        FormData.ClientId = azureAdFile.Configuration.ClientId;
+        FormData.ClientSecret = azureAdFile.Configuration.ClientSecret;
+        FormData.Scope = azureAdFile.Configuration.Scope;
     }
 
     private void CheckGetAccessTokenButtonIsEnabled()
     {
-        var isEnabled = FileConfiguration.IsValid();
+        var isEnabled = FormData.IsValid();
 
         if (GetAccessTokenButtonIsEnabled != isEnabled)
         {

@@ -3,9 +3,11 @@ using System.Runtime.CompilerServices;
 
 namespace KittyToken.Maui.Models;
 
-public sealed partial class AzureAdConfigurationModel :
+public sealed partial class AzureAdFormDataModel :
     INotifyPropertyChanged
 {
+    private string _name = string.Empty;
+
     private string _instance = string.Empty;
 
     private string _tenantId = string.Empty;
@@ -17,6 +19,16 @@ public sealed partial class AzureAdConfigurationModel :
     private string _scope = string.Empty;
 
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            _name = value;
+            OnPropertyChanged();
+        }
+    }
 
     public string Instance
     {
