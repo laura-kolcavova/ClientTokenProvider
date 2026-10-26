@@ -174,29 +174,44 @@ public sealed partial class MainPage : ContentPage
         }
     }
 
+    private async void DeleteMenuFlyoutItem_Clicked(
+        object? sender,
+        EventArgs e)
+    {
+        if (sender is not MenuFlyoutItem { BindingContext: AzureAdFile azureAdFile })
+        {
+            return;
+        }
+
+        var confirmed = await DisplayAlertAsync(
+            "Delete configuration",
+            $"Are you sure you want to delete \"{azureAdFile.Name}\"?",
+            "Delete",
+            "Cancel");
+
+        if (!confirmed)
+        {
+            return;
+        }
+
+        try
+        {
+            await DeleteAzureAdFile(azureAdFile, CancellationToken.None);
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync(
+                "Failed to delete Azure AD file",
+                ex.Message,
+                "OK");
+        }
+    }
+
     private void CancelButton_Clicked(
         object? sender,
         EventArgs e)
     {
         _getAccessTokenCancellationTokenSource?.Cancel();
-    }
-
-    private async Task GetAccessToken(CancellationToken cancellationToken)
-    {
-        var request = new GetClientTokenRequestDto
-        {
-            Instance = FormData.Instance,
-            TenantId = FormData.TenantId,
-            ClientId = FormData.ClientId,
-            ClientSecret = FormData.ClientSecret,
-            Scope = FormData.Scope,
-        };
-
-        AccessToken = await _azureAdClient.GetAcessToken(
-            request,
-            cancellationToken);
-
-        DecodedAccessToken = _jwtDecoder.Decode(AccessToken);
     }
 
     private async Task LoadAzureAdFiles(CancellationToken cancellationToken)
@@ -245,6 +260,55 @@ public sealed partial class MainPage : ContentPage
 
             await _azureAdFileStore.SaveChanges(cancellationToken);
         }
+    }
+
+    private async Task DeleteAzureAdFile(
+        AzureAdFile azureAdFile,
+        CancellationToken cancellationToken)
+    {
+        _azureAdFileStore.Remove(
+            azureAdFile,
+            cancellationToken);
+
+        await _azureAdFileStore.SaveChanges(cancellationToken);
+
+        AzureAdFiles.Remove(azureAdFile);
+
+        if (ActiveAzureAdFile == azureAdFile)
+        {
+            ActiveAzureAdFile = null;
+
+            ResetFormData();
+        }
+
+    }
+
+    private async Task GetAccessToken(CancellationToken cancellationToken)
+    {
+        var request = new GetClientTokenRequestDto
+        {
+            Instance = FormData.Instance,
+            TenantId = FormData.TenantId,
+            ClientId = FormData.ClientId,
+            ClientSecret = FormData.ClientSecret,
+            Scope = FormData.Scope,
+        };
+
+        AccessToken = await _azureAdClient.GetAcessToken(
+            request,
+            cancellationToken);
+
+        DecodedAccessToken = _jwtDecoder.Decode(AccessToken);
+    }
+
+    private void ResetFormData()
+    {
+        FormData.Name = DefaultAzureAdFileName;
+        FormData.Instance = string.Empty;
+        FormData.TenantId = string.Empty;
+        FormData.ClientId = string.Empty;
+        FormData.ClientSecret = string.Empty;
+        FormData.Scope = string.Empty;
     }
 
     private void SetFormData(AzureAdFile azureAdFile)

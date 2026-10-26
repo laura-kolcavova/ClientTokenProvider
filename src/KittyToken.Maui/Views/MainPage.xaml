@@ -37,7 +37,18 @@
                 SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="azureAdModels:AzureAdFile">
-                        <Label Padding="0,8" Text="{Binding Name}" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Padding="20,5,20,5"
+                            LineBreakMode="TailTruncation"
+                            Text="{Binding Name}">
+                            <FlyoutBase.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Clicked="DeleteMenuFlyoutItem_Clicked" Text="Delete" />
+                                </MenuFlyout>
+                            </FlyoutBase.ContextFlyout>
+                        </Label>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
@@ -93,14 +104,6 @@
                     IsEnabled="{Binding FormData.CanGetAccessToken}"
                     IsVisible="{Binding VisualizationState, Converter={StaticResource IsNotEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
                     Text="Run" />
-                <!--<Button.Triggers>
-                       <DataTrigger
-                           Binding="{Binding IsLoading}"
-                           TargetType="Button"
-                           Value="True">
-                           <Setter Property="IsVisible" Value="False" />
-                       </DataTrigger>
-                   </Button.Triggers>-->
 
                 <Button
                     BackgroundColor="{AppThemeBinding Light={StaticResource Secondary},
