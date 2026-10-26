@@ -5,7 +5,6 @@ using KittyToken.Application.Shared.JwtDecoding;
 using KittyToken.Application.Shared.JwtDecoding.Abstractions;
 using KittyToken.Maui.Models;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace KittyToken.Maui.Views;
 
@@ -25,8 +24,6 @@ public sealed partial class MainPage : ContentPage
     private string _accessToken = string.Empty;
 
     private DecodedJwt? _decodedAccessToken;
-
-    private bool _getAccessTokenButtonIsEnabled = false;
 
     private MainPageVisualizationState _visualizationState = MainPageVisualizationState.Idle;
 
@@ -77,16 +74,6 @@ public sealed partial class MainPage : ContentPage
         }
     }
 
-    public bool GetAccessTokenButtonIsEnabled
-    {
-        get => _getAccessTokenButtonIsEnabled;
-        private set
-        {
-            _getAccessTokenButtonIsEnabled = value;
-            OnPropertyChanged();
-        }
-    }
-
     public MainPageVisualizationState VisualizationState
     {
         get => _visualizationState;
@@ -108,13 +95,9 @@ public sealed partial class MainPage : ContentPage
         _azureAdClient = azureAdClient;
         _jwtDecoder = jwtDecoder;
 
-        FormData.PropertyChanged += FormData_PropertyChanged;
-
         InitializeComponent();
 
         BindingContext = this;
-
-        CheckGetAccessTokenButtonIsEnabled();
     }
 
     protected override async void OnAppearing()
@@ -132,13 +115,6 @@ public sealed partial class MainPage : ContentPage
                 ex.Message,
                 "OK");
         }
-    }
-
-    private void FormData_PropertyChanged(
-        object? sender,
-        PropertyChangedEventArgs e)
-    {
-        CheckGetAccessTokenButtonIsEnabled();
     }
 
     private async void GetAccessTokenButton_Clicked(
@@ -279,15 +255,5 @@ public sealed partial class MainPage : ContentPage
         FormData.ClientId = azureAdFile.Configuration.ClientId;
         FormData.ClientSecret = azureAdFile.Configuration.ClientSecret;
         FormData.Scope = azureAdFile.Configuration.Scope;
-    }
-
-    private void CheckGetAccessTokenButtonIsEnabled()
-    {
-        var isEnabled = FormData.IsValid();
-
-        if (GetAccessTokenButtonIsEnabled != isEnabled)
-        {
-            GetAccessTokenButtonIsEnabled = isEnabled;
-        }
     }
 }

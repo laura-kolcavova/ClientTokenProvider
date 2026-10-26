@@ -90,7 +90,7 @@
             <Grid Grid.Row="1" Margin="20">
                 <Button
                     Clicked="GetAccessTokenButton_Clicked"
-                    IsEnabled="{Binding GetAccessTokenButtonIsEnabled}"
+                    IsEnabled="{Binding FormData.CanGetAccessToken}"
                     IsVisible="{Binding VisualizationState, Converter={StaticResource IsNotEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
                     Text="Run" />
                 <!--<Button.Triggers>

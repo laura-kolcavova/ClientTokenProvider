@@ -27,6 +27,7 @@ public sealed partial class AzureAdFormDataModel :
         {
             _name = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(CanBeSaved));
         }
     }
 
@@ -37,6 +38,7 @@ public sealed partial class AzureAdFormDataModel :
         {
             _instance = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(CanGetAccessToken));
         }
     }
 
@@ -47,6 +49,7 @@ public sealed partial class AzureAdFormDataModel :
         {
             _tenantId = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(CanGetAccessToken));
         }
     }
 
@@ -57,6 +60,7 @@ public sealed partial class AzureAdFormDataModel :
         {
             _clientId = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(CanGetAccessToken));
         }
     }
 
@@ -67,6 +71,7 @@ public sealed partial class AzureAdFormDataModel :
         {
             _clientSecret = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(CanGetAccessToken));
         }
     }
 
@@ -77,18 +82,18 @@ public sealed partial class AzureAdFormDataModel :
         {
             _scope = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(CanGetAccessToken));
         }
     }
 
-    public bool IsValid()
-    {
-        return
-            !string.IsNullOrEmpty(Instance) &&
-            !string.IsNullOrEmpty(TenantId) &&
-            !string.IsNullOrEmpty(ClientId) &&
-            !string.IsNullOrEmpty(ClientSecret) &&
-            !string.IsNullOrEmpty(Scope);
-    }
+    public bool CanBeSaved => !string.IsNullOrWhiteSpace(Name);
+
+    public bool CanGetAccessToken =>
+        !string.IsNullOrWhiteSpace(Instance) &&
+        !string.IsNullOrWhiteSpace(TenantId) &&
+        !string.IsNullOrWhiteSpace(ClientId) &&
+        !string.IsNullOrWhiteSpace(ClientSecret) &&
+        !string.IsNullOrWhiteSpace(Scope);
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
