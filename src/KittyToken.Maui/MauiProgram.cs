@@ -39,7 +39,11 @@ public static class MauiProgram
         {
             builder.Logging.AddDebug();
         }
-        return builder.Build();
+        var app = builder.Build();
+
+        app.Services.InitApplication();
+
+        return app;
     }
 
     private static string GetDbConnectionString()

@@ -11,11 +11,6 @@ internal sealed class AzureAdFileDbContext(
 {
     public DbSet<AzureAdFile> AzureAdFiles => Set<AzureAdFile>();
 
-    public void Init()
-    {
-        Database.EnsureCreated();
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder
