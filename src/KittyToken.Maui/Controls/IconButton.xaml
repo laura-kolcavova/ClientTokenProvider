@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="KittyToken.Maui.Controls.IconButton"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:KittyToken.Maui.Controls"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Name="IconButtonControl"
+    x:DataType="controls:IconButton">
+    <Border
+        Padding="14,10"
+        BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
+                                          Dark={StaticResource PrimaryDark}}"
+        BindingContext="{Binding Source={x:Reference IconButtonControl}}"
+        MinimumHeightRequest="44"
+        MinimumWidthRequest="44"
+        StrokeShape="RoundRectangle 8"
+        StrokeThickness="0">
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+        </Border.GestureRecognizers>
+
+        <HorizontalStackLayout Spacing="8">
+            <Image
+                HeightRequest="18"
+                Source="{Binding ImageSource}"
+                VerticalOptions="Center"
+                WidthRequest="18">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
+                </Image.Behaviors>
+            </Image>
+
+            <Label
+                FontSize="14"
+                Text="{Binding Text}"
+                TextColor="{AppThemeBinding Light={StaticResource White},
+                                            Dark={StaticResource PrimaryDarkText}}"
+                VerticalOptions="Center" />
+        </HorizontalStackLayout>
+    </Border>
+</ContentView>
