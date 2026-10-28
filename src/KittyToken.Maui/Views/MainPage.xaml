@@ -76,9 +76,10 @@
                             Text="{Binding FormData.Name}"
                             VerticalOptions="Center" />
 
-                        <Button
+                        <controls:IconButton
                             Grid.Column="1"
                             Clicked="SaveButton_Clicked"
+                            ImageSource="save.png"
                             Text="Save" />
                     </Grid>
 
