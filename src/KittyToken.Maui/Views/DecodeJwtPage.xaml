@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="KittyToken.Maui.Views.JwtVisualizerTestPage"
+    x:Class="KittyToken.Maui.Views.DecodeJwtPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:KittyToken.Maui.Controls"
     xmlns:views="clr-namespace:KittyToken.Maui.Views"
     Title=""
-    x:DataType="views:JwtVisualizerTestPage">
+    x:DataType="views:DecodeJwtPage">
 
     <Grid
         Padding="20"

@@ -33,7 +33,7 @@ public static class MauiProgram
 
         builder.Services
             .AddTransient<MainPage>()
-            .AddTransient<JwtVisualizerTestPage>();
+            .AddTransient<DecodeJwtPage>();
 
         if (isDevelopment)
         {

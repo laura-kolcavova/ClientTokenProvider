@@ -35,10 +35,14 @@
                     Text="Configurations"
                     VerticalOptions="Center" />
 
-                <Button
+                <ImageButton
                     Grid.Column="1"
                     Clicked="AddNewButton_Clicked"
-                    Text="Add" />
+                    Source="add.png">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray200}}" />
+                    </ImageButton.Behaviors>
+                </ImageButton>
             </Grid>
 
             <CollectionView

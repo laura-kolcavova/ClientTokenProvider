@@ -7,8 +7,13 @@
     Title="KittyToken.Maui">
 
     <ShellContent
-        Title="Main"
+        Title="Configurations"
         ContentTemplate="{DataTemplate views:MainPage}"
         Route="MainPage" />
+
+    <ShellContent
+        Title="Decode JWT"
+        ContentTemplate="{DataTemplate views:DecodeJwtPage}"
+        Route="DecodeJWT" />
 
 </Shell>

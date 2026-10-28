@@ -3,7 +3,7 @@ using KittyToken.Application.Shared.JwtDecoding.Abstractions;
 
 namespace KittyToken.Maui.Views;
 
-public sealed partial class JwtVisualizerTestPage : ContentPage
+public sealed partial class DecodeJwtPage : ContentPage
 {
     private const string SampleToken =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" +
@@ -38,7 +38,7 @@ public sealed partial class JwtVisualizerTestPage : ContentPage
         }
     }
 
-    public JwtVisualizerTestPage(
+    public DecodeJwtPage(
         IJwtDecoder jwtDecoder)
     {
         _jwtDecoder = jwtDecoder;
