@@ -81,14 +81,14 @@
             IsVisible="{Binding ActiveConfiguration, Converter={StaticResource IsNullConverter}}"
             Spacing="20"
             VerticalOptions="Center">
-            <Image Source="cat.png" WidthRequest="140" />
+            <Image Source="cat.png" WidthRequest="130" />
 
             <Label HorizontalTextAlignment="Center" Text="Select a configuration or" />
 
             <Button
                 Clicked="AddConfigurationButton_Clicked"
                 FontAttributes="Bold"
-                Text="Create New Configuration" />
+                Text="Create New" />
         </VerticalStackLayout>
 
         <Grid
