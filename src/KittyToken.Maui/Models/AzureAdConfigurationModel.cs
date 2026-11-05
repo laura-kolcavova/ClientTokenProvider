@@ -139,8 +139,7 @@ public sealed partial class AzureAdConfigurationModel : INotifyPropertyChanged
     public bool IsPersisted => PersistenceId != Guid.Empty;
 
     public bool CanBeSaved =>
-        !string.IsNullOrWhiteSpace(Name) &&
-        (!IsPersisted || _savedState != (Instance, TenantId, ClientId, ClientSecret, Scope));
+       !IsPersisted || _savedState != (Instance, TenantId, ClientId, ClientSecret, Scope);
 
     public bool CanGetAccessToken =>
         !string.IsNullOrWhiteSpace(Instance) &&

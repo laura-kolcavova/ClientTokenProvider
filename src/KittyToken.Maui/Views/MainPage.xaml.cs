@@ -25,6 +25,12 @@ public sealed partial class MainPage : ContentPage
 
     private CancellationTokenSource? _getAccessTokenCancellationTokenSource;
 
+#if WINDOWS
+    private Microsoft.UI.Windowing.AppWindow? _appWindow;
+
+    private bool _canClose;
+#endif
+
     public ObservableCollection<AzureAdConfigurationModel> ConfigurationList { get; } = [];
 
     public AzureAdConfigurationModel? ActiveConfiguration
@@ -67,8 +73,59 @@ public sealed partial class MainPage : ContentPage
     {
         base.OnAppearing();
 
+#if WINDOWS
+        if (_appWindow is null && Window?.Handler?.PlatformView is Microsoft.UI.Xaml.Window platformWindow)
+        {
+            _appWindow = platformWindow.AppWindow;
+            _appWindow.Closing += AppWindow_Closing;
+        }
+#endif
+
         await LoadConfigurations();
     }
+
+#if WINDOWS
+    private async void AppWindow_Closing(
+        Microsoft.UI.Windowing.AppWindow sender,
+        Microsoft.UI.Windowing.AppWindowClosingEventArgs args)
+    {
+        var unsavedConfigurations = ConfigurationList
+            .Where(configurationModel => configurationModel.CanBeSaved)
+            .ToList();
+
+        if (_canClose || unsavedConfigurations.Count == 0)
+        {
+            return;
+        }
+
+        // Must be set before the first await, otherwise the window closes anyway.
+        args.Cancel = true;
+
+        var save = await DisplayAlertAsync(
+            "You have unsaved changes",
+            "Do you want to save the changes before you leave?",
+            "Save",
+            "Don't save");
+
+        if (save)
+        {
+            foreach (var configurationModel in unsavedConfigurations)
+            {
+                await SaveConfiguration(configurationModel);
+            }
+
+            // A failed save already showed its error and stays unsaved; keep the app open so nothing is lost.
+            if (ConfigurationList.Any(configurationModel => configurationModel.CanBeSaved))
+            {
+                return;
+            }
+        }
+
+        _canClose = true;
+
+        Microsoft.Maui.Controls.Application.Current?.Quit();
+    }
+#endif
 
     private void AddConfigurationImageButton_Clicked(
         object? sender,
@@ -251,6 +308,8 @@ public sealed partial class MainPage : ContentPage
                 await _azureAdFileStore.Add(
                      newAzureAdFile,
                      CancellationToken.None);
+
+                await _azureAdFileStore.SaveChanges(CancellationToken.None);
 
                 configurationModel.PersistenceId = newAzureAdFile.Id;
 
