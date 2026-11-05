@@ -118,7 +118,7 @@
                             FontAttributes="Bold"
                             FontSize="20"
                             IsVisible="{Binding IsEditingName}"
-                            Text="{Binding ActiveConfiguration.Name, Mode=TwoWay}"
+                            Text="{Binding ActiveConfiguration.Name, Mode=OneWay}"
                             Unfocused="NameEntry_Unfocused"
                             VerticalOptions="Center" />
 
@@ -126,6 +126,7 @@
                             Grid.Column="1"
                             Clicked="SaveButton_Clicked"
                             ImageSource="save.png"
+                            IsEnabled="{Binding ActiveConfiguration.CanBeSaved}"
                             Text="Save" />
                     </Grid>
 

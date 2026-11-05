@@ -37,6 +37,11 @@ public sealed partial class IconButton :
         object? sender,
         TappedEventArgs e)
     {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
         Clicked?.Invoke(this, EventArgs.Empty);
     }
 }

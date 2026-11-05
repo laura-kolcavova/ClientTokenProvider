@@ -128,7 +128,14 @@ public sealed partial class MainPage : ContentPage
 
         IsEditingName = false;
 
-        await RenameConfiguration(ActiveConfiguration);
+        if (sender is not Entry entry)
+        {
+            return;
+        }
+
+        var newName = ((Entry)sender).Text;
+
+        await RenameConfiguration(ActiveConfiguration, newName);
     }
 
     private async void DeleteMenuFlyoutItem_Clicked(
@@ -214,6 +221,16 @@ public sealed partial class MainPage : ContentPage
 
     private async Task SaveConfiguration(AzureAdConfigurationModel configurationModel)
     {
+        if (string.IsNullOrWhiteSpace(configurationModel.Name))
+        {
+            await DisplayAlertAsync(
+               "Failed to save Azure AD configuration",
+               "Name must not be empty",
+               "OK");
+
+            return;
+        }
+
         var configuration = new AzureAdConfiguration
         {
             Instance = configurationModel.Instance,
@@ -237,6 +254,8 @@ public sealed partial class MainPage : ContentPage
 
                 configurationModel.PersistenceId = newAzureAdFile.Id;
 
+                configurationModel.MarkAsSaved();
+
                 return;
             }
 
@@ -258,6 +277,8 @@ public sealed partial class MainPage : ContentPage
             existingAzureAdFile.UpdateConfiguration(configuration);
 
             await _azureAdFileStore.SaveChanges(CancellationToken.None);
+
+            configurationModel.MarkAsSaved();
         }
         catch (Exception ex)
         {
@@ -269,8 +290,16 @@ public sealed partial class MainPage : ContentPage
     }
 
     private async Task RenameConfiguration(
-        AzureAdConfigurationModel configurationModel)
+        AzureAdConfigurationModel configurationModel,
+        string newName)
     {
+        if (string.IsNullOrWhiteSpace(newName))
+        {
+            return;
+        }
+
+        configurationModel.Name = newName;
+
         if (!configurationModel.IsPersisted)
         {
             return;
@@ -411,6 +440,8 @@ public sealed partial class MainPage : ContentPage
             ClientSecret = azureAdFile.Configuration.ClientSecret,
             Scope = azureAdFile.Configuration.Scope,
         };
+
+        configurationModel.MarkAsSaved();
 
         return configurationModel;
     }

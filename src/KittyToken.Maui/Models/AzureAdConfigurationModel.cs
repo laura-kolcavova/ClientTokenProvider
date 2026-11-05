@@ -24,6 +24,13 @@ public sealed partial class AzureAdConfigurationModel : INotifyPropertyChanged
 
     private MainPageVisualizationState _visualizationState = MainPageVisualizationState.Idle;
 
+    private (
+        string Instance,
+        string TenantId,
+        string ClientId,
+        string ClientSecret,
+        string Scope) _savedState;
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public Guid PersistenceId { get; set; }
@@ -47,6 +54,7 @@ public sealed partial class AzureAdConfigurationModel : INotifyPropertyChanged
             _instance = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(CanGetAccessToken));
+            OnPropertyChanged(nameof(CanBeSaved));
         }
     }
 
@@ -58,6 +66,7 @@ public sealed partial class AzureAdConfigurationModel : INotifyPropertyChanged
             _tenantId = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(CanGetAccessToken));
+            OnPropertyChanged(nameof(CanBeSaved));
         }
     }
 
@@ -69,6 +78,7 @@ public sealed partial class AzureAdConfigurationModel : INotifyPropertyChanged
             _clientId = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(CanGetAccessToken));
+            OnPropertyChanged(nameof(CanBeSaved));
         }
     }
 
@@ -80,6 +90,7 @@ public sealed partial class AzureAdConfigurationModel : INotifyPropertyChanged
             _clientSecret = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(CanGetAccessToken));
+            OnPropertyChanged(nameof(CanBeSaved));
         }
     }
 
@@ -91,6 +102,7 @@ public sealed partial class AzureAdConfigurationModel : INotifyPropertyChanged
             _scope = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(CanGetAccessToken));
+            OnPropertyChanged(nameof(CanBeSaved));
         }
     }
 
@@ -126,7 +138,9 @@ public sealed partial class AzureAdConfigurationModel : INotifyPropertyChanged
 
     public bool IsPersisted => PersistenceId != Guid.Empty;
 
-    public bool CanBeSaved => !string.IsNullOrWhiteSpace(Name);
+    public bool CanBeSaved =>
+        !string.IsNullOrWhiteSpace(Name) &&
+        (!IsPersisted || _savedState != (Instance, TenantId, ClientId, ClientSecret, Scope));
 
     public bool CanGetAccessToken =>
         !string.IsNullOrWhiteSpace(Instance) &&
@@ -134,6 +148,13 @@ public sealed partial class AzureAdConfigurationModel : INotifyPropertyChanged
         !string.IsNullOrWhiteSpace(ClientId) &&
         !string.IsNullOrWhiteSpace(ClientSecret) &&
         !string.IsNullOrWhiteSpace(Scope);
+
+    public void MarkAsSaved()
+    {
+        _savedState = (Instance, TenantId, ClientId, ClientSecret, Scope);
+
+        OnPropertyChanged(nameof(CanBeSaved));
+    }
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
