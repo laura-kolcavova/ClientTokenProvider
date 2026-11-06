@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="KittyToken.Maui.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:strings="clr-namespace:KittyToken.Maui.Resources.Strings"
+    xmlns:views="clr-namespace:KittyToken.Maui.Views"
+    Title="{x:Static strings:AppShellResources.AppTitle}">
+
+    <ShellContent
+        Title="{x:Static strings:AppShellResources.Configurations}"
+        ContentTemplate="{DataTemplate views:MainPage}"
+        Route="MainPage" />
+
+    <ShellContent
+        Title="{x:Static strings:AppShellResources.DecodeJwt}"
+        ContentTemplate="{DataTemplate views:DecodeJwtPage}"
+        Route="DecodeJWT" />
+
+</Shell>

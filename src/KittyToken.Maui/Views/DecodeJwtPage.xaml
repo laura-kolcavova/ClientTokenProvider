@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="KittyToken.Maui.Views.DecodeJwtPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:KittyToken.Maui.Controls"
+    xmlns:strings="clr-namespace:KittyToken.Maui.Resources.Strings"
+    xmlns:views="clr-namespace:KittyToken.Maui.Views"
+    Title=""
+    x:DataType="views:DecodeJwtPage">
+
+    <Grid
+        Padding="20"
+        ColumnDefinitions="*,*"
+        ColumnSpacing="20">
+        <Grid
+            Grid.Column="0"
+            RowDefinitions="Auto,*"
+            RowSpacing="4">
+            <Label Grid.Row="0" Text="{x:Static strings:DecodeJwtPageResources.Token}" />
+            <Editor Grid.Row="1" Text="{Binding Token, Mode=TwoWay}" />
+        </Grid>
+
+        <controls:JwtVisualizer
+            Grid.Column="1"
+            DecodedToken="{Binding DecodedToken}"
+            Token="{Binding Token}"
+            VisualizationMode="Decoded" />
+    </Grid>
+
+</ContentPage>
