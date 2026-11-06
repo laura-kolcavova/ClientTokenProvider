@@ -7,16 +7,8 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Name="IconButtonControl"
     x:DataType="controls:IconButton">
-    <ContentView.Triggers>
-        <Trigger TargetType="controls:IconButton" Property="IsEnabled" Value="False">
-            <Setter Property="Opacity" Value="0.5" />
-        </Trigger>
-    </ContentView.Triggers>
-
     <Border
         Padding="14,10"
-        BackgroundColor="{AppThemeBinding Light={StaticResource Primary},
-                                          Dark={StaticResource PrimaryDark}}"
         BindingContext="{Binding Source={x:Reference IconButtonControl}}"
         MinimumHeightRequest="44"
         MinimumWidthRequest="44"
@@ -33,16 +25,33 @@
                 VerticalOptions="Center"
                 WidthRequest="18">
                 <Image.Behaviors>
-                    <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
+                    <!-- icon follows the label color, so the disabled state only lives in one place -->
+                    <toolkit:IconTintColorBehavior TintColor="{Binding TextColor, Source={x:Reference TextLabel}, x:DataType=Label}" />
                 </Image.Behaviors>
             </Image>
 
             <Label
-                FontSize="14"
+                x:Name="TextLabel"
                 Text="{Binding Text}"
-                TextColor="{AppThemeBinding Light={StaticResource White},
-                                            Dark={StaticResource PrimaryDarkText}}"
-                VerticalOptions="Center" />
+                VerticalOptions="Center">
+                <!-- explicit style so the implicit Label style's Disabled visual state doesn't override these colors -->
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Setter Property="FontFamily" Value="OpenSansRegular" />
+                        <Setter Property="FontSize" Value="14" />
+                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray200}}" />
+                        <Style.Triggers>
+                            <DataTrigger
+                                x:DataType="controls:IconButton"
+                                Binding="{Binding IsEnabled}"
+                                TargetType="Label"
+                                Value="False">
+                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray400}}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
         </HorizontalStackLayout>
     </Border>
 </ContentView>
