@@ -45,9 +45,9 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="{Binding EncodedHeader}" TextColor="{StaticResource Red400}" />
-                            <Span Text="." />
+                            <Span Text="{Binding HeaderSeparator}" />
                             <Span Text="{Binding EncodedPayload}" TextColor="{StaticResource Blue400}" />
-                            <Span Text="." />
+                            <Span Text="{Binding PayloadSeparator}" />
                             <Span Text="{Binding EncodedSignature}" TextColor="{StaticResource Pink400}" />
                         </FormattedString>
                     </Label.FormattedText>

@@ -56,6 +56,10 @@ public sealed partial class JwtVisualizer :
 
     public bool IsDecodedVisible => VisualizationMode == JwtVisualizationMode.Decoded;
 
+    public string HeaderSeparator => EncodedPayload.Length > 0 ? "." : string.Empty;
+
+    public string PayloadSeparator => EncodedSignature.Length > 0 ? "." : string.Empty;
+
     public string EncodedHeader
     {
         get => _encodedHeader;
@@ -103,6 +107,9 @@ public sealed partial class JwtVisualizer :
         self.EncodedHeader = parts.ElementAtOrDefault(0) ?? string.Empty;
         self.EncodedPayload = parts.ElementAtOrDefault(1) ?? string.Empty;
         self.EncodedSignature = parts.ElementAtOrDefault(2) ?? string.Empty;
+
+        self.OnPropertyChanged(nameof(HeaderSeparator));
+        self.OnPropertyChanged(nameof(PayloadSeparator));
     }
 
     private static void OnVisualizationModePropertyChanged(
