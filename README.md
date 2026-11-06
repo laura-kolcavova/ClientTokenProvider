@@ -23,6 +23,18 @@ KittyToken gets access tokens with the OAuth 2.0 client credentials flow. Save y
 - **Framework:** .NET 10
 - **Storage:** SQLite via Entity Framework Core
 
+## Build
+
+### Publish portable release (x64)
+
+Requires the .NET MAUI workload (`dotnet workload install maui`).
+
+```powershell
+dotnet publish src/KittyToken.Maui/KittyToken.Maui.csproj -f net10.0-windows10.0.19041.0 -c Release -r win-x64 --self-contained /p:WindowsPackageType=None /p:WindowsAppSDKSelfContained=true /p:DebugType=None /p:DebugSymbols=false
+```
+
+Output files will be in `src/KittyToken.Maui/bin/Release/net10.0-windows10.0.19041.0/win-x64/publish`.
+
 ## Data
 
 Configurations are stored locally in `%LOCALAPPDATA%\KittyToken.sqlite3`.

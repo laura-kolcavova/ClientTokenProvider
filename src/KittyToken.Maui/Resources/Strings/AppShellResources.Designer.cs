@@ -61,7 +61,7 @@ namespace KittyToken.Maui.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to KittyToken.Maui.
+        ///   Looks up a localized string similar to KittyToken.
         /// </summary>
         public static string AppTitle {
             get {
