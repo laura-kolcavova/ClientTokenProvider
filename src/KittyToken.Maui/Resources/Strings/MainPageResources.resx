@@ -115,6 +115,9 @@
   <data name="RenameConfigurationFailed" xml:space="preserve">
     <value>Failed to rename Azure AD configuration</value>
   </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
   <data name="Run" xml:space="preserve">
     <value>Run</value>
   </data>

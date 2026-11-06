@@ -67,6 +67,7 @@
                             Text="{Binding Name}">
                             <FlyoutBase.ContextFlyout>
                                 <MenuFlyout>
+                                    <MenuFlyoutItem Clicked="RenameMenuFlyoutItem_Clicked" Text="{x:Static strings:MainPageResources.Rename}" />
                                     <MenuFlyoutItem Clicked="DeleteMenuFlyoutItem_Clicked" Text="{x:Static strings:MainPageResources.Delete}" />
                                 </MenuFlyout>
                             </FlyoutBase.ContextFlyout>

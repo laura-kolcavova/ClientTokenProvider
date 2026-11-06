@@ -194,6 +194,25 @@ public sealed partial class MainPage : ContentPage
         await RenameConfiguration(ActiveConfiguration, newName);
     }
 
+    private void RenameMenuFlyoutItem_Clicked(
+        object? sender,
+        EventArgs e)
+    {
+        if (sender is not MenuFlyoutItem
+            {
+                BindingContext: AzureAdConfigurationModel configurationModel
+            })
+        {
+            return;
+        }
+
+        ActiveConfiguration = configurationModel;
+
+        IsEditingName = true;
+
+        NameEntry.Focus();
+    }
+
     private async void DeleteMenuFlyoutItem_Clicked(
         object? sender,
         EventArgs e)
