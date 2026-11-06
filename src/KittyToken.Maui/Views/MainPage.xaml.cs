@@ -3,14 +3,13 @@ using KittyToken.Application.AzureAd.Models;
 using KittyToken.Application.AzureAd.Services.Abstractions;
 using KittyToken.Application.Shared.JwtDecoding.Abstractions;
 using KittyToken.Maui.Models;
+using KittyToken.Maui.Resources.Strings;
 using System.Collections.ObjectModel;
 
 namespace KittyToken.Maui.Views;
 
 public sealed partial class MainPage : ContentPage
 {
-    private const string DefaultAzureAdFileName = "New Configuration";
-
     private readonly IAzureAdFileStore _azureAdFileStore;
 
     private readonly IAzureAdFileFactory _azureAdFileFactory;
@@ -102,10 +101,10 @@ public sealed partial class MainPage : ContentPage
         args.Cancel = true;
 
         var save = await DisplayAlertAsync(
-            "You have unsaved changes",
-            "Do you want to save the changes before you leave?",
-            "Save",
-            "Don't save");
+            MainPageResources.UnsavedChangesTitle,
+            MainPageResources.UnsavedChangesMessage,
+            MainPageResources.Save,
+            MainPageResources.DontSave);
 
         if (save)
         {
@@ -208,10 +207,10 @@ public sealed partial class MainPage : ContentPage
         }
 
         var confirmed = await DisplayAlertAsync(
-            "Delete configuration",
-            $"Are you sure you want to delete \"{configurationModel.Name}\"?",
-            "Delete",
-            "Cancel");
+            MainPageResources.DeleteConfigurationTitle,
+            string.Format(MainPageResources.DeleteConfigurationMessage, configurationModel.Name),
+            MainPageResources.Delete,
+            MainPageResources.Cancel);
 
         if (!confirmed)
         {
@@ -258,9 +257,9 @@ public sealed partial class MainPage : ContentPage
         catch (Exception ex)
         {
             await DisplayAlertAsync(
-                "Failed to load Azure AD configurations",
+                MainPageResources.LoadConfigurationsFailed,
                 ex.Message,
-                "OK");
+                MainPageResources.Ok);
         }
     }
 
@@ -268,7 +267,7 @@ public sealed partial class MainPage : ContentPage
     {
         var configurationModel = new AzureAdConfigurationModel
         {
-            Name = DefaultAzureAdFileName
+            Name = MainPageResources.NewConfigurationName
         };
 
         ConfigurationList.Add(configurationModel);
@@ -281,9 +280,9 @@ public sealed partial class MainPage : ContentPage
         if (string.IsNullOrWhiteSpace(configurationModel.Name))
         {
             await DisplayAlertAsync(
-               "Failed to save Azure AD configuration",
-               "Name must not be empty",
-               "OK");
+               MainPageResources.SaveConfigurationFailed,
+               MainPageResources.NameMustNotBeEmpty,
+               MainPageResources.Ok);
 
             return;
         }
@@ -325,9 +324,9 @@ public sealed partial class MainPage : ContentPage
             if (existingAzureAdFile is null)
             {
                 await DisplayAlertAsync(
-                    "Failed to save Azure AD configuration",
-                    "Azure AD configuration not found",
-                    "OK");
+                    MainPageResources.SaveConfigurationFailed,
+                    MainPageResources.ConfigurationNotFound,
+                    MainPageResources.Ok);
 
                 return;
             }
@@ -342,9 +341,9 @@ public sealed partial class MainPage : ContentPage
         catch (Exception ex)
         {
             await DisplayAlertAsync(
-                "Failed to save Azure AD configuration",
+                MainPageResources.SaveConfigurationFailed,
                 ex.Message,
-                "OK");
+                MainPageResources.Ok);
         }
     }
 
@@ -373,9 +372,9 @@ public sealed partial class MainPage : ContentPage
             if (existingAzureAdFile is null)
             {
                 await DisplayAlertAsync(
-                    "Failed to rename Azure AD configuration",
-                    "Azure AD configuration not found",
-                    "OK");
+                    MainPageResources.RenameConfigurationFailed,
+                    MainPageResources.ConfigurationNotFound,
+                    MainPageResources.Ok);
 
                 return;
             }
@@ -387,9 +386,9 @@ public sealed partial class MainPage : ContentPage
         catch (Exception ex)
         {
             await DisplayAlertAsync(
-                "Failed to rename Azure AD configuration",
+                MainPageResources.RenameConfigurationFailed,
                 ex.Message,
-                "OK");
+                MainPageResources.Ok);
         }
     }
 
@@ -407,9 +406,9 @@ public sealed partial class MainPage : ContentPage
                 if (existingAzureAdFile is null)
                 {
                     await DisplayAlertAsync(
-                        "Failed to delete Azure AD configuration",
-                        "Azure AD configuration not found",
-                        "OK");
+                        MainPageResources.DeleteConfigurationFailed,
+                        MainPageResources.ConfigurationNotFound,
+                        MainPageResources.Ok);
 
                     return;
                 }
@@ -422,9 +421,9 @@ public sealed partial class MainPage : ContentPage
             catch (Exception ex)
             {
                 await DisplayAlertAsync(
-                    "Failed to delete Azure AD configuration",
+                    MainPageResources.DeleteConfigurationFailed,
                     ex.Message,
-                    "OK");
+                    MainPageResources.Ok);
             }
         }
 
@@ -477,9 +476,9 @@ public sealed partial class MainPage : ContentPage
             configurationModel.VisualizationState = MainPageVisualizationState.Idle;
 
             await DisplayAlertAsync(
-                "Failed to get access token",
+                MainPageResources.GetAccessTokenFailed,
                 ex.Message,
-                "OK");
+                MainPageResources.Ok);
         }
         finally
         {

@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:KittyToken.Maui.Controls"
     xmlns:models="clr-namespace:KittyToken.Maui.Models"
+    xmlns:strings="clr-namespace:KittyToken.Maui.Resources.Strings"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:views="clr-namespace:KittyToken.Maui.Views"
     Title=""
@@ -37,7 +38,7 @@
                 <Label
                     Grid.Column="0"
                     FontAttributes="Bold"
-                    Text="Configurations"
+                    Text="{x:Static strings:MainPageResources.Configurations}"
                     VerticalOptions="Center" />
 
                 <ImageButton
@@ -66,7 +67,7 @@
                             Text="{Binding Name}">
                             <FlyoutBase.ContextFlyout>
                                 <MenuFlyout>
-                                    <MenuFlyoutItem Clicked="DeleteMenuFlyoutItem_Clicked" Text="Delete" />
+                                    <MenuFlyoutItem Clicked="DeleteMenuFlyoutItem_Clicked" Text="{x:Static strings:MainPageResources.Delete}" />
                                 </MenuFlyout>
                             </FlyoutBase.ContextFlyout>
                         </Label>
@@ -84,12 +85,12 @@
             VerticalOptions="Center">
             <Image Source="cat.png" WidthRequest="130" />
 
-            <Label HorizontalTextAlignment="Center" Text="Select a configuration or" />
+            <Label HorizontalTextAlignment="Center" Text="{x:Static strings:MainPageResources.SelectConfigurationOr}" />
 
             <Button
                 Clicked="AddConfigurationButton_Clicked"
                 FontAttributes="Bold"
-                Text="Create New" />
+                Text="{x:Static strings:MainPageResources.CreateNew}" />
         </VerticalStackLayout>
 
         <Grid
@@ -128,31 +129,31 @@
                             Clicked="SaveButton_Clicked"
                             ImageSource="save.png"
                             IsEnabled="{Binding ActiveConfiguration.CanBeSaved}"
-                            Text="Save" />
+                            Text="{x:Static strings:MainPageResources.Save}" />
                     </Grid>
 
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Instance" />
+                        <Label Text="{x:Static strings:MainPageResources.Instance}" />
                         <Entry Text="{Binding ActiveConfiguration.Instance, Mode=TwoWay}" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Tenant Id" />
+                        <Label Text="{x:Static strings:MainPageResources.TenantId}" />
                         <Entry Text="{Binding ActiveConfiguration.TenantId, Mode=TwoWay}" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Client Id" />
+                        <Label Text="{x:Static strings:MainPageResources.ClientId}" />
                         <Entry Text="{Binding ActiveConfiguration.ClientId, Mode=TwoWay}" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Client Secret" />
+                        <Label Text="{x:Static strings:MainPageResources.ClientSecret}" />
                         <Entry Text="{Binding ActiveConfiguration.ClientSecret, Mode=TwoWay}" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Scope" />
+                        <Label Text="{x:Static strings:MainPageResources.Scope}" />
                         <Entry Text="{Binding ActiveConfiguration.Scope, Mode=TwoWay}" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>
@@ -163,14 +164,14 @@
                     Clicked="GetAccessTokenButton_Clicked"
                     IsEnabled="{Binding ActiveConfiguration.CanGetAccessToken}"
                     IsVisible="{Binding ActiveConfiguration.VisualizationState, Converter={StaticResource IsNotEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
-                    Text="Run" />
+                    Text="{x:Static strings:MainPageResources.Run}" />
 
                 <Button
                     BackgroundColor="{AppThemeBinding Light={StaticResource Secondary},
                                                       Dark={StaticResource Gray600}}"
                     Clicked="CancelButton_Clicked"
                     IsVisible="{Binding ActiveConfiguration.VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
-                    Text="Cancel"
+                    Text="{x:Static strings:MainPageResources.Cancel}"
                     TextColor="{AppThemeBinding Light={StaticResource Primary},
                                                 Dark={StaticResource White}}" />
             </Grid>
@@ -187,7 +188,7 @@
                 VerticalOptions="Center">
                 <Image Source="cat.png" WidthRequest="100" />
 
-                <Label HorizontalTextAlignment="Center" Text="Enter Azure AD configuration and click Run to get an access token" />
+                <Label HorizontalTextAlignment="Center" Text="{x:Static strings:MainPageResources.IdleHint}" />
             </VerticalStackLayout>
 
             <VerticalStackLayout
@@ -202,7 +203,7 @@
                     SecondaryColor="{StaticResource OnAccent}"
                     Size="60" />
 
-                <Label HorizontalTextAlignment="Center" Text="Sending request ..." />
+                <Label HorizontalTextAlignment="Center" Text="{x:Static strings:MainPageResources.SendingRequest}" />
             </VerticalStackLayout>
 
             <controls:JwtVisualizer

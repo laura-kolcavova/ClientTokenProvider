@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:KittyToken.Maui.Controls"
+    xmlns:strings="clr-namespace:KittyToken.Maui.Resources.Strings"
     xmlns:views="clr-namespace:KittyToken.Maui.Views"
     Title=""
     x:DataType="views:DecodeJwtPage">
@@ -16,7 +17,7 @@
             Grid.Column="0"
             RowDefinitions="Auto,*"
             RowSpacing="4">
-            <Label Grid.Row="0" Text="Token" />
+            <Label Grid.Row="0" Text="{x:Static strings:DecodeJwtPageResources.Token}" />
             <Editor Grid.Row="1" Text="{Binding Token, Mode=TwoWay}" />
         </Grid>
 
