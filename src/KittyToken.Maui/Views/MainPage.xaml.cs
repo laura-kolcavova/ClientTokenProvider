@@ -108,10 +108,7 @@ public sealed partial class MainPage : ContentPage
 
         if (save)
         {
-            foreach (var configurationModel in unsavedConfigurations)
-            {
-                await SaveConfiguration(configurationModel);
-            }
+            await SaveConfigurations(unsavedConfigurations);
 
             // A failed save already showed its error and stays unsaved; keep the app open so nothing is lost.
             if (ConfigurationList.Any(configurationModel => configurationModel.CanBeSaved))
@@ -356,6 +353,81 @@ public sealed partial class MainPage : ContentPage
             await _azureAdFileStore.SaveChanges(CancellationToken.None);
 
             configurationModel.MarkAsSaved();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync(
+                MainPageResources.SaveConfigurationFailed,
+                ex.Message,
+                MainPageResources.Ok);
+        }
+    }
+
+    private async Task SaveConfigurations(
+        IEnumerable<AzureAdConfigurationModel> configurationModels)
+    {
+        try
+        {
+            foreach (var configurationModel in configurationModels)
+            {
+                if (string.IsNullOrWhiteSpace(configurationModel.Name))
+                {
+                    await DisplayAlertAsync(
+                       MainPageResources.SaveConfigurationFailed,
+                       MainPageResources.NameMustNotBeEmpty,
+                       MainPageResources.Ok);
+
+                    return;
+                }
+
+                var configuration = new AzureAdConfiguration
+                {
+                    Instance = configurationModel.Instance,
+                    TenantId = configurationModel.TenantId,
+                    ClientId = configurationModel.ClientId,
+                    ClientSecret = configurationModel.ClientSecret,
+                    Scope = configurationModel.Scope,
+                };
+
+                if (!configurationModel.IsPersisted)
+                {
+                    var newAzureAdFile = _azureAdFileFactory.Create(
+                        configurationModel.Name,
+                        configuration);
+
+                    await _azureAdFileStore.Add(
+                         newAzureAdFile,
+                         CancellationToken.None);
+
+                    configurationModel.PersistenceId = newAzureAdFile.Id;
+
+                    return;
+                }
+
+                var existingAzureAdFile = await _azureAdFileStore.GetById(
+                    configurationModel.PersistenceId,
+                    CancellationToken.None);
+
+                if (existingAzureAdFile is null)
+                {
+                    await DisplayAlertAsync(
+                        MainPageResources.SaveConfigurationFailed,
+                        MainPageResources.ConfigurationNotFound,
+                        MainPageResources.Ok);
+
+                    return;
+                }
+
+                existingAzureAdFile.UpdateName(configurationModel.Name);
+                existingAzureAdFile.UpdateConfiguration(configuration);
+            }
+
+            await _azureAdFileStore.SaveChanges(CancellationToken.None);
+
+            foreach (var configurationModel in configurationModels)
+            {
+                configurationModel.MarkAsSaved();
+            }
         }
         catch (Exception ex)
         {
