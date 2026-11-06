@@ -25,7 +25,6 @@
                 VerticalOptions="Center"
                 WidthRequest="18">
                 <Image.Behaviors>
-                    <!-- icon follows the label color, so the disabled state only lives in one place -->
                     <toolkit:IconTintColorBehavior TintColor="{Binding TextColor, Source={x:Reference TextLabel}, x:DataType=Label}" />
                 </Image.Behaviors>
             </Image>
@@ -34,7 +33,6 @@
                 x:Name="TextLabel"
                 Text="{Binding Text}"
                 VerticalOptions="Center">
-                <!-- explicit style so the implicit Label style's Disabled visual state doesn't override these colors -->
                 <Label.Style>
                     <Style TargetType="Label">
                         <Setter Property="FontFamily" Value="OpenSansRegular" />

@@ -42,6 +42,7 @@
 
                 <ImageButton
                     Grid.Column="1"
+                    BackgroundColor="Transparent"
                     Clicked="AddConfigurationImageButton_Clicked"
                     Source="add.png">
                     <ImageButton.Behaviors>
@@ -197,8 +198,8 @@
                 <controls:Spinner
                     HorizontalOptions="Center"
                     IsRunning="{Binding ActiveConfiguration.VisualizationState, Converter={StaticResource IsEqualConverter}, ConverterParameter={x:Static models:MainPageVisualizationState.Loading}}"
-                    PrimaryColor="{StaticResource Primary}"
-                    SecondaryColor="{StaticResource Secondary}"
+                    PrimaryColor="{AppThemeBinding Light={StaticResource Accent}, Dark={StaticResource AccentDark}}"
+                    SecondaryColor="{StaticResource OnAccent}"
                     Size="60" />
 
                 <Label HorizontalTextAlignment="Center" Text="Sending request ..." />
