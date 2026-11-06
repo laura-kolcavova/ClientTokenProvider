@@ -366,6 +366,8 @@ public sealed partial class MainPage : ContentPage
     private async Task SaveConfigurations(
         IEnumerable<AzureAdConfigurationModel> configurationModels)
     {
+        var newAzureAdFiles = new List<(AzureAdConfigurationModel ConfigurationModel, AzureAdFile AzureAdFile)>();
+
         try
         {
             foreach (var configurationModel in configurationModels)
@@ -399,9 +401,9 @@ public sealed partial class MainPage : ContentPage
                          newAzureAdFile,
                          CancellationToken.None);
 
-                    configurationModel.PersistenceId = newAzureAdFile.Id;
+                    newAzureAdFiles.Add((configurationModel, newAzureAdFile));
 
-                    return;
+                    continue;
                 }
 
                 var existingAzureAdFile = await _azureAdFileStore.GetById(
@@ -423,6 +425,11 @@ public sealed partial class MainPage : ContentPage
             }
 
             await _azureAdFileStore.SaveChanges(CancellationToken.None);
+
+            foreach (var (configurationModel, azureAdFile) in newAzureAdFiles)
+            {
+                configurationModel.PersistenceId = azureAdFile.Id;
+            }
 
             foreach (var configurationModel in configurationModels)
             {
