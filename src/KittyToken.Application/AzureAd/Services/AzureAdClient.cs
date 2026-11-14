@@ -9,7 +9,7 @@ internal sealed class AzureAdClient(
     HttpClient httpClient) :
     IAzureAdClient
 {
-    public async Task<string> GetAcessToken(
+    public async Task<string> GetAccessToken(
         GetClientTokenRequestDto request,
         CancellationToken cancellationToken)
     {

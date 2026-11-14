@@ -5,7 +5,7 @@ namespace KittyToken.Application.Shared.Extensions;
 
 public static class ServiceProviderExtensions
 {
-    public static IServiceProvider InitApplication(
+    public static IServiceProvider InitKittyTokenStorage(
         this IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();

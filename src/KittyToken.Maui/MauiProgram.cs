@@ -28,10 +28,15 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        builder.Services
-            .AddApplication(dbConnectionString, isDevelopment);
+        builder
+            .Services
+            .AddKittyTokenCore()
+            .AddKittyTokenStorage(
+                dbConnectionString: dbConnectionString,
+                useDevelopmentLogging: isDevelopment);
 
-        builder.Services
+        builder
+            .Services
             .AddTransient<MainPage>()
             .AddTransient<DecodeJwtPage>();
 
@@ -39,9 +44,12 @@ public static class MauiProgram
         {
             builder.Logging.AddDebug();
         }
+
         var app = builder.Build();
 
-        app.Services.InitApplication();
+        app
+            .Services
+            .InitKittyTokenStorage();
 
         return app;
     }

@@ -557,7 +557,7 @@ public sealed partial class MainPage : ContentPage
 
         try
         {
-            var accessToken = await _azureAdClient.GetAcessToken(
+            var accessToken = await _azureAdClient.GetAccessToken(
                 request,
                 cancellationToken);
 
