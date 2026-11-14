@@ -35,6 +35,9 @@ public static class ServiceCollectionExtensions
            });
 
         services
+            .AddSingleton<IAzureAdFileFactory, AzureAdFileFactory>();
+
+        services
             .AddScoped<IAzureAdFileStore, AzureAdFileStoreSqLite>();
 
         return services;
