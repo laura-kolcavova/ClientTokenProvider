@@ -546,7 +546,7 @@ public sealed partial class MainPage : ContentPage
         configurationModel.DecodedAccessToken = null;
         configurationModel.VisualizationState = MainPageVisualizationState.Loading;
 
-        var request = new GetClientTokenRequestDto
+        var requestDto = new GetClientTokenRequestDto
         {
             Instance = configurationModel.Instance,
             TenantId = configurationModel.TenantId,
@@ -558,7 +558,7 @@ public sealed partial class MainPage : ContentPage
         try
         {
             var accessToken = await _azureAdClient.GetAccessToken(
-                request,
+                requestDto,
                 cancellationToken);
 
             configurationModel.AccessToken = accessToken;

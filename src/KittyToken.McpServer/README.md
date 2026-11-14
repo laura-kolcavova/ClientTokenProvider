@@ -1,97 +1,84 @@
-# MCP Server
+# KittyToken MCP Server
 
-This README was created using the C# MCP server project template.
-It demonstrates how you can easily create an MCP server using C# and publish it as a NuGet package.
+An [MCP](https://modelcontextprotocol.io/) server that lets AI assistants like Claude Code get Azure AD (Microsoft Entra ID) access tokens.
 
-The MCP server is built as a self-contained application and does not require the .NET runtime to be installed on the target machine.
-However, since it is self-contained, it must be built for each target platform separately.
-By default, the template is configured to build for:
-* `win-x64`
-* `win-arm64`
-* `osx-arm64`
-* `linux-x64`
-* `linux-arm64`
-* `linux-musl-x64`
+## About
 
-If your users require more platforms to be supported, update the list of runtime identifiers in the project's `<RuntimeIdentifiers />` element.
+The server runs over stdio and uses the same token logic as the KittyToken desktop app. It is a self-contained single-file exe, so the target machine does not need .NET installed.
 
-See [aka.ms/nuget/mcp/guide](https://aka.ms/nuget/mcp/guide) for the full guide.
+## Tools
 
-## Checklist before publishing to NuGet.org
+| Tool | Description | Parameters |
+|------|-------------|------------|
+| `get_access_token` | Gets an access token with the OAuth 2.0 client credentials flow | `instance`, `tenantId`, `clientId`, `clientSecret`, `scope` |
 
-- Test the MCP server locally using the steps below.
-- Update the package metadata in the .csproj file, in particular the `<PackageId>`.
-- Update `.mcp/server.json` to declare your MCP server's inputs.
-  - See [configuring inputs](https://aka.ms/nuget/mcp/guide/configuring-inputs) for more details.
-- Pack the project using `dotnet pack`.
+> [!WARNING]
+> The client secret is passed as a tool argument, so it becomes part of the AI conversation. Use it only with secrets you are allowed to share with your AI provider.
 
-The `bin/Release` directory will contain the package file (.nupkg), which can be [published to NuGet.org](https://learn.microsoft.com/nuget/nuget-org/publish-a-package).
+## Requirements
 
-## Developing locally
+- Windows 10 or later (x64)
+- [Claude Code](https://docs.claude.com/en/docs/claude-code) or another MCP client
 
-To test this MCP server from source code (locally) without using a built MCP server package, you can configure your IDE to run the project directly using `dotnet run`.
+## Build
 
-```json
-{
-  "servers": {
-    "KittyToken.McpServer": {
-      "type": "stdio",
-      "command": "dotnet",
-      "args": [
-        "run",
-        "--project",
-        "<PATH TO PROJECT DIRECTORY>"
-      ]
-    }
-  }
-}
+### Publish portable release (x64)
+
+Requires the .NET 10 SDK.
+
+```powershell
+dotnet publish src/KittyToken.McpServer/KittyToken.McpServer.csproj -c Release -r win-x64 -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=None -p:DebugSymbols=false
 ```
 
-Refer to the VS Code or Visual Studio documentation for more information on configuring and using MCP servers:
+Output is a single `KittyToken.McpServer.exe` in `src/KittyToken.McpServer/bin/Release/net10.0/win-x64/publish`.
 
-- [Use MCP servers in VS Code](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
-- [Use MCP servers in Visual Studio](https://learn.microsoft.com/visualstudio/ide/mcp-servers)
+Copy it to a permanent location, for example `C:\Tools\KittyToken\KittyToken.McpServer.exe`. The MCP client starts the exe from that path, so it must not move afterwards.
 
-## Testing the MCP Server
+> [!TIP]
+> For other platforms, replace `win-x64` with one of the runtime identifiers listed in the `.csproj` (e.g. `win-arm64`, `osx-arm64`, `linux-x64`).
 
-Once configured, you can ask Copilot Chat for a random number, for example, `Give me 3 random numbers`. It should prompt you to use the `get_random_number` tool on the `KittyToken.McpServer` MCP server and show you the results.
+## Register in Claude Code
 
-## Publishing to NuGet.org
+Add the server for your user, so it is available in every project:
 
-1. Run `dotnet pack -c Release` to create the NuGet package
-2. Publish to NuGet.org with `dotnet nuget push bin/Release/*.nupkg --api-key <your-api-key> --source https://api.nuget.org/v3/index.json`
-
-## Using the MCP Server from NuGet.org
-
-Once the MCP server package is published to NuGet.org, you can configure it in your preferred IDE. Both VS Code and Visual Studio use the `dnx` command to download and install the MCP server package from NuGet.org.
-
-- **VS Code**: Create a `<WORKSPACE DIRECTORY>/.vscode/mcp.json` file
-- **Visual Studio**: Create a `<SOLUTION DIRECTORY>\.mcp.json` file
-
-For both VS Code and Visual Studio, the configuration file uses the following server definition:
-
-```json
-{
-  "servers": {
-    "KittyToken.McpServer": {
-      "type": "stdio",
-      "command": "dnx",
-      "args": [
-        "<your package ID here>",
-        "--version",
-        "<your package version here>",
-        "--yes"
-      ]
-    }
-  }
-}
+```powershell
+claude mcp add --scope user kittytoken -- "C:\Tools\KittyToken\KittyToken.McpServer.exe"
 ```
 
-## More information
+| Scope | Where it is available |
+|-------|-----------------------|
+| `local` (default) | Only you, only in the current project |
+| `user` | Only you, in all projects |
+| `project` | Everyone in the repo, through a `.mcp.json` file committed to it |
 
-.NET MCP servers use the [ModelContextProtocol](https://www.nuget.org/packages/ModelContextProtocol) C# SDK. For more information about MCP:
+Check that it connected:
 
-- [Official Documentation](https://modelcontextprotocol.io/)
-- [Protocol Specification](https://spec.modelcontextprotocol.io/)
-- [GitHub Organization](https://github.com/modelcontextprotocol)
-- [MCP C# SDK](https://csharp.sdk.modelcontextprotocol.io/)
+```powershell
+claude mcp list
+```
+
+You should see `kittytoken: ... - ✓ Connected`. Inside a Claude Code session, `/mcp` shows the server and its tools.
+
+Then just ask, for example:
+
+> Get me an access token for tenant `<tenant-id>`, client `<client-id>`, secret `<secret>` and scope `api://<app-id>/.default`.
+
+To remove the server:
+
+```powershell
+claude mcp remove kittytoken --scope user
+```
+
+### Updating
+
+Close Claude Code (it keeps the exe locked while running), publish again and overwrite the exe in the same location.
+
+## Run from source
+
+For development, register the project with `dotnet run` instead of the published exe:
+
+```powershell
+claude mcp add kittytoken-dev -- dotnet run --project "<PATH TO REPO>\src\KittyToken.McpServer"
+```
+
+The server logs to stderr, because stdout carries the MCP messages.
