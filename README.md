@@ -2,6 +2,8 @@
 
 Get Azure AD (Microsoft Entra ID) access tokens and inspect JWTs, either in a desktop app or from an AI assistant such as Claude Code.
 
+![KittyToken desktop app main page](docs/images/KittyToken_MainPage.png)
+
 ## About
 
 KittyToken gets access tokens with the OAuth 2.0 client credentials flow. It comes in two parts:
