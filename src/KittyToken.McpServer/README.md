@@ -102,51 +102,7 @@ claude mcp remove kittytoken --scope user
 
 ### Updating
 
-Close Claude Code (it keeps the exe locked while running), publish again and overwrite the exe in the same location.
-
-## Usage examples
-
-Just ask in a Claude Code session. Claude picks the tools.
-
-### Get a token for a project, then save the config
-
-In a project folder:
-
-> Get an access token using the AzureAd section from appsettings.Development.json
-
-Claude reads the file and calls `get_access_token`. If the secret isn't in the file (for example it's in user-secrets), Claude asks you for it.
-
-Later in the same session:
-
-> Save this Azure AD config as "Orders API - dev"
-
-Claude calls `create_configuration` with the values it already has.
-
-### Reuse a saved config from any project
-
-> Get me an access token for "Orders API - dev"
-
-> Get a token for Orders API dev and decode it, I want to see the roles claim
-
-Claude finds the configuration with `get_configurations`, calls `get_access_token_by_configuration` and, if asked, `decode_jwt`.
-
-### Manage saved configs
-
-> List my saved Azure AD configurations
-
-> Rename "Orders API - dev" to "Orders API - DEV (old tenant)"
-
-> The client secret for Orders API dev was rotated, the new one is `<secret>`. Update it.
-
-> Delete the configuration "Test app"
-
-`update_configuration` replaces all values, so Claude first reads the current ones and changes only what you asked for.
-
-### One-off from the terminal
-
-```powershell
-claude -p "Get an access token for the 'Orders API - dev' configuration and print only the token" --allowedTools "mcp__kittytoken__get_configurations,mcp__kittytoken__get_access_token_by_configuration"
-```
+Close Claude Code (it keeps the exe locked while running), publish again and overwrite the exe in the same location.s
 
 ## Run from source
 
