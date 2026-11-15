@@ -42,7 +42,7 @@ Prompts appear in Claude Code as slash commands.
 
 Examples:
 
-- `/mcp__kittytoken__get_encoded_token_by_configuration "Orders API - dev"`
+- `/mcp__kittytoken__get_encoded_token_by_configuration "<configuration-name>"`
 - `/mcp__kittytoken__get_encoded_token https://login.microsoftonline.com/ <tenant-id> <client-id> <secret> api://<app-id>/.default`
 
 > [!WARNING]
