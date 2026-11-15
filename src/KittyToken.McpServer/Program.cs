@@ -20,12 +20,13 @@ builder
         dbConnectionString: dbConnectionString,
         useDevelopmentLogging: false);
 
-// Add the MCP services: the transport to use (stdio) and the tools to register.
+// Add the MCP services: the transport to use (stdio) and the tools and prompts to register.
 builder
     .Services
     .AddMcpServer()
     .WithStdioServerTransport()
-    .WithToolsFromAssembly();
+    .WithToolsFromAssembly()
+    .WithPromptsFromAssembly();
 
 var app = builder.Build();
 

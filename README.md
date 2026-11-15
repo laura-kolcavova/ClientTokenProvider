@@ -9,7 +9,7 @@ KittyToken gets access tokens with the OAuth 2.0 client credentials flow. It com
 | Part | What it does |
 |------|--------------|
 | **Desktop app** | Save your app registrations as configurations, click Run and see the decoded token right away |
-| **MCP server** | Lets Claude Code and other MCP clients get access tokens for you. See the [MCP server README](src/KittyToken.McpServer/README.md) |
+| **MCP server** | Lets Claude Code and other MCP clients get access tokens and manage saved configurations for you. See the [MCP server README](src/KittyToken.McpServer/README.md) |
 
 ## Features
 
@@ -22,7 +22,9 @@ KittyToken gets access tokens with the OAuth 2.0 client credentials flow. It com
 
 ### MCP server
 
-- `get_access_token` tool for the client credentials flow
+- Get access tokens with the client credentials flow, directly or from a saved configuration
+- Create, update, rename and delete configurations, shared with the desktop app
+- Decode JWTs
 - Single self-contained exe, no .NET install needed
 - Registered in Claude Code with one `claude mcp add` command
 
@@ -78,4 +80,4 @@ Configurations are stored locally in `%LOCALAPPDATA%\KittyToken.sqlite3`.
 > Client secrets are saved unencrypted, so keep this file private.
 
 > [!WARNING]
-> With the MCP server, the client secret is passed as a tool argument, so it becomes part of the AI conversation.
+> With the MCP server, client secrets become part of the AI conversation: when you pass them to a tool, and when the server returns saved configurations.
